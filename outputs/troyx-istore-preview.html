@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TroyX iStore | Your Trusted Apple Store.</title>
+    <meta
+      name="description"
+      content="TroyX iStore is an independent premium retailer of genuine Apple devices and accessories."
+    />
+    <style>
+      :root {
+        --blue: #0071e3;
+        --ink: #0b0b0f;
+        --muted: #666a73;
+        --mist: #f5f5f7;
+        --line: rgba(0, 0, 0, 0.08);
+        --card: #ffffff;
+      }
+      .dark {
+        --ink: #f5f5f7;
+        --muted: #b8beca;
+        --mist: #111827;
+        --line: rgba(255, 255, 255, 0.12);
+        --card: #0b0b0f;
+        background: #050507;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: #fff;
+      }
+      .dark body,
+      .dark {
+        color: var(--ink);
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 1px solid var(--line);
+        background: color-mix(in srgb, var(--card) 82%, transparent);
+        backdrop-filter: blur(24px);
+      }
+      .nav,
+      .wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .nav {
+        min-height: 68px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 750;
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        background: #0b0b0f;
+      }
+      .dark .logo {
+        color: #0b0b0f;
+        background: #fff;
+      }
+      .links {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 650;
+      }
+      .links a,
+      .icon,
+      button {
+        border-radius: 999px;
+      }
+      .links a {
+        padding: 10px 12px;
+      }
+      .links a:hover,
+      .icon:hover {
+        background: rgba(0, 0, 0, 0.05);
+        color: var(--ink);
+      }
+      .dark .links a:hover,
+      .dark .icon:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+      .icon {
+        border: 1px solid var(--line);
+        background: var(--card);
+        min-width: 42px;
+        height: 42px;
+        display: inline-grid;
+        place-items: center;
+        cursor: pointer;
+        color: var(--ink);
+      }
+      .hero {
+        min-height: calc(100vh - 68px);
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        align-items: center;
+        gap: 40px;
+        padding: 54px 20px 80px;
+      }
+      .pill {
+        display: inline-flex;
+        color: var(--blue);
+        background: #eaf4ff;
+        border: 1px solid rgba(0, 113, 227, 0.18);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 750;
+      }
+      h1 {
+        font-size: clamp(48px, 8vw, 88px);
+        line-height: 0.95;
+        margin: 22px 0;
+        letter-spacing: 0;
+      }
+      h2 {
+        font-size: clamp(32px, 5vw, 56px);
+        line-height: 1;
+        margin: 0;
+        letter-spacing: 0;
+      }
+      h3 {
+        margin: 0;
+      }
+      p {
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+      .btn {
+        border: 0;
+        padding: 14px 20px;
+        font-weight: 750;
+        cursor: pointer;
+        background: var(--blue);
+        color: #fff;
+        box-shadow: 0 18px 40px rgba(0, 113, 227, 0.22);
+      }
+      .btn.secondary {
+        background: var(--card);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        box-shadow: none;
+      }
+      .hero-card {
+        position: relative;
+        border-radius: 44px;
+        background: var(--mist);
+        border: 1px solid var(--line);
+        box-shadow: 0 30px 100px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        padding: 24px;
+      }
+      .hero-card img {
+        display: block;
+        width: 100%;
+        animation: float 6s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      section {
+        padding: 76px 0;
+      }
+      .band {
+        background: var(--mist);
+      }
+      .section-head {
+        max-width: 760px;
+        margin-bottom: 34px;
+      }
+      .eyebrow {
+        color: var(--blue);
+        text-transform: uppercase;
+        font-weight: 800;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.04);
+      }
+      .product-media {
+        background: var(--mist);
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        padding: 26px;
+      }
+      .product-media img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+      .product-body {
+        padding: 18px;
+      }
+      .meta {
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        font-weight: 800;
+      }
+      .price {
+        color: var(--blue);
+        font-size: 22px;
+        font-weight: 850;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+      .small-btn {
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--ink);
+        height: 42px;
+        padding: 0 14px;
+        font-weight: 750;
+        cursor: pointer;
+      }
+      .features {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+      }
+      .feature {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        padding: 26px;
+      }
+      .drawer {
+        position: fixed;
+        inset: 0 0 0 auto;
+        width: min(440px, 100%);
+        background: var(--card);
+        border-left: 1px solid var(--line);
+        transform: translateX(100%);
+        transition: 0.25s ease;
+        z-index: 40;
+        padding: 24px;
+        overflow: auto;
+      }
+      .drawer.open {
+        transform: translateX(0);
+      }
+      .cart-item {
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        gap: 12px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      footer {
+        background: #0b0b0f;
+        color: #fff;
+        padding: 54px 0;
+      }
+      footer p,
+      footer a {
+        color: #c9ced8;
+      }
+      @media (max-width: 940px) {
+        .links {
+          display: none;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+        .grid,
+        .features {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 620px) {
+        .grid,
+        .features {
+          grid-template-columns: 1fr;
+        }
+        .brand span:last-child {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="nav">
+        <a class="brand" href="#home">
+          <span class="logo">TX</span>
+          <span>TroyX iStore<br /><small style="color: var(--muted)">Your Trusted Apple Store.</small></span>
+        </a>
+        <nav class="links">
+          <a href="#home">Home</a>
+          <a href="#shop">Shop</a>
+          <a href="#categories">Categories</a>
+          <a href="#trade">Trade-In</a>
+          <a href="#repair">Repair</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <div class="actions">
+          <button class="icon" onclick="toggleTheme()" aria-label="Toggle dark mode">◐</button>
+          <button class="icon" onclick="toggleCart()" aria-label="Cart">Bag <span id="cartCount"></span></button>
+        </div>
+      </div>
+    </header>
+    <main id="home">
+      <div class="wrap hero">
+        <div>
+          <span class="pill">Independent retailer of genuine Apple products</span>
+          <h1>TroyX iStore</h1>
+          <p>
+            A premium electronics shopping experience for verified devices, accessories, repair booking,
+            trade-in estimates, checkout, customer dashboards, and future admin expansion.
+          </p>
+          <div class="btns">
+            <a class="btn" href="#shop">Shop collection</a>
+            <a class="btn secondary" href="#trade">Estimate trade-in</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <img src="../public/assets/product-device.svg" alt="Featured iPhone" />
+        </div>
+      </div>
+      <section id="shop">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow">Shop</p>
+            <h2>Featured products</h2>
+            <p>Demo products for iPhone, MacBook, iPad, Watch, AirPods, and accessories.</p>
+          </div>
+          <div class="grid" id="productGrid"></div>
+        </div>
+      </section>
+      <section class="band" id="categories">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow">Categories</p>
+            <h2>Everything customers expect.</h2>
+          </div>
+          <div class="features" id="categoryGrid"></div>
+        </div>
+      </section>
+      <section id="trade">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow">Trade-In Estimator</p>
+            <h2>Estimate device value.</h2>
+            <p>Final trade-in value is confirmed only after physical inspection.</p>
+          </div>
+          <div class="card product-body">
+            <div class="row" style="flex-wrap: wrap">
+              <input id="tradeDevice" placeholder="iPhone 15 Pro" class="small-btn" style="border-radius: 16px" />
+              <input id="tradeBattery" type="number" min="50" max="100" value="90" class="small-btn" style="border-radius: 16px" />
+              <select id="tradeCondition" class="small-btn" style="border-radius: 16px">
+                <option value="1">Excellent</option>
+                <option value="0.85">Good</option>
+                <option value="0.65">Fair</option>
+                <option value="0.4">Poor</option>
+              </select>
+              <button class="btn" onclick="estimateTrade()">Estimate</button>
+            </div>
+            <h3 id="tradeResult" style="margin-top: 18px"></h3>
+          </div>
+        </div>
+      </section>
+      <section class="band" id="repair">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow">Repair Booking</p>
+            <h2>Appointment flow ready.</h2>
+            <p>Customers can describe issues, choose a device, select a date, and later upload photos through Cloudinary.</p>
+          </div>
+          <div class="features">
+            <div class="feature"><h3>Device</h3><p>iPhone, MacBook, iPad, Watch, AirPods.</p></div>
+            <div class="feature"><h3>Issue</h3><p>Capture symptoms and diagnostic notes.</p></div>
+            <div class="feature"><h3>Date</h3><p>Appointment scheduling and email hooks.</p></div>
+            <div class="feature"><h3>Admin</h3><p>Repair queue can be managed from admin.</p></div>
+          </div>
+        </div>
+      </section>
+      <section id="about">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow">Why TroyX</p>
+            <h2>Premium, independent, trustworthy.</h2>
+          </div>
+          <div class="features">
+            <div class="feature"><h3>Verified inventory</h3><p>Clear condition, warranty, availability, and specs.</p></div>
+            <div class="feature"><h3>Secure checkout</h3><p>Payment architecture supports global and local providers.</p></div>
+            <div class="feature"><h3>AI-ready</h3><p>Shopping assistant and trade-in guidance APIs are scaffolded.</p></div>
+            <div class="feature"><h3>Admin-ready</h3><p>Orders, revenue, inventory, coupons, roles, and audit logs.</p></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <aside class="drawer" id="cartDrawer">
+      <div class="row">
+        <h2>Your bag</h2>
+        <button class="icon" onclick="toggleCart()">×</button>
+      </div>
+      <div id="cartItems"></div>
+      <h3 id="cartTotal"></h3>
+      <button class="btn" style="width: 100%; margin-top: 16px">Checkout</button>
+    </aside>
+    <footer id="contact">
+      <div class="wrap">
+        <div class="row" style="align-items: flex-start; flex-wrap: wrap">
+          <div>
+            <h3>TroyX iStore</h3>
+            <p>Your Trusted Apple Store.</p>
+            <p style="max-width: 620px">
+              TroyX iStore is an independent retailer and is not affiliated with Apple Inc. Product names are
+              used only to identify genuine compatible products.
+            </p>
+          </div>
+          <div>
+            <p>support@troyxistore.com</p>
+            <p>+233 24 000 0000</p>
+            <p>Accra, Ghana</p>
+          </div>
+        </div>
+        <p style="margin-top: 34px">© 2026 TroyX iStore. All Rights Reserved.</p>
+      </div>
+    </footer>
+    <script>
+      const products = [
+        ["iphone-16-pro-max", "iPhone 16 Pro Max", "iPhone", 1299, "../public/assets/product-device.svg"],
+        ["iphone-16", "iPhone 16", "iPhone", 899, "../public/assets/product-device-blue.svg"],
+        ["macbook-air", "MacBook Air 13-inch", "MacBook", 1099, "../public/assets/product-laptop.svg"],
+        ["macbook-pro", "MacBook Pro 14-inch", "MacBook", 1999, "../public/assets/product-laptop-dark.svg"],
+        ["ipad-pro", "iPad Pro 13-inch", "iPad", 1299, "../public/assets/product-tablet.svg"],
+        ["watch", "Apple Watch Series", "Apple Watch", 429, "../public/assets/product-watch.svg"],
+        ["airpods", "AirPods Pro", "AirPods", 249, "../public/assets/product-audio.svg"],
+        ["charger", "Magnetic Fast Charger", "Chargers", 39, "../public/assets/product-accessory-blue.svg"]
+      ];
+      const categories = [
+        "iPhone",
+        "MacBook",
+        "iPad",
+        "Apple Watch",
+        "AirPods",
+        "Accessories",
+        "Cases",
+        "Chargers"
+      ];
+      const state = { cart: JSON.parse(localStorage.getItem("troyx-preview-cart") || "[]") };
+      function money(value) {
+        return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
+      }
+      function save() {
+        localStorage.setItem("troyx-preview-cart", JSON.stringify(state.cart));
+        renderCart();
+      }
+      function addToCart(id) {
+        const item = state.cart.find((entry) => entry.id === id);
+        if (item) item.qty += 1;
+        else state.cart.push({ id, qty: 1 });
+        save();
+      }
+      function removeFromCart(id) {
+        state.cart = state.cart.filter((entry) => entry.id !== id);
+        save();
+      }
+      function renderProducts() {
+        productGrid.innerHTML = products
+          .map(
+            ([id, name, category, price, image]) => `
+          <article class="card">
+            <div class="product-media"><img src="${image}" alt="${name}" /></div>
+            <div class="product-body">
+              <p class="meta">${category}</p>
+              <h3>${name}</h3>
+              <p>Verified inventory with warranty, delivery estimate, wishlist, compare, and checkout support.</p>
+              <div class="row">
+                <span class="price">${money(price)}</span>
+                <button class="small-btn" onclick="addToCart('${id}')">Add</button>
+              </div>
+            </div>
+          </article>`
+          )
+          .join("");
+        categoryGrid.innerHTML = categories
+          .map((category) => `<div class="feature"><h3>${category}</h3><p>Browse genuine devices and accessories.</p></div>`)
+          .join("");
+      }
+      function renderCart() {
+        cartCount.textContent = state.cart.length ? ` ${state.cart.reduce((sum, item) => sum + item.qty, 0)}` : "";
+        cartItems.innerHTML =
+          state.cart
+            .map((entry) => {
+              const product = products.find(([id]) => id === entry.id);
+              if (!product) return "";
+              return `<div class="cart-item"><img src="${product[4]}" alt="" style="width:72px"><div><strong>${product[1]}</strong><p>${entry.qty} × ${money(product[3])}</p><button class="small-btn" onclick="removeFromCart('${entry.id}')">Remove</button></div></div>`;
+            })
+            .join("") || "<p>Your cart is empty.</p>";
+        const total = state.cart.reduce((sum, entry) => {
+          const product = products.find(([id]) => id === entry.id);
+          return sum + (product ? product[3] * entry.qty : 0);
+        }, 0);
+        cartTotal.textContent = `Total: ${money(total)}`;
+      }
+      function toggleCart() {
+        cartDrawer.classList.toggle("open");
+      }
+      function toggleTheme() {
+        document.documentElement.classList.toggle("dark");
+      }
+      function estimateTrade() {
+        const device = tradeDevice.value.toLowerCase();
+        const base = device.includes("pro") ? 650 : device.includes("iphone") ? 420 : 300;
+        const estimate = Math.round(base * (Number(tradeBattery.value || 90) / 100) * Number(tradeCondition.value));
+        tradeResult.textContent = `Estimated value: ${money(estimate)}. Final value requires physical inspection.`;
+      }
+      renderProducts();
+      renderCart();
+    </script>
+  </body>
+</html>
