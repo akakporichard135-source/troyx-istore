@@ -251,7 +251,7 @@ export const useVendorStore = create<VendorState>()(
       }
     }),
     {
-      name: "troyx-vendor-store"
+      name: "troyx-vendor-store-v2"
     }
   )
 );
