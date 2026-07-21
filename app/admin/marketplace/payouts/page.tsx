@@ -74,7 +74,6 @@ export default function AdminPayoutsPage() {
                     {po.status === "Pending" ? (
                       <div className="flex items-center justify-end gap-2">
                         <Button
-                          size="sm"
                           onClick={() => updatePayoutStatus(po.id, "Paid")}
                           className="h-8 px-3 text-[11px] font-bold bg-emerald-600 text-white hover:bg-emerald-500"
                         >
@@ -82,11 +81,11 @@ export default function AdminPayoutsPage() {
                           Mark Paid
                         </Button>
                         <Button
-                          size="sm"
                           variant="outline"
                           onClick={() => updatePayoutStatus(po.id, "Rejected")}
-                          className="h-8 px-3 text-[11px] font-semibold border-red-500/20 text-red-500 hover:bg-red-500/10"
+                          className="h-8 px-3 text-[11px] font-bold text-red-500 border-red-500/30 hover:bg-red-500/10"
                         >
+                          <XCircle className="h-3.5 w-3.5 mr-1" />
                           Reject
                         </Button>
                       </div>

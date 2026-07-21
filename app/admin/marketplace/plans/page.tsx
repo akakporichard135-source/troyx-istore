@@ -64,7 +64,6 @@ export default function AdminPlansPage() {
                 <div className="flex items-center justify-between border-b border-black/5 dark:border-white/10 pb-4">
                   <h2 className="text-lg font-bold text-brand-ink dark:text-white">{plan.name} Plan</h2>
                   <Button
-                    size="sm"
                     variant="outline"
                     onClick={() => (isEditing ? handleSavePlan(plan.id) : startEdit(plan))}
                     className="h-8 text-xs font-bold border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white"

@@ -87,7 +87,6 @@ export default function VendorInventoryPage() {
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <Button
-                      size="sm"
                       variant="outline"
                       onClick={() => toggleAvailability(prod.id, prod.availability)}
                       className="h-8 text-[11px] font-semibold border-white/10 text-white hover:bg-white/10"
