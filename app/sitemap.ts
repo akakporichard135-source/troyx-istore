@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next";
 import { products } from "@/database/products";
+import { initialVendors } from "@/database/vendors";
 import { siteConfig } from "@/lib/site";
 
 const staticRoutes = [
   "",
   "/shop",
+  "/stores",
+  "/sell",
   "/categories",
   "/cart",
   "/checkout",
@@ -15,7 +18,6 @@ const staticRoutes = [
   "/wishlist",
   "/compare",
   "/order-tracking",
-  "/order-history",
   "/contact",
   "/about",
   "/faq",
@@ -34,6 +36,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: route === "" ? 1 : 0.7
+    })),
+    ...initialVendors.map((vendor) => ({
+      url: `${siteConfig.url}/store/${vendor.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "daily" as const,
+      priority: 0.9
     })),
     ...products.map((product) => ({
       url: `${siteConfig.url}/product/${product.slug}`,

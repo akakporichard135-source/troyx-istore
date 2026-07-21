@@ -56,6 +56,7 @@ export function ProductGallery({ product }: { product: Product }) {
           alt={product.name} 
           fill 
           priority 
+          onError={() => setActive("/assets/product-device-blue.svg")}
           sizes="(min-width: 1024px) 50vw, 100vw" 
           className="object-contain p-10 transition-transform duration-100 ease-out" 
           style={zoomStyle}

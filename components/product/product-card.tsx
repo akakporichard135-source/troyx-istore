@@ -19,6 +19,7 @@ export function ProductCard({ product, compact = false }: { product: Product; co
 
   // Quick view modal state
   const [quickViewOpen, setQuickViewOpen] = useState(false);
+  const [imageSrc, setImageSrc] = useState(product.images[0] || "/assets/product-device-blue.svg");
 
   return (
     <>
@@ -49,9 +50,10 @@ export function ProductCard({ product, compact = false }: { product: Product; co
         <div className="bg-brand-mist dark:bg-zinc-950/20 relative aspect-square overflow-hidden flex items-center justify-center">
           <Link href={`/product/${product.slug}`} className="block w-full h-full relative">
             <Image
-              src={product.images[0]}
+              src={imageSrc}
               alt={product.name}
               fill
+              onError={() => setImageSrc("/assets/product-device-blue.svg")}
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
               className="object-contain p-8 transition-transform duration-500 group-hover:scale-105"
             />

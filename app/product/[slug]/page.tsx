@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ProductDetailActions } from "@/components/product/product-detail-actions";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductGrid } from "@/components/product/product-grid";
+import { ProductReviews } from "@/components/product/product-reviews";
 import { Section } from "@/components/ui/section";
 import { getProductBySlug, products } from "@/database/products";
 import { formatCurrency } from "@/lib/utils";
@@ -106,15 +107,8 @@ export default async function ProductDetailsPage({ params }: Props) {
         <ProductGrid products={related.length ? related : products.slice(0, 4)} compact />
       </Section>
 
-      <Section eyebrow="Ratings & Reviews" title={`${product.rating} average rating from ${product.reviewCount} reviews`}>
-        <div className="grid gap-5 md:grid-cols-3">
-          {["Verified purchase", "Photo review ready", "Helpful votes"].map((item) => (
-            <div key={item} className="rounded-[2rem] border border-black/5 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
-              <p className="font-semibold text-brand-ink dark:text-white">{item}</p>
-              <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">Review infrastructure is ready for authenticated customers and order-linked submissions.</p>
-            </div>
-          ))}
-        </div>
+      <Section eyebrow="Ratings & Reviews" title="Customer Reviews & Experience">
+        <ProductReviews rating={product.rating} reviewCount={product.reviewCount} />
       </Section>
     </>
   );
