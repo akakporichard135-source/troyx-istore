@@ -119,8 +119,8 @@ export function getProductImages(productId: string, category?: string): string[]
   const categoryFallback = category ? productCategoryFallbacks[category] : "/assets/product-device-blue.svg";
 
   if (category === "iPhone" || productId.startsWith("iphone")) {
-    // Map to local public files: /public/images/iphone/[modelId].png
-    return [`/images/iphone/${productId}.png`, categoryFallback];
+    // Map to the organized local files: /images/iphone/[modelId]/[modelId].jpg
+    return [`/images/iphone/${productId}/${productId}.jpg`, categoryFallback];
   }
 
   const images = productImages[productId as keyof typeof productImages];
