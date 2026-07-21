@@ -17,9 +17,17 @@ export function ProductCard({ product, compact = false }: { product: Product; co
   const saved = wishlist.includes(product.id);
   const compared = compare.includes(product.id);
 
+  const categoryFallback = 
+    product.category === "MacBook" ? "/assets/product-laptop-dark.svg" :
+    product.category === "iPad" ? "/assets/product-tablet-dark.svg" :
+    product.category === "Apple Watch" ? "/assets/product-watch-dark.svg" :
+    product.category === "AirPods" || product.category === "Speakers" ? "/assets/product-audio.svg" :
+    product.category === "Accessories" || product.category === "Chargers" ? "/assets/product-accessory-blue.svg" :
+    "/assets/product-device-blue.svg";
+
   // Quick view modal state
   const [quickViewOpen, setQuickViewOpen] = useState(false);
-  const [imageSrc, setImageSrc] = useState(product.images[0] || "/assets/product-device-blue.svg");
+  const [imageSrc, setImageSrc] = useState(product.images[0] || categoryFallback);
 
   return (
     <>
@@ -53,7 +61,7 @@ export function ProductCard({ product, compact = false }: { product: Product; co
               src={imageSrc}
               alt={product.name}
               fill
-              onError={() => setImageSrc("/assets/product-device-blue.svg")}
+              onError={() => setImageSrc(categoryFallback)}
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
               className="object-contain p-8 transition-transform duration-500 group-hover:scale-105"
             />
