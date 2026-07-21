@@ -89,17 +89,21 @@ export function ProductCard({ product, compact = false }: { product: Product; co
               </p>
             )}
 
-            {/* Spec pills preview */}
+            {/* Spec pills preview & Seller Badge */}
             {!compact && (
-              <div className="mt-3 flex flex-wrap gap-1.5">
+              <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                {/* Seller Badge */}
+                <Link
+                  href={`/store/${product.vendorSlug || (product.isVerifiedVendor ? "troyx-official" : "troyx-official")}`}
+                  className="inline-flex items-center gap-1 rounded-md bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Sold by {product.vendorName || "TroyX Flagship"}
+                </Link>
+
                 {product.storage.slice(0, 2).map((opt) => (
                   <span key={opt} className="inline-block rounded-md bg-blue-50/50 px-2 py-0.5 text-[9px] font-bold text-brand-blue dark:bg-blue-900/20">
                     {opt}
-                  </span>
-                ))}
-                {product.condition.slice(0, 1).map((cond) => (
-                  <span key={cond} className="inline-block rounded-md bg-purple-50/50 px-2 py-0.5 text-[9px] font-bold text-purple-700 dark:bg-purple-900/20 dark:text-purple-300">
-                    {cond}
                   </span>
                 ))}
               </div>

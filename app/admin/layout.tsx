@@ -25,7 +25,10 @@ import {
   Search,
   User,
   ShieldAlert,
-  ChevronDown
+  ChevronDown,
+  Store,
+  CreditCard,
+  Sparkles
 } from "lucide-react";
 import { useAdminStore, AdminRole } from "@/context/admin-store";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
@@ -33,14 +36,17 @@ import { cn } from "@/lib/utils";
 
 const menuItems = [
   { icon: Home, label: "Overview", href: "/admin" },
+  { icon: Store, label: "Marketplace Overview", href: "/admin/marketplace" },
+  { icon: Users, label: "Store Vendors", href: "/admin/marketplace/vendors" },
+  { icon: FileText, label: "Seller Applications", href: "/admin/marketplace/applications" },
+  { icon: Sparkles, label: "Subscription Plans", href: "/admin/marketplace/plans" },
+  { icon: CreditCard, label: "Vendor Payouts", href: "/admin/marketplace/payouts" },
   { icon: BarChart3, label: "Analytics", href: "/admin/analytics" },
   { icon: PackagePlus, label: "Products", href: "/admin/products" },
   { icon: Boxes, label: "Inventory", href: "/admin/inventory" },
   { icon: FileText, label: "Orders", href: "/admin/orders" },
   { icon: Users, label: "Customers", href: "/admin/customers" },
   { icon: Percent, label: "Promotions", href: "/admin/promotions" },
-  { icon: ImageIcon, label: "Images", href: "/admin/images" },
-  { icon: DollarSign, label: "Pricing", href: "/admin/pricing" },
   { icon: Shield, label: "Role Matrix", href: "/admin/roles" },
   { icon: Settings, label: "Store Settings", href: "/admin/settings" },
   { icon: LockKeyhole, label: "Audit Logs", href: "/admin/logs" },

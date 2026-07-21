@@ -11,35 +11,37 @@ const footerGroups = [
     title: "Quick Links",
     links: [
       ["Shop", "/shop"],
-      ["Categories", "/categories"],
+      ["Browse Stores", "/stores"],
       ["Best Sellers", "/shop?sort=best"],
       ["New Arrivals", "/shop?sort=new"]
     ]
   },
   {
-    title: "Support",
+    title: "Sell on TroyX",
     links: [
-      ["Contact", "/contact"],
+      ["Open a Store", "/sell"],
+      ["Vendor Portal", "/vendor"],
+      ["Marketplace Pricing", "/sell#pricing"],
+      ["Seller Terms", "/terms#seller"]
+    ]
+  },
+  {
+    title: "Support & Repair",
+    links: [
+      ["Contact Us", "/contact"],
       ["FAQ", "/faq"],
       ["Order Tracking", "/order-tracking"],
-      ["Repair Booking", "/repair-booking"]
+      ["Repair Booking", "/repair-booking"],
+      ["Trade-In", "/trade-in"]
     ]
   },
   {
-    title: "Company",
+    title: "Company & Legal",
     links: [
-      ["About", "/about"],
-      ["Trade-In", "/trade-in"],
-      ["Customer Dashboard", "/dashboard"],
-      ["Admin", "/admin"]
-    ]
-  },
-  {
-    title: "Legal",
-    links: [
+      ["About Us", "/about"],
       ["Privacy Policy", "/privacy-policy"],
       ["Terms", "/terms"],
-      ["Shipping Policy", "/shipping-policy"]
+      ["Admin Portal", "/admin"]
     ]
   }
 ];
@@ -47,7 +49,7 @@ const footerGroups = [
 export function Footer() {
   const pathname = usePathname();
 
-  if (pathname?.startsWith("/admin")) {
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/vendor")) {
     return null;
   }
 
