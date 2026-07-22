@@ -1,10 +1,10 @@
 /**
  * Image Service - Centralized Apple & Gaming product image management
- * Maps local image paths for the storefront using the real uploaded iPhone photographs.
+ * Maps local image paths for the storefront.
  */
 
 export const productCategoryFallbacks: Record<string, string> = {
-  iPhone: "/images/iphone/iphone-gold.png",
+  iPhone: "/assets/image-coming-soon.svg",
   MacBook: "/assets/product-laptop-dark.svg",
   iPad: "/assets/product-tablet-dark.svg",
   "Apple Watch": "/assets/product-watch-dark.svg",
@@ -112,85 +112,23 @@ export const productImages: Record<string, string[]> = {
   ]
 };
 
-// Map each of the 51 iPhone models to one of the 5 uploaded real photos based on color/generation.
-const iphoneImageMap: Record<string, string> = {
-  // Orange/Bronze (17 series, 17 Pro/Max)
-  "iphone-17-pro-max": "/images/iphone/iphone-orange.png",
-  "iphone-17-pro": "/images/iphone/iphone-orange.png",
-  "iphone-17-air": "/images/iphone/iphone-teal.png",
-  "iphone-17": "/images/iphone/iphone-teal.png",
-  "iphone-16e": "/images/iphone/iphone-pink.png",
-
-  // Gold/Natural/Bronze (16 Pro, 15 Pro, XS, 8, 7, 6, 5s)
-  "iphone-16-pro-max": "/images/iphone/iphone-gold.png",
-  "iphone-16-pro": "/images/iphone/iphone-gold.png",
-  "iphone-15-pro-max": "/images/iphone/iphone-black.png",
-  "iphone-15-pro": "/images/iphone/iphone-black.png",
-  "iphone-xs-max": "/images/iphone/iphone-gold.png",
-  "iphone-xs": "/images/iphone/iphone-gold.png",
-  "iphone-8-plus": "/images/iphone/iphone-gold.png",
-  "iphone-8": "/images/iphone/iphone-gold.png",
-  "iphone-6s-plus": "/images/iphone/iphone-gold.png",
-  "iphone-6s": "/images/iphone/iphone-gold.png",
-  "iphone-6-plus": "/images/iphone/iphone-silver.png",
-  "iphone-6": "/images/iphone/iphone-silver.png",
-  "iphone-5s": "/images/iphone/iphone-gold.png",
-
-  // Silver/White/Starlight (SE, 12, 11, X, 5, 4, 3, 1st Gen)
-  "iphone-se-3": "/images/iphone/iphone-silver.png",
-  "iphone-se-2": "/images/iphone/iphone-silver.png",
-  "iphone-12": "/images/iphone/iphone-silver.png",
-  "iphone-12-mini": "/images/iphone/iphone-silver.png",
-  "iphone-11": "/images/iphone/iphone-yellow.png",
-  "iphone-x": "/images/iphone/iphone-silver.png",
-  "iphone-5": "/images/iphone/iphone-silver.png",
-  "iphone-4s": "/images/iphone/iphone-black.png",
-  "iphone-4": "/images/iphone/iphone-black.png",
-  "iphone-3gs": "/images/iphone/iphone-silver.png",
-  "iphone-3g": "/images/iphone/iphone-silver.png",
-  "iphone-1st-gen": "/images/iphone/iphone-silver.png",
-
-  // Teal/Pink/Blue/Purple/Yellow
-  "iphone-16-plus": "/images/iphone/iphone-teal.png",
-  "iphone-16": "/images/iphone/iphone-teal.png",
-  "iphone-15-plus": "/images/iphone/iphone-pink.png",
-  "iphone-15": "/images/iphone/iphone-pink.png",
-  "iphone-14-pro-max": "/images/iphone/iphone-purple.png",
-  "iphone-14-pro": "/images/iphone/iphone-purple.png",
-  "iphone-14-plus": "/images/iphone/iphone-blue.png",
-  "iphone-14": "/images/iphone/iphone-blue.png",
-  "iphone-13-pro-max": "/images/iphone/iphone-blue.png",
-  "iphone-13-pro": "/images/iphone/iphone-blue.png",
-  "iphone-13": "/images/iphone/iphone-pink.png",
-  "iphone-13-mini": "/images/iphone/iphone-pink.png",
-  "iphone-12-pro-max": "/images/iphone/iphone-blue.png",
-  "iphone-12-pro": "/images/iphone/iphone-blue.png",
-  "iphone-11-pro-max": "/images/iphone/iphone-black.png",
-  "iphone-11-pro": "/images/iphone/iphone-black.png",
-  "iphone-xr": "/images/iphone/iphone-yellow.png",
-  "iphone-7-plus": "/images/iphone/iphone-purple.png",
-  "iphone-7": "/images/iphone/iphone-purple.png",
-  "iphone-se": "/images/iphone/iphone-purple.png",
-  "iphone-5c": "/images/iphone/iphone-yellow.png"
-};
-
 /**
  * Get product images with guaranteed fallback
  */
 export function getProductImages(productId: string, category?: string): string[] {
-  const categoryFallback = "/images/iphone/iphone-gold.png";
+  const placeholder = "/assets/image-coming-soon.svg";
 
   if (category === "iPhone" || productId.startsWith("iphone")) {
-    const mapped = iphoneImageMap[productId.toLowerCase()];
-    return [mapped || categoryFallback, categoryFallback];
+    // Return only the neutral "Image Coming Soon" placeholder
+    return [placeholder, placeholder];
   }
 
   const images = productImages[productId as keyof typeof productImages];
   if (images && images.length > 0) {
-    return [...images, categoryFallback];
+    return [...images, placeholder];
   }
 
-  return [categoryFallback];
+  return [placeholder];
 }
 
 /**
@@ -205,7 +143,7 @@ export function getFeaturedImage(productId: string, category?: string): string {
  * Banner images for sections
  */
 export const bannerImages = {
-  iphones: "/images/iphone/iphone-gold.png",
+  iphones: "/assets/image-coming-soon.svg",
   macbooks: "/assets/product-laptop-dark.svg",
   ipads: "/assets/product-tablet-dark.svg",
   watches: "/assets/product-watch-dark.svg",

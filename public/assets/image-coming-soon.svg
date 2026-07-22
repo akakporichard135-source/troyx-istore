@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="100%" height="100%" fill="#18181b"/>
+  <rect x="10" y="10" width="380" height="380" rx="20" fill="none" stroke="#27272a" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="50%" y="48%" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600" fill="#a1a1aa" text-anchor="middle">
+    Image
+  </text>
+  <text x="50%" y="54%" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600" fill="#a1a1aa" text-anchor="middle">
+    Coming Soon
+  </text>
+</svg>
