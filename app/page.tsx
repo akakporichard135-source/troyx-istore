@@ -46,6 +46,7 @@ const sections = [
 ];
 
 const heroImage = "/images/home/hero-iphone-17-pro-max.webp";
+const featuredDealImage = "/images/home/featured-iphone-16-pro-max.webp";
 
 export default function HomePage() {
   const featuredIPhone = products.find(p => p.bestSeller && p.category === "iPhone") || products[0];
@@ -148,12 +149,13 @@ export default function HomePage() {
                 </LinkButton>
               </div>
             </div>
-            <div className="relative h-64 md:h-80">
+            <div className="relative flex h-80 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-5 shadow-inner sm:h-96 sm:p-7 md:h-[420px]">
               <Image
-                src={featuredIPhone.images[0]}
+                src={featuredDealImage}
                 alt={featuredIPhone.name}
                 fill
-                className="object-contain"
+                sizes="(min-width: 768px) 42vw, 86vw"
+                className="object-contain p-5 sm:p-7"
               />
             </div>
           </div>
