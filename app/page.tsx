@@ -45,6 +45,8 @@ const sections = [
   { id: "gaming", title: "Gaming Consoles", description: "PS5, Xbox, Nintendo Switch, and accessories", image: bannerImages.gaming }
 ];
 
+const heroImage = "/images/home/hero-iphone-17-pro-max.webp";
+
 export default function HomePage() {
   const featuredIPhone = products.find(p => p.bestSeller && p.category === "iPhone") || products[0];
   const bestSellerProducts = featuredGroups.bestSellers.slice(0, 4);
@@ -109,15 +111,15 @@ export default function HomePage() {
           </div>
 
           {/* Hero Image */}
-          <div className="relative h-96 md:h-[500px] flex items-center justify-center">
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-100/40 to-blue-50/40 backdrop-blur-sm dark:from-blue-500/10 dark:to-blue-400/5" />
+          <div className="relative flex h-[420px] items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-blue-100/50 via-white/60 to-blue-50/40 p-6 backdrop-blur-sm dark:from-violet-950/50 dark:via-blue-950/30 dark:to-zinc-950/40 sm:h-[500px] sm:p-8 lg:h-[560px] lg:p-10">
             <Image
-              src={bannerImages.iphones}
-              alt="iPhone 16 Pro Max"
-              width={400}
-              height={500}
+              src={heroImage}
+              alt="iPhone 17 Pro Max"
+              width={666}
+              height={1184}
               priority
-              className="relative z-10 rounded-2xl object-cover shadow-2xl hover:shadow-3xl transition-shadow duration-300"
+              sizes="(min-width: 1024px) 38vw, (min-width: 640px) 52vw, 80vw"
+              className="relative z-10 h-full w-auto max-w-full rounded-2xl object-contain shadow-2xl transition-shadow duration-300 hover:shadow-3xl"
             />
           </div>
         </div>
