@@ -1,0 +1,603 @@
+[
+  {
+    "slug": "iphone-11",
+    "productName": "iPhone 11",
+    "image": "/images/iphone/iphone-11.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-11-480.webp",
+      "/images/iphone/responsive/iphone-11-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 11 Product Red 128g.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_11_Product_Red_128g.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/08/IPhone_11_Product_Red_128g.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/IPhone_11_Product_Red_128g.jpg/1280px-IPhone_11_Product_Red_128g.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "茅野ふたば",
+    "width": 3024,
+    "height": 4032,
+    "alternates": []
+  },
+  {
+    "slug": "iphone-11-pro",
+    "productName": "iPhone 11 Pro",
+    "image": "/images/iphone/iphone-11-pro.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-11-pro-480.webp",
+      "/images/iphone/responsive/iphone-11-pro-800.webp"
+    ],
+    "sourceTitle": "File:2019-12-22 IPhone 11 Pro.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:2019-12-22_IPhone_11_Pro.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a4/2019-12-22_IPhone_11_Pro.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/2019-12-22_IPhone_11_Pro.jpg/1280px-2019-12-22_IPhone_11_Pro.jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "attribution": "Shinji",
+    "width": 4032,
+    "height": 3024,
+    "alternates": [
+      "File:IPhone 11 Pro setup in japanese.jpg",
+      "File:IPhone 11 Pro & Apple Watch Series 5.jpg",
+      "File:20191227 iPhone 11 Pro 3.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-11-pro-max",
+    "productName": "iPhone 11 Pro Max",
+    "image": "/images/iphone/iphone-11-pro-max.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-11-pro-max-480.webp",
+      "/images/iphone/responsive/iphone-11-pro-max-800.webp"
+    ],
+    "sourceTitle": "File:Iphone 11 pro max.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Iphone_11_pro_max.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/88/Iphone_11_pro_max.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Iphone_11_pro_max.jpg/1280px-Iphone_11_pro_max.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "Ahmadkurdi44",
+    "width": 1440,
+    "height": 1755,
+    "alternates": [
+      "File:Iphone 11 promax.jpg",
+      "File:苹果11promax，重庆市巴南区（2024年10月11日）.jpg",
+      "File:ايفون 11 برو ماكس.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-12",
+    "productName": "iPhone 12",
+    "image": "/images/iphone/iphone-12.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-12-480.webp",
+      "/images/iphone/responsive/iphone-12-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 12 Black 256g.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_12_Black_256g.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cf/IPhone_12_Black_256g.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/IPhone_12_Black_256g.jpg/1280px-IPhone_12_Black_256g.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "茅野ふたば",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:IPhone 12 Green 128g.jpg",
+      "File:IPhone 12 screen removed.jpg",
+      "File:IPhone 12 - 2.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-12-mini",
+    "productName": "iPhone 12 mini",
+    "image": "/images/iphone/iphone-12-mini.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-12-mini-480.webp",
+      "/images/iphone/responsive/iphone-12-mini-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 12 Mini - 7.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_12_Mini_-_7.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9e/IPhone_12_Mini_-_7.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/IPhone_12_Mini_-_7.jpg/1280px-IPhone_12_Mini_-_7.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "KKPCW（Kyu3）",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:IPhone 12 Mini - 5.jpg",
+      "File:IPhone 12 Mini - 6.jpg",
+      "File:IPhone 12 Mini - 8.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-12-pro",
+    "productName": "iPhone 12 Pro",
+    "image": "/images/iphone/iphone-12-pro.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-12-pro-480.webp",
+      "/images/iphone/responsive/iphone-12-pro-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 12 Pro backside.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_12_Pro_backside.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e4/IPhone_12_Pro_backside.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/IPhone_12_Pro_backside.jpg/1280px-IPhone_12_Pro_backside.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "茅野ふたば",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:IPhone 12 Pro Pacific Blue 256g.jpg",
+      "File:IPhone 12 Pro Max Pacific Blue 128g.jpg",
+      "File:IPhone 12 Pro Pacific Blue 128g.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-12-pro-max",
+    "productName": "iPhone 12 Pro Max",
+    "image": "/images/iphone/iphone-12-pro-max.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-12-pro-max-480.webp",
+      "/images/iphone/responsive/iphone-12-pro-max-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 12 Pro Max Pacific Blue 128g.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_12_Pro_Max_Pacific_Blue_128g.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f0/IPhone_12_Pro_Max_Pacific_Blue_128g.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/IPhone_12_Pro_Max_Pacific_Blue_128g.jpg/1280px-IPhone_12_Pro_Max_Pacific_Blue_128g.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "茅野ふたば",
+    "width": 3024,
+    "height": 4032,
+    "alternates": []
+  },
+  {
+    "slug": "iphone-13",
+    "productName": "iPhone 13",
+    "image": "/images/iphone/iphone-13.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-13-480.webp",
+      "/images/iphone/responsive/iphone-13-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 13.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_13.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3c/IPhone_13.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/IPhone_13.jpg/1280px-IPhone_13.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "Kskhh",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:IPhone 13 for Tora (52641558635).jpg",
+      "File:IPhone 13 White 256g.jpg",
+      "File:IPhone 13, January 28, 2024.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-13-mini",
+    "productName": "iPhone 13 mini",
+    "image": "/images/iphone/iphone-13-mini.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-13-mini-480.webp",
+      "/images/iphone/responsive/iphone-13-mini-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 13 Mini Grün Freigestellt.png",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_13_Mini_Gr%C3%BCn_Freigestellt.png",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8b/IPhone_13_Mini_Gr%C3%BCn_Freigestellt.png",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/IPhone_13_Mini_Gr%C3%BCn_Freigestellt.png/1280px-IPhone_13_Mini_Gr%C3%BCn_Freigestellt.png",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "DYVER",
+    "width": 2645,
+    "height": 5521,
+    "alternates": []
+  },
+  {
+    "slug": "iphone-13-pro",
+    "productName": "iPhone 13 Pro",
+    "image": "/images/iphone/iphone-13-pro.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-13-pro-480.webp",
+      "/images/iphone/responsive/iphone-13-pro-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 13 Pro Sierra blue A2483 US version rear.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_13_Pro_Sierra_blue_A2483_US_version_rear.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7f/IPhone_13_Pro_Sierra_blue_A2483_US_version_rear.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/IPhone_13_Pro_Sierra_blue_A2483_US_version_rear.jpg/1280px-IPhone_13_Pro_Sierra_blue_A2483_US_version_rear.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "茅野ふたば",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:Apple iPhone 13 Pro.jpg",
+      "File:Samsung Galaxy S24 Ultra, iPhone 13 Pro, Google Pixel.jpg",
+      "File:IPhone 13 Pro with Airpods Max 3.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-13-pro-max",
+    "productName": "iPhone 13 Pro Max",
+    "image": "/images/iphone/iphone-13-pro-max.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-13-pro-max-480.webp",
+      "/images/iphone/responsive/iphone-13-pro-max-800.webp"
+    ],
+    "sourceTitle": "File:Back view of iPhone 13 Pro Max Gold.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Back_view_of_iPhone_13_Pro_Max_Gold.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/13/Back_view_of_iPhone_13_Pro_Max_Gold.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Back_view_of_iPhone_13_Pro_Max_Gold.jpg/1280px-Back_view_of_iPhone_13_Pro_Max_Gold.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "メイド理世",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:IPhone 13 Pro Max Sierra Blue 128g.jpg",
+      "File:ROC National Anti-Disaster Day earthquake short message on iPhone 13 Pro Max 20220921.png",
+      "File:Iphone 13 pro max.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-14",
+    "productName": "iPhone 14",
+    "image": "/images/iphone/iphone-14.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-14-480.webp",
+      "/images/iphone/responsive/iphone-14-800.webp"
+    ],
+    "sourceTitle": "File:Back view of iPhone 14 Blue.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Back_view_of_iPhone_14_Blue.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/99/Back_view_of_iPhone_14_Blue.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Back_view_of_iPhone_14_Blue.jpg/1280px-Back_view_of_iPhone_14_Blue.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "メイド理世",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:IPhone 14 20240225.jpg",
+      "File:IPhone 14 20240225 (1).jpg",
+      "File:IPhone 14 20240225 (1) (cropped).jpg"
+    ]
+  },
+  {
+    "slug": "iphone-14-plus",
+    "productName": "iPhone 14 Plus",
+    "image": "/images/iphone/iphone-14-plus.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-14-plus-480.webp",
+      "/images/iphone/responsive/iphone-14-plus-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 14 Plus yellow.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_14_Plus_yellow.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d1/IPhone_14_Plus_yellow.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/IPhone_14_Plus_yellow.jpg/1280px-IPhone_14_Plus_yellow.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "茅野ふたば",
+    "width": 3024,
+    "height": 4032,
+    "alternates": []
+  },
+  {
+    "slug": "iphone-14-pro",
+    "productName": "iPhone 14 Pro",
+    "image": "/images/iphone/iphone-14-pro.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-14-pro-480.webp",
+      "/images/iphone/responsive/iphone-14-pro-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 14 Pro Deep Purple 256g.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_14_Pro_Deep_Purple_256g.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/32/IPhone_14_Pro_Deep_Purple_256g.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/IPhone_14_Pro_Deep_Purple_256g.jpg/1280px-IPhone_14_Pro_Deep_Purple_256g.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "茅野ふたば",
+    "width": 3024,
+    "height": 4032,
+    "alternates": []
+  },
+  {
+    "slug": "iphone-14-pro-max",
+    "productName": "iPhone 14 Pro Max",
+    "image": "/images/iphone/iphone-14-pro-max.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-14-pro-max-480.webp",
+      "/images/iphone/responsive/iphone-14-pro-max-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 14 Pro Max Deep purple A2896 China, Hong Kong and Macao version front.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_14_Pro_Max_Deep_purple_A2896_China,_Hong_Kong_and_Macao_version_front.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9e/IPhone_14_Pro_Max_Deep_purple_A2896_China%2C_Hong_Kong_and_Macao_version_front.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/IPhone_14_Pro_Max_Deep_purple_A2896_China%2C_Hong_Kong_and_Macao_version_front.jpg/1280px-IPhone_14_Pro_Max_Deep_purple_A2896_China%2C_Hong_Kong_and_Macao_version_front.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "茅野ふたば",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:Deep Purple iPhone 14 Pro Max front photo.jpg",
+      "File:Back of the iPhone 14 Pro Max.jpg",
+      "File:Back view of iPhone 14 Pro Max Deep Purple.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-15",
+    "productName": "iPhone 15",
+    "image": "/images/iphone/iphone-15.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-15-480.webp",
+      "/images/iphone/responsive/iphone-15-800.webp"
+    ],
+    "sourceTitle": "File:Back and side of iPhone 15.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Back_and_side_of_iPhone_15.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Back_and_side_of_iPhone_15.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Back_and_side_of_iPhone_15.jpg/1280px-Back_and_side_of_iPhone_15.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "Kyu3",
+    "width": 1912,
+    "height": 2550,
+    "alternates": [
+      "File:Back of iPhone 15.jpg",
+      "File:Back view of iPhone 15 Blue.jpg",
+      "File:Back view of iPhone 15 blue.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-15-plus",
+    "productName": "iPhone 15 Plus",
+    "image": "/images/iphone/iphone-15-plus.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-15-plus-480.webp",
+      "/images/iphone/responsive/iphone-15-plus-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 15 plus.png",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_15_plus.png",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e8/IPhone_15_plus.png",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/IPhone_15_plus.png/1280px-IPhone_15_plus.png",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "Ka Kit Pang",
+    "width": 3472,
+    "height": 4624,
+    "alternates": [
+      "File:IPhone 15 Plus.JPG",
+      "File:IPhone 15 Plus.jpeg",
+      "File:IPhone 15 plus.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-15-pro",
+    "productName": "iPhone 15 Pro",
+    "image": "/images/iphone/iphone-15-pro.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-15-pro-480.webp",
+      "/images/iphone/responsive/iphone-15-pro-800.webp"
+    ],
+    "sourceTitle": "File:Back view of iPhone 15 Pro Natural titanium.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Back_view_of_iPhone_15_Pro_Natural_titanium.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Back_view_of_iPhone_15_Pro_Natural_titanium.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Back_view_of_iPhone_15_Pro_Natural_titanium.jpg/1280px-Back_view_of_iPhone_15_Pro_Natural_titanium.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "メイド理世",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:IPhone 15 pro.png",
+      "File:IPhone 15 Pro.JPG",
+      "File:Apple iPhone 15 Pro.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-15-pro-max",
+    "productName": "iPhone 15 Pro Max",
+    "image": "/images/iphone/iphone-15-pro-max.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-15-pro-max-480.webp",
+      "/images/iphone/responsive/iphone-15-pro-max-800.webp"
+    ],
+    "sourceTitle": "File:Front of iPhone 15 Pro Max.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Front_of_iPhone_15_Pro_Max.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/42/Front_of_iPhone_15_Pro_Max.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Front_of_iPhone_15_Pro_Max.jpg/1280px-Front_of_iPhone_15_Pro_Max.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "attribution": "Ayamano2021",
+    "width": 2147,
+    "height": 4219,
+    "alternates": [
+      "File:Side of iPhone 15 Pro Max - 1.jpg",
+      "File:Side of iPhone 15 Pro Max - 3.jpg",
+      "File:Back view of iPhone 15 Pro Max Natural Titanium.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-16",
+    "productName": "iPhone 16",
+    "image": "/images/iphone/iphone-16.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-16-480.webp",
+      "/images/iphone/responsive/iphone-16-800.webp"
+    ],
+    "sourceTitle": "File:Left view of iPhone 16 in Pink.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Left_view_of_iPhone_16_in_Pink.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/22/Left_view_of_iPhone_16_in_Pink.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Left_view_of_iPhone_16_in_Pink.jpg/1280px-Left_view_of_iPhone_16_in_Pink.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "メイド理世",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:Right view of iPhone 16 in Pink.jpg",
+      "File:IPhone 16 Ultramarine Rear.png",
+      "File:Back view of iPhone 16 Ultramarine.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-16-plus",
+    "productName": "iPhone 16 Plus",
+    "image": "/images/iphone/iphone-16-plus.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-16-plus-480.webp",
+      "/images/iphone/responsive/iphone-16-plus-800.webp"
+    ],
+    "sourceTitle": "File:Right view of iPhone 16 Plus Teal.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Right_view_of_iPhone_16_Plus_Teal.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Right_view_of_iPhone_16_Plus_Teal.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Right_view_of_iPhone_16_Plus_Teal.jpg/1280px-Right_view_of_iPhone_16_Plus_Teal.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "メイド理世",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:Left view of iPhone 16 Plus Teal.jpg",
+      "File:Back view of iPhone 16 Plus in Pink.jpg",
+      "File:Back view of iPhone 16 Plus Black.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-16-pro",
+    "productName": "iPhone 16 Pro",
+    "image": "/images/iphone/iphone-16-pro.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-16-pro-480.webp",
+      "/images/iphone/responsive/iphone-16-pro-800.webp"
+    ],
+    "sourceTitle": "File:Right view of iPhone 16 Pro White Titanium.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Right_view_of_iPhone_16_Pro_White_Titanium.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/57/Right_view_of_iPhone_16_Pro_White_Titanium.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Right_view_of_iPhone_16_Pro_White_Titanium.jpg/1280px-Right_view_of_iPhone_16_Pro_White_Titanium.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "メイド理世",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:Back view of iPhone 16 Pro White Titanium.jpg",
+      "File:Back of iPhone 16 Pro - 1.jpg",
+      "File:Back of iPhone 16 Pro Silver model.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-16-pro-max",
+    "productName": "iPhone 16 Pro Max",
+    "image": "/images/iphone/iphone-16-pro-max.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-16-pro-max-480.webp",
+      "/images/iphone/responsive/iphone-16-pro-max-800.webp"
+    ],
+    "sourceTitle": "File:Right view of iPhone 16 Pro Max Natural Titanium.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Right_view_of_iPhone_16_Pro_Max_Natural_Titanium.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/01/Right_view_of_iPhone_16_Pro_Max_Natural_Titanium.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Right_view_of_iPhone_16_Pro_Max_Natural_Titanium.jpg/1280px-Right_view_of_iPhone_16_Pro_Max_Natural_Titanium.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "attribution": "メイド理世",
+    "width": 3024,
+    "height": 4032,
+    "alternates": [
+      "File:Back view of iPhone 16 Pro Max Natural Titanium.jpg",
+      "File:Back of iPhone 16 Pro Max Gold model.jpg",
+      "File:About iPhone 16 Pro Max Natural Titanium.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-17",
+    "productName": "iPhone 17",
+    "image": "/images/iphone/iphone-17.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-17-480.webp",
+      "/images/iphone/responsive/iphone-17-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 17 (Lavender) - Backside.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_17_(Lavender)_-_Backside.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ab/IPhone_17_%28Lavender%29_-_Backside.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/IPhone_17_%28Lavender%29_-_Backside.jpg/1280px-IPhone_17_%28Lavender%29_-_Backside.jpg",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "attribution": "AzureSaturn",
+    "width": 3072,
+    "height": 4284,
+    "alternates": [
+      "File:IPhone 17 backside (Lavender) (Oct 1, 2025).jpg",
+      "File:Black iPhone 17.jpg",
+      "File:White iPhone 17.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-17-air",
+    "productName": "iPhone Air",
+    "image": "/images/iphone/iphone-17-air.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-17-air-480.webp",
+      "/images/iphone/responsive/iphone-17-air-800.webp"
+    ],
+    "sourceTitle": "File:IPhone Air (Cloud White) - Backside.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_Air_(Cloud_White)_-_Backside.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/IPhone_Air_%28Cloud_White%29_-_Backside.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/IPhone_Air_%28Cloud_White%29_-_Backside.jpg/1280px-IPhone_Air_%28Cloud_White%29_-_Backside.jpg",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "attribution": "AzureSaturn",
+    "width": 2857,
+    "height": 4284,
+    "alternates": [
+      "File:IPhone Air backside.jpg",
+      "File:Space Black iPhone Air.jpg",
+      "File:Light Gold iPhone Air.jpg"
+    ]
+  },
+  {
+    "slug": "iphone-17-pro",
+    "productName": "iPhone 17 Pro",
+    "image": "/images/iphone/iphone-17-pro.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-17-pro-480.webp",
+      "/images/iphone/responsive/iphone-17-pro-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 17 Pro (Silver) - Backside.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_17_Pro_(Silver)_-_Backside.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b1/IPhone_17_Pro_%28Silver%29_-_Backside.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/IPhone_17_Pro_%28Silver%29_-_Backside.jpg/1280px-IPhone_17_Pro_%28Silver%29_-_Backside.jpg",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "attribution": "AzureSaturn",
+    "width": 3261,
+    "height": 4284,
+    "alternates": [
+      "File:IPhone 17 Pro and 16e backside (Sep 30, 2025).jpg",
+      "File:IPhone 17 Pro backside (Cosmic Orange) (Oct 1, 2025).jpg",
+      "File:IPhone 17 Pro backside (Deep Blue) (Oct 1, 2025).jpg"
+    ]
+  },
+  {
+    "slug": "iphone-17-pro-max",
+    "productName": "iPhone 17 Pro Max",
+    "image": "/images/iphone/iphone-17-pro-max.webp",
+    "responsive": [
+      "/images/iphone/responsive/iphone-17-pro-max-480.webp",
+      "/images/iphone/responsive/iphone-17-pro-max-800.webp"
+    ],
+    "sourceTitle": "File:IPhone 17 Pro Max (Cosmic Orange) - Backside.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:IPhone_17_Pro_Max_(Cosmic_Orange)_-_Backside.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6f/IPhone_17_Pro_Max_%28Cosmic_Orange%29_-_Backside.jpg",
+    "importedUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/IPhone_17_Pro_Max_%28Cosmic_Orange%29_-_Backside.jpg/1280px-IPhone_17_Pro_Max_%28Cosmic_Orange%29_-_Backside.jpg",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "attribution": "AzureSaturn",
+    "width": 3130,
+    "height": 4284,
+    "alternates": [
+      "File:IPhone 17 Pro Max backside (Silver) (Oct 1, 2025).jpg",
+      "File:Silver iPhone 17 Pro Max.jpg",
+      "File:Cosmic Orange iPhone 17 Pro Max.jpg"
+    ]
+  }
+]
