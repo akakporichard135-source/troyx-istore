@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight, CheckCircle2, MapPin, ShieldCheck, Sparkles, Truck, Wrench, Trophy, Zap, Package } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ProductGrid } from "@/components/product/product-grid";
@@ -39,10 +40,34 @@ const trustCards: Array<[LucideIcon, string, string]> = [
 ];
 
 const sections = [
-  { id: "iphones", title: "Latest iPhones", description: "From iPhone 16 Pro to budget-friendly options", image: bannerImages.iphones },
-  { id: "macbooks", title: "MacBook Collection", description: "Air, Pro, and all variants with premium performance", image: bannerImages.macbooks },
-  { id: "ipads", title: "iPad Range", description: "Pro, Air, and standard models for every need", image: bannerImages.ipads },
-  { id: "gaming", title: "Gaming Consoles", description: "PS5, Xbox, Nintendo Switch, and accessories", image: bannerImages.gaming }
+  {
+    id: "iphones",
+    title: "Latest iPhones",
+    description: "Explore the latest iPhone models, Pro editions, and affordable options.",
+    image: "/images/categories/iphones.webp",
+    href: "/categories?type=iphones"
+  },
+  {
+    id: "macbooks",
+    title: "MacBook Collection",
+    description: "Shop MacBook Air and MacBook Pro models for work, school, and creativity.",
+    image: "/images/categories/macbooks.webp",
+    href: "/categories?type=macbooks"
+  },
+  {
+    id: "ipads",
+    title: "iPad Range",
+    description: "Discover iPad Pro, iPad Air, iPad mini, and standard iPad models.",
+    image: "/images/categories/ipads.webp",
+    href: "/categories?type=ipads"
+  },
+  {
+    id: "gaming",
+    title: "Gaming Consoles",
+    description: "Shop PlayStation, Xbox, Nintendo Switch, and gaming accessories.",
+    image: "/images/categories/gaming.webp",
+    href: "/categories?type=gaming"
+  }
 ];
 
 const heroImage = "/images/home/hero-iphone-17-pro-max.webp";
@@ -166,25 +191,25 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {sections.map((section) => (
-            <LinkButton
+            <Link
               key={section.id}
-              href={section.id === "gaming" ? "/categories?type=gaming" : `/categories?type=${section.id}`}
-              className="!h-auto !p-0 relative group overflow-hidden rounded-2xl"
+              href={section.href}
+              className="focus-ring group relative block h-64 overflow-hidden rounded-2xl border border-black/5 bg-zinc-950 shadow-sm transition hover:-translate-y-1 hover:shadow-premium dark:border-white/10 md:h-72"
+              aria-label={`Browse ${section.title}`}
             >
-              <div className="relative h-48 md:h-64 w-full">
-                <Image
-                  src={section.image}
-                  alt={section.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
-                <div className="absolute inset-0 flex flex-col justify-end p-6">
-                  <h3 className="text-2xl md:text-3xl font-bold text-white">{section.title}</h3>
-                  <p className="text-blue-100 text-sm mt-2">{section.description}</p>
-                </div>
+              <Image
+                src={section.image}
+                alt={`${section.title} category`}
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10" />
+              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
+                <h3 className="text-2xl font-bold text-white md:text-3xl">{section.title}</h3>
+                <p className="mt-3 max-w-xl text-sm leading-6 text-blue-50 sm:text-base">{section.description}</p>
               </div>
-            </LinkButton>
+            </Link>
           ))}
         </div>
       </section>
