@@ -1,6 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, MapPin, ShieldCheck, Sparkles, Truck, Wrench, Trophy, Zap, Package } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  MapPin,
+  ShieldCheck,
+  Sparkles,
+  Truck,
+  Wrench,
+  Trophy,
+  Zap,
+  Package
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ProductGrid } from "@/components/product/product-grid";
 import { Button, LinkButton } from "@/components/ui/button";
@@ -33,38 +44,58 @@ const reviews = [
 ];
 
 const trustCards: Array<[LucideIcon, string, string]> = [
-  [ShieldCheck, "100% Authentic", "Verified and documented inventory with authenticity guarantees."],
-  [Truck, "Fast Fulfillment", "Same-day pickup and 1-3 day delivery options available."],
-  [Wrench, "Expert Support", "Book diagnostics, repairs, and get personalized buying guidance."],
-  [Trophy, "Best Value", "Competitive pricing with trade-in options and flexible payment plans."]
+  [
+    ShieldCheck,
+    "100% Authentic",
+    "Verified and documented inventory with authenticity guarantees."
+  ],
+  [
+    Truck,
+    "Fast Fulfillment",
+    "Same-day pickup and 1-3 day delivery options available."
+  ],
+  [
+    Wrench,
+    "Expert Support",
+    "Book diagnostics, repairs, and get personalized buying guidance."
+  ],
+  [
+    Trophy,
+    "Best Value",
+    "Competitive pricing with trade-in options and flexible payment plans."
+  ]
 ];
 
 const sections = [
   {
     id: "iphones",
     title: "Latest iPhones",
-    description: "Explore the latest iPhone models, Pro editions, and affordable options.",
+    description:
+      "Explore the latest iPhone models, Pro editions, and affordable options.",
     image: "/images/categories/iphones.webp",
     href: "/categories?type=iphones"
   },
   {
     id: "macbooks",
     title: "MacBook Collection",
-    description: "Shop MacBook Air and MacBook Pro models for work, school, and creativity.",
+    description:
+      "Shop MacBook Air and MacBook Pro models for work, school, and creativity.",
     image: "/images/categories/macbooks.webp",
     href: "/categories?type=macbooks"
   },
   {
     id: "ipads",
     title: "iPad Range",
-    description: "Discover iPad Pro, iPad Air, iPad mini, and standard iPad models.",
+    description:
+      "Discover iPad Pro, iPad Air, iPad mini, and standard iPad models.",
     image: "/images/categories/ipads.webp",
     href: "/categories?type=ipads"
   },
   {
     id: "gaming",
     title: "Gaming Consoles",
-    description: "Shop PlayStation, Xbox, Nintendo Switch, and gaming accessories.",
+    description:
+      "Shop PlayStation, Xbox, Nintendo Switch, and gaming accessories.",
     image: "/images/categories/gaming.webp",
     href: "/categories?type=gaming"
   }
@@ -74,7 +105,9 @@ const heroImage = "/images/home/hero-iphone-17-pro-max.webp";
 const featuredDealImage = "/images/home/featured-iphone-16-pro-max.webp";
 
 export default function HomePage() {
-  const featuredIPhone = products.find(p => p.bestSeller && p.category === "iPhone") || products[0];
+  const featuredIPhone =
+    products.find((p) => p.bestSeller && p.category === "iPhone") ||
+    products[0];
   const bestSellerProducts = featuredGroups.bestSellers.slice(0, 4);
   const newArrivalProducts = featuredGroups.newArrivals.slice(0, 4);
   const gamingProducts = featuredGroups.gaming;
@@ -93,19 +126,23 @@ export default function HomePage() {
           <div>
             <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 mb-6 dark:border-blue-800 dark:bg-blue-500/10">
               <Sparkles className="h-4 w-4 text-brand-blue mr-2" />
-              <span className="text-sm font-semibold text-brand-blue">Premium Apple Retailer</span>
+              <span className="text-sm font-semibold text-brand-blue">
+                Premium Apple Retailer
+              </span>
             </div>
 
             <h1 className="text-6xl md:text-7xl font-bold tracking-tight text-brand-ink dark:text-white leading-tight">
               TroyX iStore
             </h1>
-            
+
             <p className="mt-4 text-2xl md:text-3xl font-semibold text-blue-600 dark:text-blue-400">
               Home of Original Apple Products
             </p>
-            
+
             <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-600 dark:text-zinc-300">
-              Discover authentic Apple devices, premium gaming consoles, and expert support in Accra. Verified inventory, transparent pricing, and same-day pickup available.
+              Discover authentic Apple devices, premium gaming consoles, and
+              expert support in Accra. Verified inventory, transparent pricing,
+              and same-day pickup available.
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">
@@ -125,11 +162,18 @@ export default function HomePage() {
                 ["100%", "Verified"],
                 ["Expert", "Support"]
               ].map(([value, label]) => (
-                <div key={value} className="flex items-center gap-2 rounded-lg bg-white/50 backdrop-blur p-3 dark:bg-white/5">
+                <div
+                  key={value}
+                  className="flex items-center gap-2 rounded-lg bg-white/50 backdrop-blur p-3 dark:bg-white/5"
+                >
                   <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
                   <div>
-                    <p className="font-semibold text-sm text-brand-ink dark:text-white">{value}</p>
-                    <p className="text-xs text-zinc-600 dark:text-zinc-400">{label}</p>
+                    <p className="font-semibold text-sm text-brand-ink dark:text-white">
+                      {value}
+                    </p>
+                    <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                      {label}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -159,17 +203,31 @@ export default function HomePage() {
           </div>
           <div className="relative grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <p className="text-blue-300 text-sm font-semibold uppercase tracking-wide">Featured Deal</p>
-              <h2 className="mt-2 text-4xl md:text-5xl font-bold text-white">{featuredIPhone.name}</h2>
-              <p className="mt-4 text-lg text-blue-100 leading-relaxed">{featuredIPhone.description}</p>
+              <p className="text-blue-300 text-sm font-semibold uppercase tracking-wide">
+                Featured Deal
+              </p>
+              <h2 className="mt-2 text-4xl md:text-5xl font-bold text-white">
+                {featuredIPhone.name}
+              </h2>
+              <p className="mt-4 text-lg text-blue-100 leading-relaxed">
+                {featuredIPhone.description}
+              </p>
               <div className="mt-6 flex items-center gap-4">
                 <div>
-                  <p className="text-3xl font-bold text-white">{formatCurrency(featuredIPhone.price)}</p>
-                  {featuredIPhone.compareAtPrice && (
-                    <p className="text-sm text-blue-200 line-through">{formatCurrency(featuredIPhone.compareAtPrice)}</p>
-                  )}
+                  <p className="text-3xl font-bold text-white">
+                    {formatCurrency(featuredIPhone.price)}
+                  </p>
+                  {featuredIPhone.compareAtPrice &&
+                    featuredIPhone.compareAtPrice > 0 && (
+                      <p className="text-sm text-blue-200 line-through">
+                        {formatCurrency(featuredIPhone.compareAtPrice)}
+                      </p>
+                    )}
                 </div>
-                <LinkButton href={`/product/${featuredIPhone.slug}`} className="!bg-white !text-brand-ink hover:!bg-blue-50">
+                <LinkButton
+                  href={`/product/${featuredIPhone.slug}`}
+                  className="!bg-white !text-brand-ink hover:!bg-blue-50"
+                >
                   View Details
                 </LinkButton>
               </div>
@@ -206,8 +264,12 @@ export default function HomePage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10" />
               <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
-                <h3 className="text-2xl font-bold text-white md:text-3xl">{section.title}</h3>
-                <p className="mt-3 max-w-xl text-sm leading-6 text-blue-50 sm:text-base">{section.description}</p>
+                <h3 className="text-2xl font-bold text-white md:text-3xl">
+                  {section.title}
+                </h3>
+                <p className="mt-3 max-w-xl text-sm leading-6 text-blue-50 sm:text-base">
+                  {section.description}
+                </p>
               </div>
             </Link>
           ))}
@@ -261,15 +323,26 @@ export default function HomePage() {
       {/* Trust Section */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">Why Choose TroyX</p>
-          <h2 className="mt-2 text-4xl md:text-5xl font-bold text-brand-ink dark:text-white">Built on Trust & Quality</h2>
+          <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
+            Why Choose TroyX
+          </p>
+          <h2 className="mt-2 text-4xl md:text-5xl font-bold text-brand-ink dark:text-white">
+            Built on Trust & Quality
+          </h2>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {trustCards.map(([Icon, title, description]) => (
-            <div key={title} className="rounded-2xl border border-black/5 bg-white p-8 shadow-sm hover:shadow-md transition-shadow dark:border-white/10 dark:bg-white/5">
+            <div
+              key={title}
+              className="rounded-2xl border border-black/5 bg-white p-8 shadow-sm hover:shadow-md transition-shadow dark:border-white/10 dark:bg-white/5"
+            >
               <Icon className="h-8 w-8 text-brand-blue mb-4" />
-              <h3 className="font-semibold text-brand-ink dark:text-white">{title}</h3>
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{description}</p>
+              <h3 className="font-semibold text-brand-ink dark:text-white">
+                {title}
+              </h3>
+              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                {description}
+              </p>
             </div>
           ))}
         </div>
@@ -278,20 +351,35 @@ export default function HomePage() {
       {/* Reviews Section */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">Customer Reviews</p>
-          <h2 className="mt-2 text-4xl md:text-5xl font-bold text-brand-ink dark:text-white">Trusted by Thousands</h2>
+          <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
+            Customer Reviews
+          </p>
+          <h2 className="mt-2 text-4xl md:text-5xl font-bold text-brand-ink dark:text-white">
+            Trusted by Thousands
+          </h2>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {reviews.map((review, index) => (
-            <div key={index} className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
+            <div
+              key={index}
+              className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5"
+            >
               <div className="flex items-center gap-1 mb-3">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400">★</span>
+                  <span key={i} className="text-yellow-400">
+                    ★
+                  </span>
                 ))}
-                <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 ml-2">{review.rating}</span>
+                <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 ml-2">
+                  {review.rating}
+                </span>
               </div>
-              <p className="text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed">{review.text}</p>
-              <p className="mt-4 font-semibold text-brand-ink dark:text-white text-sm">{review.name}</p>
+              <p className="text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed">
+                {review.text}
+              </p>
+              <p className="mt-4 font-semibold text-brand-ink dark:text-white text-sm">
+                {review.name}
+              </p>
             </div>
           ))}
         </div>
@@ -302,10 +390,15 @@ export default function HomePage() {
         <div className="rounded-3xl bg-gradient-to-br from-blue-50 to-white dark:from-white/5 dark:to-white/2.5 border border-black/5 dark:border-white/10 p-12 md:p-16">
           <div className="grid md:grid-cols-2 gap-12">
             <div>
-              <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">Visit Us</p>
-              <h2 className="mt-3 text-4xl font-bold text-brand-ink dark:text-white">Bawaleshie, East Legon</h2>
+              <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
+                Visit Us
+              </p>
+              <h2 className="mt-3 text-4xl font-bold text-brand-ink dark:text-white">
+                Bawaleshie, East Legon
+              </h2>
               <p className="mt-6 text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                Experience our premium showroom. See and test authentic Apple products and gaming consoles before you buy.
+                Experience our premium showroom. See and test authentic Apple
+                products and gaming consoles before you buy.
               </p>
               <div className="mt-8 space-y-4">
                 <p className="flex items-center gap-3 text-zinc-600 dark:text-zinc-300">
@@ -340,8 +433,13 @@ export default function HomePage() {
       {/* Newsletter Section */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="rounded-3xl bg-gradient-to-r from-brand-ink via-blue-900 to-blue-800 p-12 md:p-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white">Stay Updated</h2>
-          <p className="mt-4 text-lg text-blue-100">Get exclusive deals, new arrivals, and expert tips delivered to your inbox.</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-white">
+            Stay Updated
+          </h2>
+          <p className="mt-4 text-lg text-blue-100">
+            Get exclusive deals, new arrivals, and expert tips delivered to your
+            inbox.
+          </p>
           <form className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
               type="email"

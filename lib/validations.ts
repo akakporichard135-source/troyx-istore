@@ -19,7 +19,12 @@ export const checkoutSchema = z.object({
   city: z.string().min(2),
   country: z.string().min(2),
   fulfillment: z.enum(["delivery", "pickup"]),
-  paymentProvider: z.enum(["card", "mobile_money", "bank_transfer", "cash_on_pickup"])
+  paymentProvider: z.enum([
+    "card",
+    "mobile_money",
+    "bank_transfer",
+    "cash_on_pickup"
+  ])
 });
 
 export const tradeInSchema = z.object({
@@ -45,7 +50,7 @@ export const searchSchema = z.object({
 export const productMutationSchema = z.object({
   name: z.string().min(2),
   category: z.string().min(2),
-  price: z.coerce.number().positive(),
+  price: z.coerce.number().min(0),
   description: z.string().min(20),
   stock: z.coerce.number().int().min(0)
 });

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, Menu, Search, ShoppingBag, Store, User, X, Sparkles } from "lucide-react";
+import { Heart, Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 const links = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Shop" },
-  { href: "/stores", label: "Stores" },
+  { href: "/categories", label: "Categories" },
   { href: "/gaming", label: "Gaming" },
   { href: "/repair-booking", label: "Repair" },
   { href: "/trade-in", label: "Trade-In" },
@@ -25,7 +25,7 @@ export function Header() {
   const cartCount = useCommerceStore((state) => state.cart.reduce((sum, item) => sum + item.quantity, 0));
   const wishlistCount = useCommerceStore((state) => state.wishlist.length);
 
-  if (pathname?.startsWith("/admin") || pathname?.startsWith("/vendor")) {
+  if (pathname?.startsWith("/admin")) {
     return null;
   }
 
@@ -55,13 +55,6 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/sell"
-            className="hidden items-center gap-1.5 rounded-full bg-gradient-to-r from-brand-blue to-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:opacity-90 sm:flex"
-          >
-            <Store className="h-3.5 w-3.5" />
-            Open a Store
-          </Link>
           <IconLink href="/search" label="Search">
             <Search className="h-4 w-4" />
           </IconLink>
@@ -93,14 +86,6 @@ export function Header() {
       >
         <div className="overflow-hidden">
           <div className="mx-auto grid max-w-7xl gap-2 px-4 py-4 sm:px-6">
-            <Link
-              href="/sell"
-              className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-blue to-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm"
-              onClick={() => setOpen(false)}
-            >
-              <Store className="h-4 w-4" />
-              Open a Store
-            </Link>
             {links.map((link) => (
               <Link
                 key={link.label}
@@ -145,3 +130,4 @@ function IconLink({
     </Link>
   );
 }
+

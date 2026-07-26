@@ -10,19 +10,17 @@ const footerGroups = [
   {
     title: "Quick Links",
     links: [
-      ["Shop Catalog", "/shop"],
-      ["Browse Stores", "/stores"],
-      ["Best Sellers", "/shop?sort=best"],
+      ["Shop Catalog", "/shop"],      ["Best Sellers", "/shop?sort=best"],
       ["New Arrivals", "/shop?sort=new"]
     ]
   },
   {
-    title: "Sell on TroyX",
+    title: "Apple Services",
     links: [
-      ["Open a Store", "/sell"],
-      ["Vendor Portal", "/vendor"],
-      ["Marketplace Pricing", "/sell#pricing"],
-      ["Seller Terms", "/terms#seller"]
+      ["Trade-In Program", "/trade-in"],
+      ["Repair Booking", "/repair-booking"],
+      ["Order Tracking", "/order-tracking"],
+      ["Customer Account", "/dashboard"]
     ]
   },
   {
@@ -49,7 +47,7 @@ const footerGroups = [
 export function Footer() {
   const pathname = usePathname();
 
-  if (pathname?.startsWith("/admin") || pathname?.startsWith("/vendor")) {
+  if (pathname?.startsWith("/admin")) {
     return null;
   }
 
@@ -109,7 +107,7 @@ export function Footer() {
         <div className="mt-12 grid gap-5 rounded-[2.5rem] bg-white/8 p-6 md:grid-cols-[1fr_auto] md:items-center border border-white/10">
           <div>
             <h2 className="text-lg font-bold text-white">Join the TroyX Insider Newsletter</h2>
-            <p className="mt-1 text-xs text-zinc-300">Get restock alerts, exclusive merchant discounts, and Apple buying guides across Ghana.</p>
+            <p className="mt-1 text-xs text-zinc-300">Get restock alerts, exclusive TroyX offers, and Apple buying guides across Ghana.</p>
           </div>
           <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
             <input
@@ -183,3 +181,4 @@ export function Footer() {
     </footer>
   );
 }
+

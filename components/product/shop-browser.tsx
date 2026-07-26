@@ -1,6 +1,16 @@
-"use client";
+﻿"use client";
 
-import { Grid2X2, List, Search, Filter, SlidersHorizontal, ChevronLeft, ChevronRight, AlertCircle, RefreshCw } from "lucide-react";
+import {
+  Grid2X2,
+  List,
+  Search,
+  Filter,
+  SlidersHorizontal,
+  ChevronLeft,
+  ChevronRight,
+  AlertCircle,
+  RefreshCw
+} from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
 import { ProductCard } from "@/components/product/product-card";
 import { Input, Select } from "@/components/ui/input";
@@ -31,51 +41,72 @@ export function ShopBrowser() {
   }, [category, query, sort, selectedConditions, priceRange, stockStatus]);
 
   const handleConditionToggle = (cond: string) => {
-    setSelectedConditions(prev => 
-      prev.includes(cond) ? prev.filter(c => c !== cond) : [...prev, cond]
+    setSelectedConditions((prev) =>
+      prev.includes(cond) ? prev.filter((c) => c !== cond) : [...prev, cond]
     );
     setCurrentPage(1);
   };
 
   const handleStockToggle = (status: string) => {
-    setStockStatus(prev => 
-      prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]
+    setStockStatus((prev) =>
+      prev.includes(status)
+        ? prev.filter((s) => s !== status)
+        : [...prev, status]
     );
     setCurrentPage(1);
   };
 
   const filtered = useMemo(() => {
     const normalized = query.toLowerCase();
-    
-    return products
-      .filter((product) => category === "All" || product.category === category)
-      .filter((product) => [product.name, product.category, product.series, product.description].join(" ").toLowerCase().includes(normalized))
-      // Condition filter
-      .filter((product) => {
-        if (selectedConditions.length === 0) return true;
-        return product.condition.some(c => selectedConditions.includes(c));
-      })
-      // Stock availability filter
-      .filter((product) => {
-        if (stockStatus.length === 0) return true;
-        return stockStatus.includes(product.availability);
-      })
-      // Price range filter
-      .filter((product) => {
-        if (priceRange === "all") return true;
-        if (priceRange === "under-200") return product.price < 200;
-        if (priceRange === "200-1000") return product.price >= 200 && product.price <= 1000;
-        if (priceRange === "above-1000") return product.price > 1000;
-        return true;
-      })
-      // Sorting
-      .sort((a, b) => {
-        if (sort === "price-low") return a.price - b.price;
-        if (sort === "price-high") return b.price - a.price;
-        if (sort === "rating") return b.rating - a.rating;
-        if (sort === "new") return Number(Boolean(b.newArrival)) - Number(Boolean(a.newArrival));
-        return Number(Boolean(b.bestSeller)) - Number(Boolean(a.bestSeller));
-      });
+
+    return (
+      products
+        .filter(
+          (product) => category === "All" || product.category === category
+        )
+        .filter((product) =>
+          [product.name, product.category, product.series, product.description]
+            .join(" ")
+            .toLowerCase()
+            .includes(normalized)
+        )
+        // Condition filter
+        .filter((product) => {
+          if (selectedConditions.length === 0) return true;
+          return product.condition.some((c) => selectedConditions.includes(c));
+        })
+        // Stock availability filter
+        .filter((product) => {
+          if (stockStatus.length === 0) return true;
+          return stockStatus.includes(product.availability);
+        })
+        // Price range filter
+        .filter((product) => {
+          if (priceRange === "all") return true;
+          if (priceRange === "contact") return product.price <= 0;
+          if (product.price <= 0) return false;
+          if (priceRange === "under-200") return product.price < 200;
+          if (priceRange === "200-1000")
+            return product.price >= 200 && product.price <= 1000;
+          if (priceRange === "above-1000") return product.price > 1000;
+          return true;
+        })
+        // Sorting
+        .sort((a, b) => {
+          if (sort === "price-low")
+            return (
+              (a.price || Number.MAX_SAFE_INTEGER) -
+              (b.price || Number.MAX_SAFE_INTEGER)
+            );
+          if (sort === "price-high") return b.price - a.price;
+          if (sort === "rating") return b.rating - a.rating;
+          if (sort === "new")
+            return (
+              Number(Boolean(b.newArrival)) - Number(Boolean(a.newArrival))
+            );
+          return Number(Boolean(b.bestSeller)) - Number(Boolean(a.bestSeller));
+        })
+    );
   }, [category, query, sort, selectedConditions, priceRange, stockStatus]);
 
   // Paginated list
@@ -104,7 +135,7 @@ export function ShopBrowser() {
           <h3 className="font-extrabold text-sm text-brand-ink dark:text-white flex items-center gap-1.5">
             <SlidersHorizontal className="h-4 w-4 text-brand-blue" /> Filters
           </h3>
-          <button 
+          <button
             onClick={handleResetFilters}
             className="text-[10px] font-bold text-zinc-400 hover:text-brand-blue transition"
           >
@@ -114,16 +145,21 @@ export function ShopBrowser() {
 
         {/* Categories */}
         <div className="space-y-2">
-          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Department</p>
+          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+            Department
+          </p>
           <div className="flex flex-col gap-1 text-xs font-semibold">
             {["All", ...categories.slice(0, 7)].map((cat) => (
               <button
                 key={cat}
-                onClick={() => { setCategory(cat); setCurrentPage(1); }}
+                onClick={() => {
+                  setCategory(cat);
+                  setCurrentPage(1);
+                }}
                 className={cn(
                   "text-left py-2 px-3 rounded-xl transition",
-                  category === cat 
-                    ? "bg-brand-blue/10 text-brand-blue font-bold dark:bg-brand-blue/20" 
+                  category === cat
+                    ? "bg-brand-blue/10 text-brand-blue font-bold dark:bg-brand-blue/20"
                     : "text-zinc-600 hover:bg-black/5 dark:text-zinc-300 dark:hover:bg-white/5"
                 )}
               >
@@ -135,12 +171,17 @@ export function ShopBrowser() {
 
         {/* Condition Filter */}
         <div className="space-y-2">
-          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Device Condition</p>
+          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+            Device Condition
+          </p>
           <div className="space-y-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
             {["New", "Used", "Refurbished"].map((cond) => {
               const checked = selectedConditions.includes(cond);
               return (
-                <label key={cond} className="flex items-center gap-2.5 cursor-pointer">
+                <label
+                  key={cond}
+                  className="flex items-center gap-2.5 cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     checked={checked}
@@ -156,15 +197,21 @@ export function ShopBrowser() {
 
         {/* Price Bracket Selector */}
         <div className="space-y-2">
-          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Price Bracket</p>
+          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+            Price Bracket
+          </p>
           <div className="space-y-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
             {[
-              { label: "All Prices", val: "all" },
-              { label: "Under ₵200", val: "under-200" },
-              { label: "₵200 - ₵1,000", val: "200-1000" },
-              { label: "Above ₵1,000", val: "above-1000" }
+              { label: "All prices", val: "all" },
+              { label: "Contact for price", val: "contact" },
+              { label: "Under GHS 200", val: "under-200" },
+              { label: "GHS 200 - GHS 1,000", val: "200-1000" },
+              { label: "Above GHS 1,000", val: "above-1000" }
             ].map((bracket) => (
-              <label key={bracket.val} className="flex items-center gap-2.5 cursor-pointer">
+              <label
+                key={bracket.val}
+                className="flex items-center gap-2.5 cursor-pointer"
+              >
                 <input
                   type="radio"
                   name="priceBracket"
@@ -180,12 +227,23 @@ export function ShopBrowser() {
 
         {/* Stock Status */}
         <div className="space-y-2">
-          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Availability</p>
+          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+            Availability
+          </p>
           <div className="space-y-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            {["In Stock", "Low Stock", "Preorder", "Out of Stock"].map((status) => {
+            {[
+              "In Stock",
+              "Low Stock",
+              "Available on request",
+              "Pre-order",
+              "Out of Stock"
+            ].map((status) => {
               const checked = stockStatus.includes(status);
               return (
-                <label key={status} className="flex items-center gap-2.5 cursor-pointer">
+                <label
+                  key={status}
+                  className="flex items-center gap-2.5 cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     checked={checked}
@@ -207,17 +265,23 @@ export function ShopBrowser() {
           <label className="relative">
             <span className="sr-only">Search products</span>
             <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-            <Input 
-              value={query} 
-              onChange={(event) => { setQuery(event.target.value); setCurrentPage(1); }} 
-              placeholder="Search catalog models, features, descriptors..." 
-              className="pl-11 h-11" 
+            <Input
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setCurrentPage(1);
+              }}
+              placeholder="Search catalog models, features, descriptors..."
+              className="pl-11 h-11"
             />
           </label>
-          
-          <Select 
-            value={sort} 
-            onChange={(event) => { setSort(event.target.value); setCurrentPage(1); }}
+
+          <Select
+            value={sort}
+            onChange={(event) => {
+              setSort(event.target.value);
+              setCurrentPage(1);
+            }}
             className="h-11"
           >
             <option value="featured">Featured / Best Seller</option>
@@ -231,7 +295,11 @@ export function ShopBrowser() {
             <button
               type="button"
               aria-label="Grid view"
-              className={cn("focus-ring h-9 w-9 rounded-full transition", view === "grid" && "bg-white text-brand-blue shadow-sm dark:bg-zinc-800")}
+              className={cn(
+                "focus-ring h-9 w-9 rounded-full transition",
+                view === "grid" &&
+                  "bg-white text-brand-blue shadow-sm dark:bg-zinc-800"
+              )}
               onClick={() => setView("grid")}
             >
               <Grid2X2 className="mx-auto h-4 w-4" />
@@ -239,7 +307,11 @@ export function ShopBrowser() {
             <button
               type="button"
               aria-label="List view"
-              className={cn("focus-ring h-9 w-9 rounded-full transition", view === "list" && "bg-white text-brand-blue shadow-sm dark:bg-zinc-800")}
+              className={cn(
+                "focus-ring h-9 w-9 rounded-full transition",
+                view === "list" &&
+                  "bg-white text-brand-blue shadow-sm dark:bg-zinc-800"
+              )}
               onClick={() => setView("list")}
             >
               <List className="mx-auto h-4 w-4" />
@@ -250,14 +322,25 @@ export function ShopBrowser() {
         {/* Results Info */}
         <div className="flex items-center justify-between text-xs text-zinc-400 font-semibold px-2">
           <p>{filtered.length} products found</p>
-          <p>Page {currentPage} of {totalPages}</p>
+          <p>
+            Page {currentPage} of {totalPages}
+          </p>
         </div>
 
         {/* Products Grid or Skeleton Loaders */}
         {isLoading ? (
-          <div className={view === "grid" ? "grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid gap-5 lg:grid-cols-2"}>
+          <div
+            className={
+              view === "grid"
+                ? "grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                : "grid gap-5 lg:grid-cols-2"
+            }
+          >
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-80 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-[2rem] p-6 space-y-4 animate-pulse-fast flex flex-col justify-between">
+              <div
+                key={i}
+                className="h-80 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-[2rem] p-6 space-y-4 animate-pulse-fast flex flex-col justify-between"
+              >
                 <div className="h-32 bg-zinc-100 dark:bg-zinc-800 rounded-2xl w-full" />
                 <div className="space-y-2">
                   <div className="h-4 bg-zinc-100 dark:bg-zinc-800 rounded-md w-3/4" />
@@ -268,9 +351,19 @@ export function ShopBrowser() {
             ))}
           </div>
         ) : paginatedList.length > 0 ? (
-          <div className={view === "grid" ? "grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid gap-5 lg:grid-cols-2 animate-fade-in"}>
+          <div
+            className={
+              view === "grid"
+                ? "grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                : "grid gap-5 lg:grid-cols-2 animate-fade-in"
+            }
+          >
             {paginatedList.map((product) => (
-              <ProductCard key={product.id} product={product} compact={view === "list"} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                compact={view === "list"}
+              />
             ))}
           </div>
         ) : (
@@ -290,17 +383,21 @@ export function ShopBrowser() {
         {totalPages > 1 && !isLoading && (
           <div className="flex justify-center items-center gap-4 pt-6 text-xs font-bold text-zinc-600 dark:text-zinc-400">
             <button
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
               className="p-2.5 border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed rounded-full hover:bg-zinc-50 dark:hover:bg-zinc-800 transition"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
-            
-            <span>{currentPage} / {totalPages}</span>
-            
+
+            <span>
+              {currentPage} / {totalPages}
+            </span>
+
             <button
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
               disabled={currentPage === totalPages}
               className="p-2.5 border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed rounded-full hover:bg-zinc-50 dark:hover:bg-zinc-800 transition"
             >

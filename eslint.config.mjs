@@ -9,8 +9,20 @@ const compat = new FlatCompat({
 });
 
 export default [
+  {
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "wordpress-theme/**",
+      "work/**",
+      "next-env.d.ts"
+    ]
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    ignores: [".next/**", "node_modules/**"]
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "react/no-unescaped-entities": "warn"
+    }
   }
 ];

@@ -1,4 +1,11 @@
-type ClassValue = string | number | false | null | undefined | ClassValue[] | Record<string, boolean>;
+type ClassValue =
+  | string
+  | number
+  | false
+  | null
+  | undefined
+  | ClassValue[]
+  | Record<string, boolean>;
 
 export function cn(...inputs: ClassValue[]) {
   return inputs
@@ -17,6 +24,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCurrency(value: number) {
+  if (value <= 0) return "Contact for price";
+
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",

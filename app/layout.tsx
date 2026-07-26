@@ -1,16 +1,10 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Geist } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Providers } from "@/components/layout/providers";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist-sans"
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -36,10 +30,12 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default function RootLayout({
+  children
+}: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geist.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased">
         <Providers>
           <Header />
           <main>{children}</main>

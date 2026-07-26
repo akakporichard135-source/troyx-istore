@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useMemo } from "react";
-import { 
-  Boxes, 
-  Search, 
-  AlertTriangle, 
-  CheckCircle2, 
+import {
+  Boxes,
+  Search,
+  AlertTriangle,
+  CheckCircle2,
   HelpCircle,
   Save,
   Download,
@@ -21,27 +21,36 @@ export default function InventoryPage() {
   const [statusFilter, setStatusFilter] = useState("all");
 
   const filteredProducts = useMemo(() => {
-    return products.filter(p => {
-      const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase());
-      const matchesStatus = statusFilter === "all" || p.availability === statusFilter;
+    return products.filter((p) => {
+      const matchesSearch =
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.id.toLowerCase().includes(search.toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" || p.availability === statusFilter;
       return matchesSearch && matchesStatus;
     });
   }, [products, search, statusFilter]);
 
   const stockSummary = useMemo(() => {
     const total = products.length;
-    const instock = products.filter(p => p.availability === "In Stock").length;
-    const low = products.filter(p => p.availability === "Low Stock").length;
-    const out = products.filter(p => p.availability === "Out of Stock").length;
+    const instock = products.filter(
+      (p) => p.availability === "In Stock"
+    ).length;
+    const low = products.filter((p) => p.availability === "Low Stock").length;
+    const out = products.filter(
+      (p) => p.availability === "Out of Stock"
+    ).length;
     return { total, instock, low, out };
   }, [products]);
 
   const handleStockStatusChange = (productId: string, availability: any) => {
     if (currentRole === "Support Staff") {
-      alert("Access Denied: Support Staff do not have edit product permissions.");
+      alert(
+        "Access Denied: Support Staff do not have edit product permissions."
+      );
       return;
     }
-    const product = products.find(p => p.id === productId);
+    const product = products.find((p) => p.id === productId);
     if (product) {
       editProduct({
         ...product,
@@ -52,10 +61,15 @@ export default function InventoryPage() {
 
   const handleExportStockReport = () => {
     const headers = "ID,Name,Category,Availability,Warranty\n";
-    const rows = products.map(p => 
-      `"${p.id}","${p.name}","${p.category}","${p.availability}","${p.warranty}"`
-    ).join("\n");
-    const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
+    const rows = products
+      .map(
+        (p) =>
+          `"${p.id}","${p.name}","${p.category}","${p.availability}","${p.warranty}"`
+      )
+      .join("\n");
+    const blob = new Blob([headers + rows], {
+      type: "text/csv;charset=utf-8;"
+    });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
@@ -70,10 +84,15 @@ export default function InventoryPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">Inventory Stocks</h1>
-          <p className="text-zinc-500 text-sm">Monitor warehouse logistics, resolve low-stock triggers, and update device availability states.</p>
+          <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">
+            Inventory Stocks
+          </h1>
+          <p className="text-zinc-500 text-sm">
+            Monitor warehouse logistics, resolve low-stock triggers, and update
+            device availability states.
+          </p>
         </div>
-        <button 
+        <button
           onClick={handleExportStockReport}
           className="px-4 py-2 border border-black/5 bg-white hover:bg-zinc-50 text-xs font-bold text-zinc-700 rounded-full flex items-center gap-1.5 dark:border-white/5 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
         >
@@ -84,20 +103,36 @@ export default function InventoryPage() {
       {/* Stock summaries */}
       <div className="grid gap-5 grid-cols-2 lg:grid-cols-4">
         <div className="p-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm">
-          <p className="text-xs text-zinc-500 font-semibold uppercase tracking-wider">Total SKU Catalog</p>
-          <p className="text-3xl font-black text-brand-ink dark:text-white mt-2">{stockSummary.total} models</p>
+          <p className="text-xs text-zinc-500 font-semibold uppercase tracking-wider">
+            Total SKU Catalog
+          </p>
+          <p className="text-3xl font-black text-brand-ink dark:text-white mt-2">
+            {stockSummary.total} models
+          </p>
         </div>
         <div className="p-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm">
-          <p className="text-xs text-zinc-500 font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">In Stock</p>
-          <p className="text-3xl font-black text-brand-ink dark:text-white mt-2">{stockSummary.instock} models</p>
+          <p className="text-xs text-zinc-500 font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+            In Stock
+          </p>
+          <p className="text-3xl font-black text-brand-ink dark:text-white mt-2">
+            {stockSummary.instock} models
+          </p>
         </div>
         <div className="p-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm">
-          <p className="text-xs text-zinc-500 font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">Low Stock Alerts</p>
-          <p className="text-3xl font-black text-brand-ink dark:text-white mt-2">{stockSummary.low} models</p>
+          <p className="text-xs text-zinc-500 font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+            Low Stock Alerts
+          </p>
+          <p className="text-3xl font-black text-brand-ink dark:text-white mt-2">
+            {stockSummary.low} models
+          </p>
         </div>
         <div className="p-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm">
-          <p className="text-xs text-zinc-500 font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400">Out of Stock</p>
-          <p className="text-3xl font-black text-brand-ink dark:text-white mt-2">{stockSummary.out} models</p>
+          <p className="text-xs text-zinc-500 font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400">
+            Out of Stock
+          </p>
+          <p className="text-3xl font-black text-brand-ink dark:text-white mt-2">
+            {stockSummary.out} models
+          </p>
         </div>
       </div>
 
@@ -122,8 +157,9 @@ export default function InventoryPage() {
           <option value="all">All Stocks Statuses</option>
           <option value="In Stock">In Stock</option>
           <option value="Low Stock">Low Stock</option>
+          <option value="Available on request">Available on request</option>
           <option value="Out of Stock">Out of Stock</option>
-          <option value="Preorder">Pre-order Availability</option>
+          <option value="Pre-order">Pre-order Availability</option>
         </select>
       </div>
 
@@ -141,33 +177,45 @@ export default function InventoryPage() {
             </thead>
             <tbody className="divide-y divide-black/5 dark:divide-white/5 font-semibold text-brand-ink dark:text-white">
               {filteredProducts.map((p) => (
-                <tr key={p.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-850/20 transition">
+                <tr
+                  key={p.id}
+                  className="hover:bg-zinc-50 dark:hover:bg-zinc-850/20 transition"
+                >
                   <td className="px-6 py-4">
                     <p className="font-bold text-sm">{p.name}</p>
-                    <p className="text-[10px] text-zinc-400 font-mono">SKU: {p.id}</p>
+                    <p className="text-[10px] text-zinc-400 font-mono">
+                      SKU: {p.id}
+                    </p>
                   </td>
                   <td className="px-6 py-4 text-zinc-500">{p.category}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                      p.availability === "In Stock" 
-                        ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300"
-                        : p.availability === "Low Stock"
-                        ? "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300"
-                        : "bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300"
-                    }`}>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        p.availability === "In Stock"
+                          ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300"
+                          : p.availability === "Low Stock"
+                            ? "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300"
+                            : "bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300"
+                      }`}
+                    >
                       {p.availability}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <select
                       value={p.availability}
-                      onChange={(e) => handleStockStatusChange(p.id, e.target.value)}
+                      onChange={(e) =>
+                        handleStockStatusChange(p.id, e.target.value)
+                      }
                       className="text-xs bg-zinc-50 dark:bg-zinc-800 border border-black/10 dark:border-white/10 rounded-full px-3 py-1.5 font-semibold outline-none"
                     >
                       <option value="In Stock">In Stock</option>
                       <option value="Low Stock">Low Stock</option>
+                      <option value="Available on request">
+                        Available on request
+                      </option>
                       <option value="Out of Stock">Out of Stock</option>
-                      <option value="Preorder">Pre-order</option>
+                      <option value="Pre-order">Pre-order</option>
                     </select>
                   </td>
                 </tr>
