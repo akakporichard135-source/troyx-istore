@@ -312,13 +312,13 @@ export function CheckoutForm() {
               <Link href="/terms" className="text-brand-blue underline">
                 TroyX iStore Terms of Service
               </Link>
-              , 12-Month Warranty terms, and confirm payment authorization.
+              , product-specific warranty notes, and confirm payment authorization.
             </span>
           </label>
 
           <div className="flex items-center gap-2 text-xs font-semibold text-emerald-500 bg-emerald-500/10 p-3 rounded-2xl border border-emerald-500/20">
             <Lock className="h-4 w-4 shrink-0" />
-            <span>256-Bit SSL Encrypted & PCI-DSS Verified Security</span>
+            <span>Encrypted checkout session</span>
           </div>
 
           <Button

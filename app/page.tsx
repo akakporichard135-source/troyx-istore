@@ -2,15 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
+  BadgeCheck,
   CheckCircle2,
   MapPin,
-  ShieldCheck,
+  Package,
   Sparkles,
   Truck,
   Wrench,
-  Trophy,
-  Zap,
-  Package
+  Zap
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ProductGrid } from "@/components/product/product-grid";
@@ -20,58 +19,12 @@ import { featuredGroups, products } from "@/database/products";
 import { bannerImages } from "@/lib/images";
 import { formatCurrency } from "@/lib/utils";
 
-const reviews = [
-  {
-    name: "Ama K.",
-    text: "My iPhone was sealed, verified, and delivered the same day. The team explained warranty and setup clearly.",
-    rating: "5.0"
-  },
-  {
-    name: "David O.",
-    text: "Premium service without the pressure. I compared MacBooks and got honest advice for my budget.",
-    rating: "4.9"
-  },
-  {
-    name: "Nadia S.",
-    text: "Trade-in estimate was fair, and the final value was confirmed after inspection exactly as promised.",
-    rating: "5.0"
-  },
-  {
-    name: "Kweku M.",
-    text: "First time buying gaming console online and I felt completely supported. Excellent customer service!",
-    rating: "5.0"
-  }
-];
-
-const trustCards: Array<[LucideIcon, string, string]> = [
-  [
-    ShieldCheck,
-    "100% Authentic",
-    "Verified and documented inventory with authenticity guarantees."
-  ],
-  [
-    Truck,
-    "Fast Fulfillment",
-    "Same-day pickup and 1-3 day delivery options available."
-  ],
-  [
-    Wrench,
-    "Expert Support",
-    "Book diagnostics, repairs, and get personalized buying guidance."
-  ],
-  [
-    Trophy,
-    "Best Value",
-    "Competitive pricing with trade-in options and flexible payment plans."
-  ]
-];
-
-const sections = [
+const categorySections = [
   {
     id: "iphones",
     title: "Latest iPhones",
     description:
-      "Explore the latest iPhone models, Pro editions, and affordable options.",
+      "Explore recent iPhone models, Pro editions, and upgrade-ready options.",
     image: "/images/categories/iphones.webp",
     href: "/iphones"
   },
@@ -101,51 +54,81 @@ const sections = [
   }
 ];
 
+const heroTrust: Array<[string, string]> = [
+  ["Clear condition", "Listed per item"],
+  ["Local pickup", "When available"],
+  ["Contact pricing", "Before purchase"],
+  ["Support desk", "Buying guidance"]
+];
+
+const benefitCards: Array<[LucideIcon, string, string]> = [
+  [
+    BadgeCheck,
+    "Condition-first shopping",
+    "Every product card highlights condition, availability, and configuration before checkout."
+  ],
+  [
+    Truck,
+    "Flexible fulfillment",
+    "Pickup and delivery options can be confirmed per order after inventory is checked."
+  ],
+  [
+    Wrench,
+    "Repair and trade-in support",
+    "Customers can request diagnostics, book repair intake, or start a trade-in estimate."
+  ],
+  [
+    Package,
+    "Curated catalogue",
+    "Homepage sections stay focused while full product families remain on category pages."
+  ]
+];
+
 const heroImage = "/images/home/hero-iphone-17-pro-max.webp";
 const featuredDealImage = "/images/home/featured-iphone-16-pro-max.webp";
 
 export default function HomePage() {
-  const featuredIPhone =
-    products.find((p) => p.bestSeller && p.category === "iPhone") ||
+  const featuredDeal =
+    products.find((product) => product.slug === "iphone-16-pro-max") ||
+    products.find((product) => product.bestSeller && product.category === "iPhone") ||
     products[0];
-  const featuredProducts = products
-    .filter((p) => p.bestSeller || p.deal)
-    .slice(0, 4);
+  const iphoneLineup = products
+    .filter((product) => product.category === "iPhone")
+    .slice(0, 8);
   const bestSellerProducts = featuredGroups.bestSellers.slice(0, 4);
   const newArrivalProducts = featuredGroups.newArrivals.slice(0, 4);
+  const macProducts = products
+    .filter((product) => product.category === "MacBook")
+    .slice(0, 4);
+  const ipadWatchProducts = products
+    .filter((product) => product.category === "iPad" || product.category === "Apple Watch")
+    .slice(0, 4);
   const gamingProducts = featuredGroups.gaming.slice(0, 4);
 
   return (
     <>
-      {/* Hero Section - Full Screen Premium */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-white via-blue-50 to-white dark:from-zinc-950 dark:via-blue-950/30 dark:to-zinc-950 pt-10">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-blue-200/20 blur-3xl dark:bg-blue-500/10" />
-          <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-blue-200/20 blur-3xl dark:bg-blue-500/10" />
-        </div>
-
+      <section className="relative overflow-hidden bg-gradient-to-br from-white via-blue-50 to-white pt-10 dark:from-zinc-950 dark:via-blue-950/30 dark:to-zinc-950">
         <div className="relative z-10 mx-auto grid min-h-[620px] max-w-7xl items-center gap-10 px-4 pb-14 sm:px-6 lg:grid-cols-2 lg:px-8">
-          {/* Hero Content */}
           <div>
-            <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 mb-6 dark:border-blue-800 dark:bg-blue-500/10">
-              <Sparkles className="h-4 w-4 text-brand-blue mr-2" />
+            <div className="mb-6 inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 dark:border-blue-800 dark:bg-blue-500/10">
+              <Sparkles className="mr-2 h-4 w-4 text-brand-blue" />
               <span className="text-sm font-semibold text-brand-blue">
-                Premium Apple Retailer
+                Premium Apple and Gaming Catalogue
               </span>
             </div>
 
-            <h1 className="text-6xl md:text-7xl font-bold tracking-tight text-brand-ink dark:text-white leading-tight">
+            <h1 className="text-6xl font-bold leading-tight tracking-tight text-brand-ink dark:text-white md:text-7xl">
               TroyX iStore
             </h1>
 
-            <p className="mt-4 text-2xl md:text-3xl font-semibold text-blue-600 dark:text-blue-400">
+            <p className="mt-4 text-2xl font-semibold text-blue-600 dark:text-blue-400 md:text-3xl">
               Home of Original Apple Products
             </p>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-600 dark:text-zinc-300">
-              Discover authentic Apple devices, premium gaming consoles, and
-              expert support in Accra. Verified inventory, transparent pricing,
-              and same-day pickup available.
+              Browse a curated Apple and gaming catalogue built around clear
+              product images, transparent condition labels, and guided support
+              before you buy.
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">
@@ -157,21 +140,15 @@ export default function HomePage() {
               </LinkButton>
             </div>
 
-            {/* Trust Badges */}
-            <div className="mt-12 grid grid-cols-2 gap-4 max-w-md">
-              {[
-                ["12-Month", "Warranty"],
-                ["Same-Day", "Pickup"],
-                ["100%", "Verified"],
-                ["Expert", "Support"]
-              ].map(([value, label]) => (
+            <div className="mt-12 grid max-w-md grid-cols-2 gap-4">
+              {heroTrust.map(([value, label]) => (
                 <div
                   key={value}
-                  className="flex items-center gap-2 rounded-lg bg-white/50 backdrop-blur p-3 dark:bg-white/5"
+                  className="flex items-center gap-2 rounded-lg bg-white/50 p-3 backdrop-blur dark:bg-white/5"
                 >
-                  <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-brand-blue" />
                   <div>
-                    <p className="font-semibold text-sm text-brand-ink dark:text-white">
+                    <p className="text-sm font-semibold text-brand-ink dark:text-white">
                       {value}
                     </p>
                     <p className="text-xs text-zinc-600 dark:text-zinc-400">
@@ -183,7 +160,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Hero Image */}
           <div className="relative flex h-[420px] items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-blue-100/50 via-white/60 to-blue-50/40 p-6 backdrop-blur-sm dark:from-violet-950/50 dark:via-blue-950/30 dark:to-zinc-950/40 sm:h-[500px] sm:p-8 lg:h-[560px] lg:p-10">
             <Image
               src={heroImage}
@@ -192,66 +168,28 @@ export default function HomePage() {
               height={1184}
               priority
               sizes="(min-width: 1024px) 38vw, (min-width: 640px) 52vw, 80vw"
-              className="relative z-10 h-full w-auto max-w-full rounded-2xl object-contain shadow-2xl transition-shadow duration-300 hover:shadow-3xl"
+              className="relative z-10 h-full w-auto max-w-full rounded-2xl object-contain shadow-2xl"
             />
           </div>
         </div>
       </section>
 
-      {/* Featured Product Banner */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-brand-ink to-blue-900 p-8 md:p-12 shadow-premium">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml+%22')] bg-opacity-5" />
-          </div>
-          <div className="relative grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <p className="text-blue-300 text-sm font-semibold uppercase tracking-wide">
-                Featured Deal
-              </p>
-              <h2 className="mt-2 text-4xl md:text-5xl font-bold text-white">
-                {featuredIPhone.name}
-              </h2>
-              <p className="mt-4 text-lg text-blue-100 leading-relaxed">
-                {featuredIPhone.description}
-              </p>
-              <div className="mt-6 flex items-center gap-4">
-                <div>
-                  <p className="text-3xl font-bold text-white">
-                    {formatCurrency(featuredIPhone.price)}
-                  </p>
-                  {featuredIPhone.compareAtPrice &&
-                    featuredIPhone.compareAtPrice > 0 && (
-                      <p className="text-sm text-blue-200 line-through">
-                        {formatCurrency(featuredIPhone.compareAtPrice)}
-                      </p>
-                    )}
-                </div>
-                <LinkButton
-                  href={`/product/${featuredIPhone.slug}`}
-                  className="!bg-white !text-brand-ink hover:!bg-blue-50"
-                >
-                  View Details
-                </LinkButton>
-              </div>
-            </div>
-            <div className="relative flex h-80 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-5 shadow-inner sm:h-96 sm:p-7 md:h-[420px]">
-              <Image
-                src={featuredDealImage}
-                alt={featuredIPhone.name}
-                fill
-                sizes="(min-width: 768px) 42vw, 86vw"
-                className="object-contain p-5 sm:p-7"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Category Banners */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {sections.map((section) => (
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand-blue">
+              Shop by Category
+            </p>
+            <h2 className="mt-2 text-3xl font-bold text-brand-ink dark:text-white md:text-5xl">
+              Start with the right family.
+            </h2>
+          </div>
+          <LinkButton href="/categories" variant="secondary">
+            View All Categories <ArrowRight className="h-4 w-4" />
+          </LinkButton>
+        </div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {categorySections.map((section) => (
             <Link
               key={section.id}
               href={section.href}
@@ -279,54 +217,109 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Products Section */}
       <Section
-        eyebrow="Featured Products"
-        title="Ready to compare"
-        description="A concise selection of standout catalogue items. Full product families live on their dedicated category pages."
+        eyebrow="Explore the iPhone Lineup"
+        title="Recent generations, clearly organised"
+        description="Swipe through curated iPhone options, then open the full iPhone catalogue for every available model."
       >
-        <ProductGrid products={featuredProducts} compact />
+        <ProductGrid products={iphoneLineup} compact />
         <div className="mt-8 text-center">
-          <LinkButton href="/shop">
-            View Full Catalog <ArrowRight className="h-4 w-4" />
+          <LinkButton href="/iphones">
+            View All iPhones <ArrowRight className="h-4 w-4" />
           </LinkButton>
         </div>
       </Section>
 
-      {/* Best Sellers Section */}
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-ink to-blue-900 p-8 shadow-premium md:p-12">
+          <div className="relative grid items-center gap-8 md:grid-cols-2">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-blue-300">
+                Featured Deal
+              </p>
+              <h2 className="mt-2 text-4xl font-bold text-white md:text-5xl">
+                {featuredDeal.name}
+              </h2>
+              <p className="mt-4 text-lg leading-relaxed text-blue-100">
+                {featuredDeal.description}
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-4">
+                <p className="text-3xl font-bold text-white">
+                  {formatCurrency(featuredDeal.price)}
+                </p>
+                <LinkButton
+                  href={`/product/${featuredDeal.slug}`}
+                  className="!bg-white !text-brand-ink hover:!bg-blue-50"
+                >
+                  View Details
+                </LinkButton>
+              </div>
+            </div>
+            <div className="relative flex h-80 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-5 shadow-inner sm:h-96 sm:p-7 md:h-[420px]">
+              <Image
+                src={featuredDealImage}
+                alt={featuredDeal.name}
+                fill
+                sizes="(min-width: 768px) 42vw, 86vw"
+                className="object-contain p-5 sm:p-7"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <Section
-        eyebrow="Bestsellers"
-        title="Customer Favorites"
-        description="Explore the products loved by thousands of customers across Accra and beyond."
+        eyebrow="Best Sellers"
+        title="Curated customer favourites"
+        description="A compact view of standout products. Use the shop page for the complete catalogue and filters."
       >
         <ProductGrid products={bestSellerProducts} compact />
         <div className="mt-8 text-center">
           <LinkButton href="/shop?filter=bestseller">
-            View All Bestsellers <ArrowRight className="h-4 w-4" />
+            View Best Sellers <ArrowRight className="h-4 w-4" />
           </LinkButton>
         </div>
       </Section>
 
-      {/* New Arrivals Section */}
       <Section
         eyebrow="New Arrivals"
-        title="Latest Releases"
-        description="Fresh inventory of the newest iPhones, MacBooks, gaming consoles, and accessories."
+        title="Fresh catalogue additions"
+        description="Recently added Apple devices, consoles, and accessories prepared for comparison."
       >
         <ProductGrid products={newArrivalProducts} compact />
         <div className="mt-8 text-center">
           <LinkButton href="/shop?filter=new">
-            Explore All New <ArrowRight className="h-4 w-4" />
+            Explore New Arrivals <ArrowRight className="h-4 w-4" />
           </LinkButton>
         </div>
       </Section>
 
-      {/* Gaming Section */}
+      <Section
+        eyebrow="Mac Collection"
+        title="MacBook options for work and study"
+        description="Compare portable Mac options without flooding the homepage with the full Mac catalogue."
+      >
+        <ProductGrid products={macProducts} compact />
+        <div className="mt-8 text-center">
+          <LinkButton href="/macbooks">
+            View Mac Collection <ArrowRight className="h-4 w-4" />
+          </LinkButton>
+        </div>
+      </Section>
+
+      <Section
+        eyebrow="iPad and Apple Watch Highlights"
+        title="Portable screens and wearables"
+        description="A short lineup for tablets and watches, with full lists available on category pages."
+      >
+        <ProductGrid products={ipadWatchProducts} compact />
+      </Section>
+
       {gamingProducts.length > 0 && (
         <Section
-          eyebrow="Gaming"
-          title="Next-Gen Gaming"
-          description="PlayStation 5, Xbox Series X|S, Nintendo Switch, and premium gaming accessories."
+          eyebrow="Gaming Highlights"
+          title="Console and accessory picks"
+          description="A concise gaming lineup covering consoles and accessories without replacing the full gaming catalogue."
         >
           <ProductGrid products={gamingProducts} compact />
           <div className="mt-8 text-center">
@@ -337,19 +330,18 @@ export default function HomePage() {
         </Section>
       )}
 
-      {/* Service Highlights */}
       <Section
         className="bg-brand-mist dark:bg-white/5"
-        eyebrow="Services"
+        eyebrow="Trade-In and Repair"
         title="Support beyond checkout"
-        description="Trade-in guidance and repair booking are built into the shopping journey so customers can upgrade with confidence."
+        description="Trade-in estimates and repair booking stay available as guided service flows."
       >
         <div className="grid gap-6 md:grid-cols-2">
           {[
             {
               title: "Trade in your current device",
               description:
-                "Get a fast estimate for eligible Apple devices and apply the value toward your next upgrade.",
+                "Start a device estimate and confirm final value after inspection.",
               href: "/trade-in",
               label: "Start Trade-In",
               icon: Zap
@@ -357,7 +349,7 @@ export default function HomePage() {
             {
               title: "Book diagnostics and repairs",
               description:
-                "Schedule a repair request for iPhone, iPad, Mac, AirPods, and accessory issues with guided intake.",
+                "Request a repair intake for iPhone, iPad, Mac, AirPods, and accessories.",
               href: "/repair-booking",
               label: "Book Repair",
               icon: Wrench
@@ -376,11 +368,7 @@ export default function HomePage() {
                 <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
                   {item.description}
                 </p>
-                <LinkButton
-                  href={item.href}
-                  variant="secondary"
-                  className="mt-6"
-                >
+                <LinkButton href={item.href} variant="secondary" className="mt-6">
                   {item.label} <ArrowRight className="h-4 w-4" />
                 </LinkButton>
               </div>
@@ -389,23 +377,22 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* Trust Section */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
-            Why Choose TroyX
+        <div className="mb-12 text-center">
+          <p className="text-sm font-semibold uppercase tracking-wide text-blue-600">
+            Customer Benefits
           </p>
-          <h2 className="mt-2 text-4xl md:text-5xl font-bold text-brand-ink dark:text-white">
-            Built on Trust & Quality
+          <h2 className="mt-2 text-4xl font-bold text-brand-ink dark:text-white md:text-5xl">
+            Built for confident comparison.
           </h2>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {trustCards.map(([Icon, title, description]) => (
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {benefitCards.map(([Icon, title, description]) => (
             <div
               key={title}
-              className="rounded-2xl border border-black/5 bg-white p-8 shadow-sm hover:shadow-md transition-shadow dark:border-white/10 dark:bg-white/5"
+              className="rounded-2xl border border-black/5 bg-white p-8 shadow-sm transition-shadow hover:shadow-md dark:border-white/10 dark:bg-white/5"
             >
-              <Icon className="h-8 w-8 text-brand-blue mb-4" />
+              <Icon className="mb-4 h-8 w-8 text-brand-blue" />
               <h3 className="font-semibold text-brand-ink dark:text-white">
                 {title}
               </h3>
@@ -417,80 +404,38 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Reviews Section */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
-            Customer Reviews
-          </p>
-          <h2 className="mt-2 text-4xl md:text-5xl font-bold text-brand-ink dark:text-white">
-            Trusted by Thousands
-          </h2>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {reviews.map((review, index) => (
-            <div
-              key={index}
-              className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5"
-            >
-              <div className="flex items-center gap-1 mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400">
-                    ★
-                  </span>
-                ))}
-                <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 ml-2">
-                  {review.rating}
-                </span>
-              </div>
-              <p className="text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed">
-                {review.text}
-              </p>
-              <p className="mt-4 font-semibold text-brand-ink dark:text-white text-sm">
-                {review.name}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Store Info Section */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-gradient-to-br from-blue-50 to-white dark:from-white/5 dark:to-white/2.5 border border-black/5 dark:border-white/10 p-12 md:p-16">
-          <div className="grid md:grid-cols-2 gap-12">
+        <div className="rounded-3xl border border-black/5 bg-gradient-to-br from-blue-50 to-white p-12 dark:border-white/10 dark:from-white/5 dark:to-white/[0.03] md:p-16">
+          <div className="grid gap-12 md:grid-cols-2">
             <div>
-              <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
+              <p className="text-sm font-semibold uppercase tracking-wide text-blue-600">
                 Visit Us
               </p>
               <h2 className="mt-3 text-4xl font-bold text-brand-ink dark:text-white">
                 Bawaleshie, East Legon
               </h2>
-              <p className="mt-6 text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                Experience our premium showroom. See and test authentic Apple
-                products and gaming consoles before you buy.
+              <p className="mt-6 text-lg leading-relaxed text-zinc-600 dark:text-zinc-300">
+                Visit the showroom to inspect available products, compare
+                configurations, and ask the team for buying guidance.
               </p>
               <div className="mt-8 space-y-4">
                 <p className="flex items-center gap-3 text-zinc-600 dark:text-zinc-300">
-                  <MapPin className="h-5 w-5 text-brand-blue flex-shrink-0" />
+                  <MapPin className="h-5 w-5 flex-shrink-0 text-brand-blue" />
                   Bawaleshie, East Legon, Ghana
                 </p>
                 <p className="flex items-center gap-3 text-zinc-600 dark:text-zinc-300">
-                  <Truck className="h-5 w-5 text-brand-blue flex-shrink-0" />
+                  <Truck className="h-5 w-5 flex-shrink-0 text-brand-blue" />
                   +233 207 137 437
-                </p>
-                <p className="flex items-center gap-3 text-zinc-600 dark:text-zinc-300">
-                  <Package className="h-5 w-5 text-brand-blue flex-shrink-0" />
-                  +233 548 974 717
                 </p>
               </div>
               <div className="mt-8">
                 <LinkButton href="/contact">Contact Us</LinkButton>
               </div>
             </div>
-            <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden shadow-lg">
+            <div className="relative h-64 overflow-hidden rounded-2xl shadow-lg md:h-80">
               <Image
                 src={bannerImages.accessories}
-                alt="TroyX Store"
+                alt="TroyX iStore accessories display"
                 fill
                 className="object-cover"
               />
@@ -499,21 +444,21 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Newsletter Section */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-gradient-to-r from-brand-ink via-blue-900 to-blue-800 p-12 md:p-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white">
+        <div className="rounded-3xl bg-gradient-to-r from-brand-ink via-blue-900 to-blue-800 p-12 text-center md:p-16">
+          <h2 className="text-3xl font-bold text-white md:text-4xl">
             Stay Updated
           </h2>
           <p className="mt-4 text-lg text-blue-100">
-            Get exclusive deals, new arrivals, and expert tips delivered to your
-            inbox.
+            Get restock notes, service updates, and buying guidance delivered to
+            your inbox.
           </p>
-          <form className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <form className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 rounded-full border border-white/20 bg-white/10 backdrop-blur px-6 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/40"
+              aria-label="Email address"
+              className="flex-1 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-white placeholder-white/60 backdrop-blur focus:outline-none focus:ring-2 focus:ring-white/40"
             />
             <Button type="submit" className="!rounded-full px-8">
               Subscribe

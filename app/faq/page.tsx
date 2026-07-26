@@ -8,14 +8,14 @@ const faqs = [
   ["Are products genuine?", "TroyX iStore is designed around genuine product inventory, clear sourcing, and condition transparency."],
   ["Do used devices show battery health?", "Yes. Used inventory supports battery health display and inspection notes."],
   ["Can I pick up my order?", "Yes. Checkout supports pickup and delivery options."],
-  ["Who can leave reviews?", "The review model is designed for verified purchase reviews only."],
+  ["Can I compare products before buying?", "Yes. Use wishlist, compare, and product detail pages to review options before contacting the team or checking out."],
   ["Is the trade-in estimate final?", "No. Final value is confirmed only after physical inspection."]
 ];
 
 export default function FAQPage() {
   return (
     <>
-      <PageHeader eyebrow="FAQ" title="Answers before you buy." description="Clear policies for products, delivery, warranty, trade-in, repair, and reviews." />
+      <PageHeader eyebrow="FAQ" title="Answers before you buy." description="Clear policies for products, delivery, warranty, trade-in, repair, and checkout." />
       <Section>
         <div className="grid gap-4">
           {faqs.map(([question, answer]) => (

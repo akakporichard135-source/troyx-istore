@@ -186,9 +186,9 @@ export function Footer() {
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-5 w-5 text-purple-400 shrink-0" />
             <div>
-              <p className="font-bold text-white">100% Genuine Guarantee</p>
+              <p className="font-bold text-white">Condition-Led Catalogue</p>
               <p className="text-[11px] text-zinc-400 mt-0.5">
-                Official 12-Month TroyX Ghana Warranty included
+                Availability, condition, and warranty notes are confirmed per item
               </p>
             </div>
           </div>

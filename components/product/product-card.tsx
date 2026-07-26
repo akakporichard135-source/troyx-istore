@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { GitCompare, Heart, Star, Eye, X } from "lucide-react";
+import { GitCompare, Heart, Eye, X } from "lucide-react";
 import { useState } from "react";
 import { AddToCartButton } from "@/components/product/add-to-cart";
 import { useCommerceStore } from "@/context/store";
@@ -35,8 +35,8 @@ export function ProductCard({
     <>
       <article
         className={cn(
-          "group relative flex h-full flex-col overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-premium dark:border-white/10 dark:bg-zinc-900/70",
-          compact ? "min-h-[430px]" : "min-h-[520px]"
+          "group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-black/5 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-premium dark:border-white/10 dark:bg-zinc-900/75",
+          compact ? "min-h-[390px]" : "min-h-[455px]"
         )}
       >
         {/* Wishlist and Compare float buttons */}
@@ -70,7 +70,7 @@ export function ProductCard({
         <div
           className={cn(
             "relative flex items-center justify-center overflow-hidden bg-brand-mist dark:bg-zinc-950/40",
-            compact ? "aspect-[5/4]" : "aspect-[4/3]"
+            compact ? "aspect-[4/3]" : "aspect-[5/4]"
           )}
         >
           <Link
@@ -86,7 +86,7 @@ export function ProductCard({
               loading="lazy"
               className={cn(
                 "object-contain transition-transform duration-500 group-hover:scale-105",
-                compact ? "p-5" : "p-7"
+                compact ? "p-6" : "p-8"
               )}
             />
           </Link>
@@ -130,42 +130,44 @@ export function ProductCard({
               {product.name}
             </Link>
 
-            {!compact && (
-              <p className="mt-2 min-h-[40px] line-clamp-2 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+            <p
+              className={cn(
+                "mt-2 line-clamp-2 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400",
+                compact ? "min-h-[36px]" : "min-h-[40px]"
+              )}
+            >
                 {product.description}
-              </p>
-            )}
+            </p>
 
-            {/* Spec pills preview & Seller Badge */}
-            {!compact && (
-              <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-0.5 text-[9px] font-bold text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  TroyX verified
+            <div className="mt-3 flex items-center gap-1.5">
+              {product.colors.slice(0, 5).map((color) => (
+                <span
+                  key={color}
+                  className="h-4 w-4 rounded-full border border-black/10 shadow-sm dark:border-white/20"
+                  style={{ backgroundColor: colorToSwatch(color) }}
+                  title={color}
+                  aria-label={color}
+                />
+              ))}
+            </div>
+
+            <div className="mt-3 flex flex-wrap items-center gap-1.5">
+              <span className="inline-flex items-center rounded-full bg-brand-blue/10 px-2.5 py-1 text-[10px] font-bold text-brand-blue dark:bg-brand-blue/20">
+                {product.condition[0] || "Available on Request"}
+              </span>
+              {product.storage.slice(0, compact ? 1 : 2).map((opt) => (
+                <span
+                  key={opt}
+                  className="inline-block rounded-full bg-black/[0.04] px-2.5 py-1 text-[10px] font-bold text-zinc-600 dark:bg-white/10 dark:text-zinc-300"
+                >
+                  {opt}
                 </span>
-
-                {product.storage.slice(0, 2).map((opt) => (
-                  <span
-                    key={opt}
-                    className="inline-block rounded-md bg-blue-50/50 px-2 py-0.5 text-[9px] font-bold text-brand-blue dark:bg-blue-900/20"
-                  >
-                    {opt}
-                  </span>
-                ))}
-              </div>
-            )}
+              ))}
+            </div>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-black/5 dark:border-white/5 space-y-3">
-            {/* Rating & Availability */}
+          <div className="mt-4 space-y-3 border-t border-black/5 pt-4 dark:border-white/5">
             <div className="flex justify-between items-center text-xs">
-              <span className="flex items-center gap-1 font-bold text-brand-ink dark:text-white">
-                <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />{" "}
-                {product.rating}{" "}
-                <span className="text-[10px] text-zinc-400 font-normal">
-                  ({product.reviewCount})
-                </span>
-              </span>
               <span
                 className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
                   product.availability === "In Stock"
@@ -179,8 +181,7 @@ export function ProductCard({
               </span>
             </div>
 
-            {/* Pricing and Add to cart */}
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex items-end justify-between gap-3">
               <div>
                 <p className="text-lg font-black text-brand-ink dark:text-white leading-none">
                   {formatCurrency(product.price)}
@@ -191,10 +192,19 @@ export function ProductCard({
                   </p>
                 )}
               </div>
+              <Link
+                href={`/product/${product.slug}`}
+                className="text-xs font-bold text-brand-blue transition hover:text-blue-500"
+              >
+                View Details
+              </Link>
+            </div>
+
+            <div>
               <AddToCartButton
                 product={product}
-                className="h-9 px-4 text-xs"
-                label={product.price > 0 ? "Add" : "Quote"}
+                className="h-10 w-full px-4 text-xs"
+                label={product.price > 0 ? "Add to Cart" : "Contact for Price"}
               />
             </div>
           </div>
@@ -236,13 +246,6 @@ export function ProductCard({
                 <h2 className="text-xl font-black text-brand-ink dark:text-white mt-1">
                   {product.name}
                 </h2>
-                <div className="flex items-center gap-2 text-xs font-semibold mt-2">
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  <span>
-                    {product.rating} ({product.reviewCount} reviews)
-                  </span>
-                </div>
-
                 <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-4 leading-relaxed line-clamp-4">
                   {product.description}
                 </p>
@@ -286,7 +289,7 @@ export function ProductCard({
                   <AddToCartButton
                     product={product}
                     className="flex-1 h-10 text-xs font-bold"
-                    label={product.price > 0 ? "Add to Cart" : "Request Quote"}
+                    label={product.price > 0 ? "Add to Cart" : "Contact for Price"}
                   />
                 </div>
               </div>
@@ -295,5 +298,33 @@ export function ProductCard({
         </div>
       )}
     </>
+  );
+}
+
+function colorToSwatch(color: string) {
+  const normalized = color.toLowerCase();
+  const palette: Record<string, string> = {
+    black: "#111827",
+    white: "#f8fafc",
+    silver: "#d4d4d8",
+    graphite: "#4b5563",
+    gray: "#71717a",
+    grey: "#71717a",
+    blue: "#3b82f6",
+    pink: "#f9a8d4",
+    red: "#ef4444",
+    green: "#86efac",
+    yellow: "#fde68a",
+    purple: "#a78bfa",
+    gold: "#d6b16f",
+    natural: "#d6c6b5",
+    titanium: "#c9c0b8",
+    orange: "#f97316",
+    midnight: "#111827",
+    starlight: "#f5f1e8"
+  };
+  return (
+    Object.entries(palette).find(([name]) => normalized.includes(name))?.[1] ||
+    "#d4d4d8"
   );
 }

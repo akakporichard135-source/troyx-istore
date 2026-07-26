@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { ProductDetailActions } from "@/components/product/product-detail-actions";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductGrid } from "@/components/product/product-grid";
-import { ProductReviews } from "@/components/product/product-reviews";
 import { Section } from "@/components/ui/section";
 import { getProductBySlug, products } from "@/database/products";
 import { formatCurrency } from "@/lib/utils";
@@ -74,12 +73,7 @@ export default async function ProductDetailsPage({ params }: Props) {
             priceCurrency: "USD",
             availability: offerAvailability,
             seller: { "@type": "Organization", name: "TroyX iStore" }
-          },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: product.rating,
-      reviewCount: product.reviewCount
-    }
+          }
   };
 
   return (
@@ -129,7 +123,7 @@ export default async function ProductDetailsPage({ params }: Props) {
               </p>
             )}
             <p className="rounded-2xl bg-brand-mist p-4 dark:bg-white/5">
-              Verified purchase reviews only
+              Status: {product.availability}
             </p>
           </div>
         </div>
@@ -164,16 +158,6 @@ export default async function ProductDetailsPage({ params }: Props) {
         <ProductGrid
           products={related.length ? related : products.slice(0, 4)}
           compact
-        />
-      </Section>
-
-      <Section
-        eyebrow="Ratings & Reviews"
-        title="Customer Reviews & Experience"
-      >
-        <ProductReviews
-          rating={product.rating}
-          reviewCount={product.reviewCount}
         />
       </Section>
     </>

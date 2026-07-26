@@ -95,6 +95,14 @@ body {
   @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue;
 }
 
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Premium scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -124,4 +132,3 @@ body {
 .animate-pulse-fast {
   animation: pulse-fast 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
-

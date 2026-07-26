@@ -98,7 +98,6 @@ export function ShopBrowser() {
               (b.price || Number.MAX_SAFE_INTEGER)
             );
           if (sort === "price-high") return b.price - a.price;
-          if (sort === "rating") return b.rating - a.rating;
           if (sort === "new")
             return (
               Number(Boolean(b.newArrival)) - Number(Boolean(a.newArrival))
@@ -285,7 +284,6 @@ export function ShopBrowser() {
           >
             <option value="featured">Featured / Best Seller</option>
             <option value="new">Newest Arrivals</option>
-            <option value="rating">Top Rated Devices</option>
             <option value="price-low">Price: Low to High</option>
             <option value="price-high">Price: High to Low</option>
           </Select>
