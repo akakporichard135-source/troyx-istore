@@ -664,7 +664,8 @@ export const useAdminStore = create<AdminState>()(
       }
     }),
     {
-      name: "troyx-admin-store-v2"
+      name: "troyx-admin-store-v2",
+      skipHydration: true
     }
   )
 );
