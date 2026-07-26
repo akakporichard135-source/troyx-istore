@@ -33,7 +33,7 @@ export function ProductCard({
 
   return (
     <>
-      <article className="group overflow-hidden rounded-[2.5rem] border border-black/5 bg-white shadow-sm hover:shadow-premium transition-all duration-300 dark:border-white/10 dark:bg-zinc-900/60 flex flex-col justify-between h-full relative">
+      <article className="group relative flex h-full min-h-[520px] flex-col overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-premium dark:border-white/10 dark:bg-zinc-900/70">
         {/* Wishlist and Compare float buttons */}
         <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
           <button
@@ -62,7 +62,7 @@ export function ProductCard({
         </div>
 
         {/* Media visual box */}
-        <div className="bg-brand-mist dark:bg-zinc-950/20 relative aspect-square overflow-hidden flex items-center justify-center">
+        <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-brand-mist dark:bg-zinc-950/40">
           <Link
             href={`/product/${product.slug}`}
             className="block w-full h-full relative"
@@ -73,13 +73,14 @@ export function ProductCard({
               fill
               onError={() => setImageSrc(categoryFallback)}
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-              className="object-contain p-8 transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              className="object-contain p-7 transition-transform duration-500 group-hover:scale-105"
             />
           </Link>
 
           {/* Badge */}
           {product.badge && (
-            <span className="absolute left-4 top-4 rounded-full bg-white/92 backdrop-blur px-3 py-1 text-[10px] font-bold text-brand-blue shadow-sm dark:bg-zinc-800/90">
+            <span className="absolute left-4 top-4 rounded-full bg-white/92 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-brand-blue shadow-sm backdrop-blur dark:bg-zinc-800/90">
               {product.badge}
             </span>
           )}
@@ -103,13 +104,13 @@ export function ProductCard({
             </p>
             <Link
               href={`/product/${product.slug}`}
-              className="mt-1 block text-base font-extrabold text-brand-ink hover:text-brand-blue dark:text-white transition"
+              className="mt-1 block min-h-[48px] text-base font-extrabold leading-6 text-brand-ink transition hover:text-brand-blue dark:text-white"
             >
               {product.name}
             </Link>
 
             {!compact && (
-              <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+              <p className="mt-2 min-h-[40px] line-clamp-2 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
                 {product.description}
               </p>
             )}
@@ -172,7 +173,7 @@ export function ProductCard({
               <AddToCartButton
                 product={product}
                 className="h-9 px-4 text-xs"
-                label="Add"
+                label={product.price > 0 ? "Add" : "Quote"}
               />
             </div>
           </div>

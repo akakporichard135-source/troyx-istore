@@ -73,7 +73,7 @@ const sections = [
     description:
       "Explore the latest iPhone models, Pro editions, and affordable options.",
     image: "/images/categories/iphones.webp",
-    href: "/categories?type=iphones"
+    href: "/iphones"
   },
   {
     id: "macbooks",
@@ -81,7 +81,7 @@ const sections = [
     description:
       "Shop MacBook Air and MacBook Pro models for work, school, and creativity.",
     image: "/images/categories/macbooks.webp",
-    href: "/categories?type=macbooks"
+    href: "/macbooks"
   },
   {
     id: "ipads",
@@ -89,7 +89,7 @@ const sections = [
     description:
       "Discover iPad Pro, iPad Air, iPad mini, and standard iPad models.",
     image: "/images/categories/ipads.webp",
-    href: "/categories?type=ipads"
+    href: "/ipads"
   },
   {
     id: "gaming",
@@ -97,7 +97,7 @@ const sections = [
     description:
       "Shop PlayStation, Xbox, Nintendo Switch, and gaming accessories.",
     image: "/images/categories/gaming.webp",
-    href: "/categories?type=gaming"
+    href: "/gaming-consoles"
   }
 ];
 
@@ -108,9 +108,12 @@ export default function HomePage() {
   const featuredIPhone =
     products.find((p) => p.bestSeller && p.category === "iPhone") ||
     products[0];
+  const featuredProducts = products
+    .filter((p) => p.bestSeller || p.deal)
+    .slice(0, 4);
   const bestSellerProducts = featuredGroups.bestSellers.slice(0, 4);
   const newArrivalProducts = featuredGroups.newArrivals.slice(0, 4);
-  const gamingProducts = featuredGroups.gaming;
+  const gamingProducts = featuredGroups.gaming.slice(0, 4);
 
   return (
     <>
@@ -121,7 +124,7 @@ export default function HomePage() {
           <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-blue-200/20 blur-3xl dark:bg-blue-500/10" />
         </div>
 
-        <div className="mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-12 px-4 pb-16 sm:px-6 lg:grid-cols-2 lg:px-8 relative z-10">
+        <div className="relative z-10 mx-auto grid min-h-[620px] max-w-7xl items-center gap-10 px-4 pb-14 sm:px-6 lg:grid-cols-2 lg:px-8">
           {/* Hero Content */}
           <div>
             <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 mb-6 dark:border-blue-800 dark:bg-blue-500/10">
@@ -276,6 +279,20 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Featured Products Section */}
+      <Section
+        eyebrow="Featured Products"
+        title="Ready to compare"
+        description="A concise selection of standout catalogue items. Full product families live on their dedicated category pages."
+      >
+        <ProductGrid products={featuredProducts} />
+        <div className="mt-8 text-center">
+          <LinkButton href="/shop">
+            View Full Catalog <ArrowRight className="h-4 w-4" />
+          </LinkButton>
+        </div>
+      </Section>
+
       {/* Best Sellers Section */}
       <Section
         eyebrow="Bestsellers"
@@ -313,12 +330,64 @@ export default function HomePage() {
         >
           <ProductGrid products={gamingProducts} />
           <div className="mt-8 text-center">
-            <LinkButton href="/categories?type=gaming">
+            <LinkButton href="/gaming-consoles">
               Explore Gaming <ArrowRight className="h-4 w-4" />
             </LinkButton>
           </div>
         </Section>
       )}
+
+      {/* Service Highlights */}
+      <Section
+        className="bg-brand-mist dark:bg-white/5"
+        eyebrow="Services"
+        title="Support beyond checkout"
+        description="Trade-in guidance and repair booking are built into the shopping journey so customers can upgrade with confidence."
+      >
+        <div className="grid gap-6 md:grid-cols-2">
+          {[
+            {
+              title: "Trade in your current device",
+              description:
+                "Get a fast estimate for eligible Apple devices and apply the value toward your next upgrade.",
+              href: "/trade-in",
+              label: "Start Trade-In",
+              icon: Zap
+            },
+            {
+              title: "Book diagnostics and repairs",
+              description:
+                "Schedule a repair request for iPhone, iPad, Mac, AirPods, and accessory issues with guided intake.",
+              href: "/repair-booking",
+              label: "Book Repair",
+              icon: Wrench
+            }
+          ].map((item) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={item.title}
+                className="rounded-3xl border border-black/5 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-premium dark:border-white/10 dark:bg-zinc-900"
+              >
+                <Icon className="h-7 w-7 text-brand-blue" />
+                <h3 className="mt-5 text-2xl font-bold text-brand-ink dark:text-white">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+                  {item.description}
+                </p>
+                <LinkButton
+                  href={item.href}
+                  variant="secondary"
+                  className="mt-6"
+                >
+                  {item.label} <ArrowRight className="h-4 w-4" />
+                </LinkButton>
+              </div>
+            );
+          })}
+        </div>
+      </Section>
 
       {/* Trust Section */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

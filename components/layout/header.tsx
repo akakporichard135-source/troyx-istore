@@ -12,17 +12,20 @@ import { cn } from "@/lib/utils";
 const links = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Shop" },
-  { href: "/categories", label: "Categories" },
-  { href: "/gaming", label: "Gaming" },
+  { href: "/iphones", label: "iPhones" },
+  { href: "/macbooks", label: "MacBooks" },
+  { href: "/ipads", label: "iPads" },
+  { href: "/gaming-consoles", label: "Gaming" },
   { href: "/repair-booking", label: "Repair" },
-  { href: "/trade-in", label: "Trade-In" },
-  { href: "/contact", label: "Contact" }
+  { href: "/trade-in", label: "Trade-In" }
 ];
 
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const cartCount = useCommerceStore((state) => state.cart.reduce((sum, item) => sum + item.quantity, 0));
+  const cartCount = useCommerceStore((state) =>
+    state.cart.reduce((sum, item) => sum + item.quantity, 0)
+  );
   const wishlistCount = useCommerceStore((state) => state.wishlist.length);
 
   if (pathname?.startsWith("/admin")) {
@@ -30,15 +33,25 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-white/82 backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-950/80">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8" aria-label="Main">
-        <Link href="/" className="focus-ring flex items-center gap-3 rounded-full">
+    <header className="sticky top-0 z-50 border-b border-black/5 bg-white/88 shadow-sm shadow-black/[0.02] backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-950/86">
+      <nav
+        className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
+        aria-label="Main"
+      >
+        <Link
+          href="/"
+          className="focus-ring flex items-center gap-3 rounded-full"
+        >
           <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-ink text-base font-bold text-white dark:bg-white dark:text-brand-ink">
             TX
           </span>
           <span className="hidden leading-tight sm:block">
-            <span className="block text-sm font-semibold text-brand-ink dark:text-white">TroyX iStore</span>
-            <span className="block text-xs text-zinc-500 dark:text-zinc-400">Home of Original Apple Products</span>
+            <span className="block text-sm font-semibold text-brand-ink dark:text-white">
+              TroyX iStore
+            </span>
+            <span className="block text-xs text-zinc-500 dark:text-zinc-400">
+              Home of Original Apple Products
+            </span>
           </span>
         </Link>
 
@@ -47,7 +60,11 @@ export function Header() {
             <Link
               key={link.label}
               href={link.href || "#"}
-              className="focus-ring rounded-full px-3 py-2 text-sm font-medium text-zinc-700 transition hover:bg-black/5 hover:text-brand-ink dark:text-zinc-200 dark:hover:bg-white/10 dark:hover:text-white"
+              className={cn(
+                "focus-ring rounded-full px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-black/5 hover:text-brand-ink dark:text-zinc-200 dark:hover:bg-white/10 dark:hover:text-white",
+                pathname === link.href &&
+                  "bg-brand-blue/10 text-brand-blue dark:bg-brand-blue/15 dark:text-blue-300"
+              )}
             >
               {link.label}
             </Link>
@@ -84,13 +101,17 @@ export function Header() {
           open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
         )}
       >
-        <div className="overflow-hidden">
-          <div className="mx-auto grid max-w-7xl gap-2 px-4 py-4 sm:px-6">
+        <div className="overflow-hidden bg-white/95 backdrop-blur dark:bg-zinc-950/95">
+          <div className="mx-auto grid max-w-7xl gap-2 px-4 py-4 sm:grid-cols-2 sm:px-6">
             {links.map((link) => (
               <Link
                 key={link.label}
                 href={link.href || "#"}
-                className="rounded-2xl px-4 py-3 text-sm font-semibold text-zinc-700 hover:bg-black/5 dark:text-zinc-200 dark:hover:bg-white/10"
+                className={cn(
+                  "rounded-2xl px-4 py-3 text-sm font-semibold text-zinc-700 hover:bg-black/5 dark:text-zinc-200 dark:hover:bg-white/10",
+                  pathname === link.href &&
+                    "bg-brand-blue/10 text-brand-blue dark:bg-brand-blue/15 dark:text-blue-300"
+                )}
                 onClick={() => setOpen(false)}
               >
                 {link.label}
@@ -130,4 +151,3 @@ function IconLink({
     </Link>
   );
 }
-

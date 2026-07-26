@@ -11,7 +11,7 @@ export function AddToCartButton({
   storage,
   condition,
   className,
-  label = "Add to Cart"
+  label
 }: {
   product: Product;
   color?: string;
@@ -21,6 +21,8 @@ export function AddToCartButton({
   label?: string;
 }) {
   const addToCart = useCommerceStore((state) => state.addToCart);
+  const buttonLabel =
+    label || (product.price > 0 ? "Add to Cart" : "Request Quote");
 
   return (
     <Button
@@ -37,7 +39,7 @@ export function AddToCartButton({
       }
     >
       <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-      {label}
+      {buttonLabel}
     </Button>
   );
 }

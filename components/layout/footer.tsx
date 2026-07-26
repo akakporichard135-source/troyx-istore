@@ -2,7 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Facebook, Instagram, Mail, MapPin, Phone, Send, Twitter, ArrowUp, ShieldCheck, Truck, CreditCard } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Send,
+  Twitter,
+  ArrowUp,
+  ShieldCheck,
+  Truck,
+  CreditCard
+} from "lucide-react";
 import { siteConfig, legalDisclaimer } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 
@@ -10,8 +22,20 @@ const footerGroups = [
   {
     title: "Quick Links",
     links: [
-      ["Shop Catalog", "/shop"],      ["Best Sellers", "/shop?sort=best"],
+      ["Shop Catalog", "/shop"],
+      ["Best Sellers", "/shop?sort=best"],
       ["New Arrivals", "/shop?sort=new"]
+    ]
+  },
+  {
+    title: "Categories",
+    links: [
+      ["iPhones", "/iphones"],
+      ["MacBooks", "/macbooks"],
+      ["iPads", "/ipads"],
+      ["Apple Watch", "/apple-watch"],
+      ["AirPods", "/airpods"],
+      ["Gaming", "/gaming-consoles"]
     ]
   },
   {
@@ -24,18 +48,10 @@ const footerGroups = [
     ]
   },
   {
-    title: "Support & Repair",
+    title: "Company & Legal",
     links: [
       ["Contact Us", "/contact"],
       ["FAQ", "/faq"],
-      ["Order Tracking", "/order-tracking"],
-      ["Repair Booking", "/repair-booking"],
-      ["Trade-In Program", "/trade-in"]
-    ]
-  },
-  {
-    title: "Company & Legal",
-    links: [
       ["About Us", "/about"],
       ["Privacy Policy", "/privacy-policy"],
       ["Terms of Service", "/terms"],
@@ -69,18 +85,28 @@ export function Footer() {
                 <p className="text-sm text-zinc-300">{siteConfig.tagline}</p>
               </div>
             </div>
-            <p className="mt-5 max-w-md text-sm leading-6 text-zinc-300">{siteConfig.description}</p>
-            <p className="mt-4 max-w-md text-xs leading-5 text-zinc-400">{legalDisclaimer}</p>
-            
+            <p className="mt-5 max-w-md text-sm leading-6 text-zinc-300">
+              {siteConfig.description}
+            </p>
+            <p className="mt-4 max-w-md text-xs leading-5 text-zinc-400">
+              {legalDisclaimer}
+            </p>
+
             <div className="mt-6 space-y-2.5 text-xs text-zinc-300">
               <p className="flex items-center gap-2.5">
-                <MapPin className="h-4 w-4 text-brand-blue" aria-hidden="true" /> {siteConfig.address}
+                <MapPin
+                  className="h-4 w-4 text-brand-blue"
+                  aria-hidden="true"
+                />{" "}
+                {siteConfig.address}
               </p>
               <p className="flex items-center gap-2.5">
-                <Phone className="h-4 w-4 text-brand-blue" aria-hidden="true" /> {siteConfig.phone}
+                <Phone className="h-4 w-4 text-brand-blue" aria-hidden="true" />{" "}
+                {siteConfig.phone}
               </p>
               <p className="flex items-center gap-2.5">
-                <Mail className="h-4 w-4 text-brand-blue" aria-hidden="true" /> {siteConfig.email}
+                <Mail className="h-4 w-4 text-brand-blue" aria-hidden="true" />{" "}
+                {siteConfig.email}
               </p>
             </div>
           </div>
@@ -92,7 +118,10 @@ export function Footer() {
                 <ul className="mt-4 space-y-3">
                   {group.links.map(([label, href]) => (
                     <li key={href}>
-                      <Link href={href} className="text-sm text-zinc-300 transition hover:text-white">
+                      <Link
+                        href={href}
+                        className="text-sm text-zinc-300 transition hover:text-white"
+                      >
                         {label}
                       </Link>
                     </li>
@@ -106,8 +135,13 @@ export function Footer() {
         {/* Unified Single Newsletter Subscription Block */}
         <div className="mt-12 grid gap-5 rounded-[2.5rem] bg-white/8 p-6 md:grid-cols-[1fr_auto] md:items-center border border-white/10">
           <div>
-            <h2 className="text-lg font-bold text-white">Join the TroyX Insider Newsletter</h2>
-            <p className="mt-1 text-xs text-zinc-300">Get restock alerts, exclusive TroyX offers, and Apple buying guides across Ghana.</p>
+            <h2 className="text-lg font-bold text-white">
+              Join the TroyX Insider Newsletter
+            </h2>
+            <p className="mt-1 text-xs text-zinc-300">
+              Get restock alerts, exclusive TroyX offers, and Apple buying
+              guides across Ghana.
+            </p>
           </div>
           <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
             <input
@@ -116,7 +150,11 @@ export function Footer() {
               aria-label="Email address"
               className="focus-ring h-11 min-w-0 flex-1 rounded-full border border-white/10 bg-white px-4 text-xs text-brand-ink placeholder-zinc-500"
             />
-            <Button type="submit" className="h-11 px-5 bg-brand-blue text-white font-bold hover:bg-brand-blue/90" aria-label="Subscribe">
+            <Button
+              type="submit"
+              className="h-11 px-5 bg-brand-blue text-white font-bold hover:bg-brand-blue/90"
+              aria-label="Subscribe"
+            >
               <Send className="h-4 w-4 mr-1.5" />
               Subscribe
             </Button>
@@ -129,7 +167,9 @@ export function Footer() {
             <CreditCard className="h-5 w-5 text-emerald-400 shrink-0" />
             <div>
               <p className="font-bold text-white">Accepted Payment Methods</p>
-              <p className="text-[11px] text-zinc-400 mt-0.5">MTN MoMo, Telecel Cash, Visa, Mastercard, Paystack</p>
+              <p className="text-[11px] text-zinc-400 mt-0.5">
+                MTN MoMo, Telecel Cash, Visa, Mastercard, Paystack
+              </p>
             </div>
           </div>
 
@@ -137,7 +177,9 @@ export function Footer() {
             <Truck className="h-5 w-5 text-brand-blue shrink-0" />
             <div>
               <p className="font-bold text-white">Nationwide Ghana Delivery</p>
-              <p className="text-[11px] text-zinc-400 mt-0.5">Same-day Accra pickup or 1-3 days nationwide dispatch</p>
+              <p className="text-[11px] text-zinc-400 mt-0.5">
+                Same-day Accra pickup or 1-3 days nationwide dispatch
+              </p>
             </div>
           </div>
 
@@ -145,24 +187,41 @@ export function Footer() {
             <ShieldCheck className="h-5 w-5 text-purple-400 shrink-0" />
             <div>
               <p className="font-bold text-white">100% Genuine Guarantee</p>
-              <p className="text-[11px] text-zinc-400 mt-0.5">Official 12-Month TroyX Ghana Warranty included</p>
+              <p className="text-[11px] text-zinc-400 mt-0.5">
+                Official 12-Month TroyX Ghana Warranty included
+              </p>
             </div>
           </div>
         </div>
 
         {/* Footer Bottom bar & Back to Top */}
         <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-zinc-400 sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {new Date().getFullYear()} TroyX iStore Ghana. All Rights Reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} TroyX iStore Ghana. All Rights
+            Reserved.
+          </p>
 
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <Link href={siteConfig.socials.instagram} aria-label="Instagram" className="hover:text-white">
+              <Link
+                href={siteConfig.socials.instagram}
+                aria-label="Instagram"
+                className="hover:text-white"
+              >
                 <Instagram className="h-4 w-4" />
               </Link>
-              <Link href={siteConfig.socials.facebook} aria-label="Facebook" className="hover:text-white">
+              <Link
+                href={siteConfig.socials.facebook}
+                aria-label="Facebook"
+                className="hover:text-white"
+              >
                 <Facebook className="h-4 w-4" />
               </Link>
-              <Link href={siteConfig.socials.x} aria-label="X" className="hover:text-white">
+              <Link
+                href={siteConfig.socials.x}
+                aria-label="X"
+                className="hover:text-white"
+              >
                 <Twitter className="h-4 w-4" />
               </Link>
             </div>
@@ -181,4 +240,3 @@ export function Footer() {
     </footer>
   );
 }
-
