@@ -285,7 +285,7 @@ export default function HomePage() {
         title="Ready to compare"
         description="A concise selection of standout catalogue items. Full product families live on their dedicated category pages."
       >
-        <ProductGrid products={featuredProducts} />
+        <ProductGrid products={featuredProducts} compact />
         <div className="mt-8 text-center">
           <LinkButton href="/shop">
             View Full Catalog <ArrowRight className="h-4 w-4" />
@@ -299,7 +299,7 @@ export default function HomePage() {
         title="Customer Favorites"
         description="Explore the products loved by thousands of customers across Accra and beyond."
       >
-        <ProductGrid products={bestSellerProducts} />
+        <ProductGrid products={bestSellerProducts} compact />
         <div className="mt-8 text-center">
           <LinkButton href="/shop?filter=bestseller">
             View All Bestsellers <ArrowRight className="h-4 w-4" />
@@ -313,7 +313,7 @@ export default function HomePage() {
         title="Latest Releases"
         description="Fresh inventory of the newest iPhones, MacBooks, gaming consoles, and accessories."
       >
-        <ProductGrid products={newArrivalProducts} />
+        <ProductGrid products={newArrivalProducts} compact />
         <div className="mt-8 text-center">
           <LinkButton href="/shop?filter=new">
             Explore All New <ArrowRight className="h-4 w-4" />
@@ -328,7 +328,7 @@ export default function HomePage() {
           title="Next-Gen Gaming"
           description="PlayStation 5, Xbox Series X|S, Nintendo Switch, and premium gaming accessories."
         >
-          <ProductGrid products={gamingProducts} />
+          <ProductGrid products={gamingProducts} compact />
           <div className="mt-8 text-center">
             <LinkButton href="/gaming-consoles">
               Explore Gaming <ArrowRight className="h-4 w-4" />

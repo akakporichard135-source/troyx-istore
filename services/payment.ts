@@ -1,4 +1,5 @@
-export type PaymentProvider = "Paystack" | "Flutterwave" | "MTN_Mobile_Money" | "Telecel_Cash" | "Stripe";
+export type PaymentProvider =
+  "Paystack" | "Flutterwave" | "MTN_Mobile_Money" | "Telecel_Cash" | "Stripe";
 
 export interface PaymentTransaction {
   id: string;
@@ -7,21 +8,32 @@ export interface PaymentTransaction {
   provider: PaymentProvider;
   customerEmail: string;
   reference: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   status: "Pending" | "Success" | "Failed";
   createdAt: string;
 }
 
 export interface PaymentAdapter {
   providerName: PaymentProvider;
-  initializePayment: (amount: number, email: string, reference: string, metadata?: any) => Promise<{ authorizationUrl?: string; reference: string; status: string }>;
-  verifyPayment: (reference: string) => Promise<{ success: boolean; transactionId: string }>;
+  initializePayment: (
+    amount: number,
+    email: string,
+    reference: string,
+    metadata?: Record<string, unknown>
+  ) => Promise<{
+    authorizationUrl?: string;
+    reference: string;
+    status: string;
+  }>;
+  verifyPayment: (
+    reference: string
+  ) => Promise<{ success: boolean; transactionId: string }>;
 }
 
 class PaystackAdapter implements PaymentAdapter {
   providerName: PaymentProvider = "Paystack";
 
-  async initializePayment(amount: number, email: string, reference: string, metadata?: any) {
+  async initializePayment(amount: number, email: string, reference: string) {
     // Simulated Paystack initialization
     return {
       authorizationUrl: `https://checkout.paystack.com/simulate-${reference}`,
@@ -38,7 +50,7 @@ class PaystackAdapter implements PaymentAdapter {
 class MobileMoneyAdapter implements PaymentAdapter {
   providerName: PaymentProvider = "MTN_Mobile_Money";
 
-  async initializePayment(amount: number, email: string, reference: string, metadata?: any) {
+  async initializePayment(amount: number, email: string, reference: string) {
     return {
       authorizationUrl: undefined,
       reference,
@@ -54,7 +66,7 @@ class MobileMoneyAdapter implements PaymentAdapter {
 class StripeAdapter implements PaymentAdapter {
   providerName: PaymentProvider = "Stripe";
 
-  async initializePayment(amount: number, email: string, reference: string, metadata?: any) {
+  async initializePayment(amount: number, email: string, reference: string) {
     return {
       authorizationUrl: `https://checkout.stripe.com/simulate-${reference}`,
       reference,
@@ -84,13 +96,6 @@ export class PaymentGatewayService {
     }
     return adapter;
   }
-
-  async processMarketplaceSubscription(planName: string, amount: number, vendorEmail: string, provider: PaymentProvider = "Paystack") {
-    const reference = `SUB-${planName.toUpperCase()}-${Date.now()}`;
-    const adapter = this.getAdapter(provider);
-    const result = await adapter.initializePayment(amount, vendorEmail, reference, { planName });
-    return result;
-  }
 }
 
 export const paymentGateway = new PaymentGatewayService();
@@ -102,13 +107,25 @@ export async function createPaymentIntent({
   amount
 }: {
   provider: string;
-  items: any[];
+  items: Array<{
+    productId: string;
+    quantity: number;
+    color?: string;
+    storage?: string;
+    condition?: string;
+  }>;
   customerEmail: string;
   amount: number;
 }) {
   const reference = `TX-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-  const adapter = paymentGateway.getAdapter((provider as PaymentProvider) || "Paystack");
-  const payment = await adapter.initializePayment(amount, customerEmail, reference, { items });
+  const adapter = paymentGateway.getAdapter(
+    (provider as PaymentProvider) || "Paystack"
+  );
+  const payment = await adapter.initializePayment(
+    amount,
+    customerEmail,
+    reference,
+    { items }
+  );
   return payment;
 }
-

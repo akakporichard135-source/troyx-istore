@@ -2,15 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Minus,
-  Plus,
-  Trash2,
-  Heart,
-  Tag,
-  ShieldCheck,
-  ArrowRight
-} from "lucide-react";
+import { Minus, Plus, Trash2, Heart, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Button, LinkButton } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";

@@ -4,16 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   CheckCircle2,
-  ShieldCheck,
   Truck,
   Store,
   CreditCard,
   Smartphone,
-  Lock,
-  ArrowRight
+  Lock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input, Select } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { useCommerceStore } from "@/context/store";
 import { useAdminStore } from "@/context/admin-store";
 import { formatCurrency } from "@/lib/utils";

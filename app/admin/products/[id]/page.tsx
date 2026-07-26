@@ -8,7 +8,6 @@ import {
   Save,
   Trash2,
   Plus,
-  Sparkles,
   Barcode,
   Image as ImageIcon,
   Check,

@@ -1,18 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { 
-  DollarSign, 
-  Search, 
-  TrendingDown, 
-  Percent, 
-  Save, 
-  AlertTriangle,
-  Sparkles,
-  ArrowDown
-} from "lucide-react";
+import { Search, Percent, AlertTriangle, ArrowDown } from "lucide-react";
 import { useAdminStore } from "@/context/admin-store";
-import { formatCurrency } from "@/lib/utils";
 
 export default function PricingPage() {
   const { products, editProduct, currentRole } = useAdminStore();
@@ -24,19 +14,26 @@ export default function PricingPage() {
   const [bulkDiscountPct, setBulkDiscountPct] = useState(5);
 
   const filteredProducts = useMemo(() => {
-    return products.filter(p => {
-      const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = selectedCategory === "all" || p.category === selectedCategory;
+    return products.filter((p) => {
+      const matchesSearch =
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.id.toLowerCase().includes(search.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "all" || p.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
   }, [products, search, selectedCategory]);
 
-  const handlePriceChange = (productId: string, field: "price" | "compareAtPrice", val: number) => {
+  const handlePriceChange = (
+    productId: string,
+    field: "price" | "compareAtPrice",
+    val: number
+  ) => {
     if (currentRole === "Sales Staff" || currentRole === "Support Staff") {
       alert("Access Denied: Restricted role permissions.");
       return;
     }
-    const product = products.find(p => p.id === productId);
+    const product = products.find((p) => p.id === productId);
     if (product) {
       editProduct({
         ...product,
@@ -51,8 +48,12 @@ export default function PricingPage() {
       return;
     }
 
-    if (window.confirm(`Are you sure you want to apply a ${bulkDiscountPct}% discount to all products in category "${bulkCategory}"?`)) {
-      products.forEach(p => {
+    if (
+      window.confirm(
+        `Are you sure you want to apply a ${bulkDiscountPct}% discount to all products in category "${bulkCategory}"?`
+      )
+    ) {
+      products.forEach((p) => {
         if (p.category === bulkCategory) {
           const factor = (100 - bulkDiscountPct) / 100;
           const newPrice = Math.round(p.price * factor);
@@ -63,20 +64,27 @@ export default function PricingPage() {
           });
         }
       });
-      alert(`Successfully applied ${bulkDiscountPct}% discount to all "${bulkCategory}" products!`);
+      alert(
+        `Successfully applied ${bulkDiscountPct}% discount to all "${bulkCategory}" products!`
+      );
     }
   };
 
   const categoriesList = useMemo(() => {
-    return Array.from(new Set(products.map(p => p.category)));
+    return Array.from(new Set(products.map((p) => p.category)));
   }, [products]);
 
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">Pricing & Campaigns</h1>
-        <p className="text-zinc-500 text-sm">Fine-tune device prices, configure markdown ratios, and apply bulk category-wide discounts.</p>
+        <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">
+          Pricing & Campaigns
+        </h1>
+        <p className="text-zinc-500 text-sm">
+          Fine-tune device prices, configure markdown ratios, and apply bulk
+          category-wide discounts.
+        </p>
       </div>
 
       {/* Grid: Category markdown + alerts */}
@@ -84,9 +92,13 @@ export default function PricingPage() {
         {/* Bulk markdown manager */}
         <div className="p-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm space-y-4">
           <h2 className="text-lg font-bold text-brand-ink dark:text-white pb-3 border-b border-black/5 dark:border-white/5 flex items-center gap-2">
-            <Percent className="h-5 w-5 text-brand-blue" /> Bulk Category Markdown
+            <Percent className="h-5 w-5 text-brand-blue" /> Bulk Category
+            Markdown
           </h2>
-          <p className="text-xs text-zinc-500">Instantly slash prices for an entire department for flash deals or restock clearouts.</p>
+          <p className="text-xs text-zinc-500">
+            Instantly slash prices for an entire department for flash deals or
+            restock clearouts.
+          </p>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="grid gap-1 text-xs font-bold text-zinc-500">
@@ -96,7 +108,11 @@ export default function PricingPage() {
                 onChange={(e) => setBulkCategory(e.target.value)}
                 className="px-4 py-2.5 rounded-full border border-black/10 focus:border-brand-blue bg-white text-zinc-850 dark:bg-zinc-850 dark:border-white/10 dark:text-white outline-none transition text-xs font-semibold"
               >
-                {categoriesList.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                {categoriesList.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
               </select>
             </label>
 
@@ -125,14 +141,19 @@ export default function PricingPage() {
         <div className="p-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm space-y-4 justify-between flex flex-col">
           <div className="space-y-2">
             <h3 className="font-bold text-brand-ink dark:text-white flex items-center gap-1.5">
-              <AlertTriangle className="h-5 w-5 text-amber-500" /> Margin Guard Policy
+              <AlertTriangle className="h-5 w-5 text-amber-500" /> Margin Guard
+              Policy
             </h3>
             <p className="text-xs text-zinc-500 leading-relaxed">
-              TroyX iStore pricing operations follow strict local VAT configurations (default: 15% VAT). Ensure list price changes leave adequate space above wholesale landing costs to avoid negative billing lines.
+              TroyX iStore pricing operations follow strict local VAT
+              configurations (default: 15% VAT). Ensure list price changes leave
+              adequate space above wholesale landing costs to avoid negative
+              billing lines.
             </p>
           </div>
           <div className="p-3.5 bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/50 text-amber-800 dark:text-amber-300 rounded-2xl text-[10px] font-semibold">
-            Warning: Dropping final customer price below original supplier MSRP prompts audit logs alert.
+            Warning: Dropping final customer price below original supplier MSRP
+            prompts audit logs alert.
           </div>
         </div>
       </div>
@@ -157,7 +178,11 @@ export default function PricingPage() {
             className="text-xs bg-white dark:bg-zinc-800 border border-black/10 dark:border-white/10 rounded-full px-3 py-1.5 font-semibold outline-none"
           >
             <option value="all">All Categories</option>
-            {categoriesList.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+            {categoriesList.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -167,23 +192,34 @@ export default function PricingPage() {
               <tr className="border-b border-black/5 dark:border-white/5 bg-zinc-50/50 dark:bg-zinc-850/20 text-zinc-400 font-semibold uppercase">
                 <th className="px-6 py-4">Product Model</th>
                 <th className="px-6 py-4">Category</th>
-                <th className="px-6 py-4 text-right">MSRP / Original (₵)</th>
-                <th className="px-6 py-4 text-right">Selling Price (₵)</th>
+                <th className="px-6 py-4 text-right">MSRP / Original (GHS)</th>
+                <th className="px-6 py-4 text-right">Selling Price (GHS)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5 dark:divide-white/5 font-semibold text-brand-ink dark:text-white">
               {filteredProducts.map((p) => (
-                <tr key={p.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-850/20 transition">
+                <tr
+                  key={p.id}
+                  className="hover:bg-zinc-50 dark:hover:bg-zinc-850/20 transition"
+                >
                   <td className="px-6 py-4">
                     <p className="font-bold text-sm">{p.name}</p>
-                    <p className="text-[10px] text-zinc-400 font-mono">SKU: {p.id}</p>
+                    <p className="text-[10px] text-zinc-400 font-mono">
+                      SKU: {p.id}
+                    </p>
                   </td>
                   <td className="px-6 py-4 text-zinc-500">{p.category}</td>
                   <td className="px-6 py-4 text-right">
                     <input
                       type="number"
                       value={p.compareAtPrice || ""}
-                      onChange={(e) => handlePriceChange(p.id, "compareAtPrice", Number(e.target.value))}
+                      onChange={(e) =>
+                        handlePriceChange(
+                          p.id,
+                          "compareAtPrice",
+                          Number(e.target.value)
+                        )
+                      }
                       placeholder="MSRP"
                       className="w-24 text-right px-2.5 py-1 bg-zinc-50 dark:bg-zinc-800 border border-black/10 dark:border-white/10 rounded-md font-mono font-bold"
                     />
@@ -192,7 +228,9 @@ export default function PricingPage() {
                     <input
                       type="number"
                       value={p.price || ""}
-                      onChange={(e) => handlePriceChange(p.id, "price", Number(e.target.value))}
+                      onChange={(e) =>
+                        handlePriceChange(p.id, "price", Number(e.target.value))
+                      }
                       className="w-24 text-right px-2.5 py-1 bg-zinc-50 dark:bg-zinc-800 border border-black/10 dark:border-white/10 rounded-md font-mono font-bold text-brand-blue"
                     />
                   </td>

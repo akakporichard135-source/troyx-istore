@@ -1,19 +1,9 @@
 ﻿"use client";
 
 import React, { useState, useMemo } from "react";
-import {
-  Boxes,
-  Search,
-  AlertTriangle,
-  CheckCircle2,
-  HelpCircle,
-  Save,
-  Download,
-  Plus,
-  Minus
-} from "lucide-react";
+import { Search, Download } from "lucide-react";
 import { useAdminStore } from "@/context/admin-store";
-import { formatCurrency } from "@/lib/utils";
+import type { Product } from "@/types";
 
 export default function InventoryPage() {
   const { products, editProduct, currentRole } = useAdminStore();
@@ -43,7 +33,10 @@ export default function InventoryPage() {
     return { total, instock, low, out };
   }, [products]);
 
-  const handleStockStatusChange = (productId: string, availability: any) => {
+  const handleStockStatusChange = (
+    productId: string,
+    availability: Product["availability"]
+  ) => {
     if (currentRole === "Support Staff") {
       alert(
         "Access Denied: Support Staff do not have edit product permissions."
@@ -205,7 +198,10 @@ export default function InventoryPage() {
                     <select
                       value={p.availability}
                       onChange={(e) =>
-                        handleStockStatusChange(p.id, e.target.value)
+                        handleStockStatusChange(
+                          p.id,
+                          e.target.value as Product["availability"]
+                        )
                       }
                       className="text-xs bg-zinc-50 dark:bg-zinc-800 border border-black/10 dark:border-white/10 rounded-full px-3 py-1.5 font-semibold outline-none"
                     >

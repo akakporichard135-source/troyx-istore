@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Star, ThumbsUp, ShieldCheck, Check, MessageSquare } from "lucide-react";
+import { Star, ThumbsUp, ShieldCheck, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ReviewItem {
@@ -16,6 +16,9 @@ interface ReviewItem {
   userLiked?: boolean;
 }
 
+type ReviewRatingFilter = number | "all";
+type ReviewSort = "recent" | "helpful";
+
 const mockReviews: ReviewItem[] = [
   {
     id: "r1",
@@ -24,7 +27,8 @@ const mockReviews: ReviewItem[] = [
     date: "14 July 2026",
     verified: true,
     title: "100% Genuine Apple Ghana stock!",
-    comment: "Purchased the iPhone 16 Pro Max from TroyX iStore in East Legon. Delivery was completed within 3 hours. Came with official 12-month Apple warranty card.",
+    comment:
+      "Purchased the iPhone 16 Pro Max from TroyX iStore in East Legon. Delivery was completed within 3 hours. Came with official 12-month Apple warranty card.",
     helpfulCount: 24
   },
   {
@@ -34,7 +38,8 @@ const mockReviews: ReviewItem[] = [
     date: "02 July 2026",
     verified: true,
     title: "Incredible battery life & performance",
-    comment: "The M3 MacBook Pro is a beast for video editing in 4K. Paystack mobile money payment went through smoothly.",
+    comment:
+      "The M3 MacBook Pro is a beast for video editing in 4K. Paystack mobile money payment went through smoothly.",
     helpfulCount: 18
   },
   {
@@ -44,15 +49,22 @@ const mockReviews: ReviewItem[] = [
     date: "28 June 2026",
     verified: true,
     title: "Fast delivery to Kumasi",
-    comment: "Package arrived in Kumasi via VIP courier within 24 hours. Well packaged and sealed.",
+    comment:
+      "Package arrived in Kumasi via VIP courier within 24 hours. Well packaged and sealed.",
     helpfulCount: 9
   }
 ];
 
-export function ProductReviews({ rating, reviewCount }: { rating: number; reviewCount: number }) {
+export function ProductReviews({
+  rating,
+  reviewCount
+}: {
+  rating: number;
+  reviewCount: number;
+}) {
   const [reviewsList, setReviewsList] = useState<ReviewItem[]>(mockReviews);
-  const [filterRating, setFilterRating] = useState<number | "all">("all");
-  const [sortBy, setSortBy] = useState<"recent" | "helpful">("helpful");
+  const [filterRating, setFilterRating] = useState<ReviewRatingFilter>("all");
+  const [sortBy, setSortBy] = useState<ReviewSort>("helpful");
 
   const [writeModalOpen, setWriteModalOpen] = useState(false);
   const [authorInput, setAuthorInput] = useState("");
@@ -100,20 +112,26 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
 
   const filtered = reviewsList
     .filter((r) => (filterRating === "all" ? true : r.rating === filterRating))
-    .sort((a, b) => (sortBy === "helpful" ? b.helpfulCount - a.helpfulCount : 0));
+    .sort((a, b) =>
+      sortBy === "helpful" ? b.helpfulCount - a.helpfulCount : 0
+    );
 
   return (
     <div className="space-y-8">
       {/* Breakdown Header */}
       <div className="grid gap-6 sm:grid-cols-3 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-6 shadow-sm">
         <div className="flex flex-col justify-center items-center text-center border-b sm:border-b-0 sm:border-r border-black/5 dark:border-white/10 pb-4 sm:pb-0">
-          <p className="text-4xl font-extrabold text-brand-ink dark:text-white">{rating}</p>
+          <p className="text-4xl font-extrabold text-brand-ink dark:text-white">
+            {rating}
+          </p>
           <div className="flex items-center gap-1 text-amber-500 my-1">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
             ))}
           </div>
-          <p className="text-xs text-zinc-500">{reviewCount} Verified Reviews</p>
+          <p className="text-xs text-zinc-500">
+            {reviewCount} Verified Reviews
+          </p>
         </div>
 
         <div className="space-y-1.5 text-xs flex flex-col justify-center">
@@ -126,14 +144,21 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
                   style={{ width: `${star === 5 ? 85 : star === 4 ? 12 : 3}%` }}
                 />
               </div>
-              <span className="w-8 text-right text-[10px] text-zinc-400">{star === 5 ? "85%" : star === 4 ? "12%" : "3%"}</span>
+              <span className="w-8 text-right text-[10px] text-zinc-400">
+                {star === 5 ? "85%" : star === 4 ? "12%" : "3%"}
+              </span>
             </div>
           ))}
         </div>
 
         <div className="flex flex-col justify-center items-center text-center sm:border-l border-black/5 dark:border-white/10 pt-4 sm:pt-0 space-y-2">
-          <p className="text-xs font-bold text-brand-ink dark:text-white">Have you used this device?</p>
-          <Button onClick={() => setWriteModalOpen(true)} className="h-10 px-5 text-xs font-bold bg-brand-blue text-white">
+          <p className="text-xs font-bold text-brand-ink dark:text-white">
+            Have you used this device?
+          </p>
+          <Button
+            onClick={() => setWriteModalOpen(true)}
+            className="h-10 px-5 text-xs font-bold bg-brand-blue text-white"
+          >
             <MessageSquare className="h-3.5 w-3.5 mr-1.5" />
             Write a Review
           </Button>
@@ -144,11 +169,11 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-black/5 dark:border-white/10 pb-4 text-xs font-semibold">
         <div className="flex items-center gap-2">
           <span className="text-zinc-500">Filter rating:</span>
-          {["all", 5, 4, 3].map((val) => (
+          {(["all", 5, 4, 3] as ReviewRatingFilter[]).map((val) => (
             <button
               key={String(val)}
               type="button"
-              onClick={() => setFilterRating(val as any)}
+              onClick={() => setFilterRating(val)}
               className={`px-3 py-1 rounded-xl transition ${
                 filterRating === val
                   ? "bg-brand-blue text-white"
@@ -164,7 +189,7 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
           <span className="text-zinc-500">Sort by:</span>
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
+            onChange={(e) => setSortBy(e.target.value as ReviewSort)}
             className="h-8 rounded-xl border border-black/10 dark:border-white/10 bg-zinc-50 dark:bg-zinc-900 px-2 text-xs font-bold focus:outline-none"
           >
             <option value="helpful">Most Helpful</option>
@@ -176,10 +201,15 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
       {/* Reviews List */}
       <div className="grid gap-4">
         {filtered.map((rev) => (
-          <div key={rev.id} className="rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-5 shadow-sm space-y-2 text-xs">
+          <div
+            key={rev.id}
+            className="rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-5 shadow-sm space-y-2 text-xs"
+          >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-brand-ink dark:text-white">{rev.author}</span>
+                <span className="font-bold text-brand-ink dark:text-white">
+                  {rev.author}
+                </span>
                 {rev.verified && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-extrabold text-emerald-500 border border-emerald-500/20">
                     <ShieldCheck className="h-3 w-3" /> Verified Purchase
@@ -195,8 +225,12 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
               ))}
             </div>
 
-            <h4 className="font-bold text-brand-ink dark:text-white">{rev.title}</h4>
-            <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed">{rev.comment}</p>
+            <h4 className="font-bold text-brand-ink dark:text-white">
+              {rev.title}
+            </h4>
+            <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+              {rev.comment}
+            </p>
 
             <div className="pt-2 flex items-center justify-between text-[11px] text-zinc-400">
               <span>Was this review helpful?</span>
@@ -221,10 +255,14 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
       {writeModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-3xl border border-black/10 dark:border-white/15 bg-white dark:bg-zinc-900 p-6 text-brand-ink dark:text-white space-y-4">
-            <h2 className="text-base font-bold">Write a Verified Customer Review</h2>
+            <h2 className="text-base font-bold">
+              Write a Verified Customer Review
+            </h2>
             <form onSubmit={handleAddReview} className="space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-zinc-500 mb-1">Your Name</label>
+                <label className="block font-semibold text-zinc-500 mb-1">
+                  Your Name
+                </label>
                 <input
                   type="text"
                   required
@@ -236,7 +274,9 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
               </div>
 
               <div>
-                <label className="block font-semibold text-zinc-500 mb-1">Rating</label>
+                <label className="block font-semibold text-zinc-500 mb-1">
+                  Rating
+                </label>
                 <select
                   value={ratingInput}
                   onChange={(e) => setRatingInput(Number(e.target.value))}
@@ -251,7 +291,9 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
               </div>
 
               <div>
-                <label className="block font-semibold text-zinc-500 mb-1">Review Headline</label>
+                <label className="block font-semibold text-zinc-500 mb-1">
+                  Review Headline
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Authentic product and fast delivery!"
@@ -262,7 +304,9 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
               </div>
 
               <div>
-                <label className="block font-semibold text-zinc-500 mb-1">Your Review</label>
+                <label className="block font-semibold text-zinc-500 mb-1">
+                  Your Review
+                </label>
                 <textarea
                   rows={3}
                   required
@@ -274,10 +318,18 @@ export function ProductReviews({ rating, reviewCount }: { rating: number; review
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={() => setWriteModalOpen(false)} className="h-10 text-xs">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setWriteModalOpen(false)}
+                  className="h-10 text-xs"
+                >
                   Cancel
                 </Button>
-                <Button type="submit" className="h-10 px-6 text-xs font-bold bg-brand-blue text-white hover:bg-brand-blue/90">
+                <Button
+                  type="submit"
+                  className="h-10 px-6 text-xs font-bold bg-brand-blue text-white hover:bg-brand-blue/90"
+                >
                   Submit Review
                 </Button>
               </div>

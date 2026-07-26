@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { GitCompare, Heart, Star, Eye, X, Check } from "lucide-react";
+import { GitCompare, Heart, Star, Eye, X } from "lucide-react";
 import { useState } from "react";
 import { AddToCartButton } from "@/components/product/add-to-cart";
 import { useCommerceStore } from "@/context/store";
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import type { Product } from "@/types";
 
 export function ProductCard({
@@ -33,7 +33,12 @@ export function ProductCard({
 
   return (
     <>
-      <article className="group relative flex h-full min-h-[520px] flex-col overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-premium dark:border-white/10 dark:bg-zinc-900/70">
+      <article
+        className={cn(
+          "group relative flex h-full flex-col overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-premium dark:border-white/10 dark:bg-zinc-900/70",
+          compact ? "min-h-[430px]" : "min-h-[520px]"
+        )}
+      >
         {/* Wishlist and Compare float buttons */}
         <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
           <button
@@ -62,7 +67,12 @@ export function ProductCard({
         </div>
 
         {/* Media visual box */}
-        <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-brand-mist dark:bg-zinc-950/40">
+        <div
+          className={cn(
+            "relative flex items-center justify-center overflow-hidden bg-brand-mist dark:bg-zinc-950/40",
+            compact ? "aspect-[5/4]" : "aspect-[4/3]"
+          )}
+        >
           <Link
             href={`/product/${product.slug}`}
             className="block w-full h-full relative"
@@ -74,7 +84,10 @@ export function ProductCard({
               onError={() => setImageSrc(categoryFallback)}
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
               loading="lazy"
-              className="object-contain p-7 transition-transform duration-500 group-hover:scale-105"
+              className={cn(
+                "object-contain transition-transform duration-500 group-hover:scale-105",
+                compact ? "p-5" : "p-7"
+              )}
             />
           </Link>
 
@@ -97,14 +110,22 @@ export function ProductCard({
         </div>
 
         {/* Content Box */}
-        <div className="p-5 flex-1 flex flex-col justify-between">
+        <div
+          className={cn(
+            "flex flex-1 flex-col justify-between",
+            compact ? "p-4" : "p-5"
+          )}
+        >
           <div>
             <p className="text-[10px] font-bold uppercase text-zinc-400 tracking-wider">
               {product.category}
             </p>
             <Link
               href={`/product/${product.slug}`}
-              className="mt-1 block min-h-[48px] text-base font-extrabold leading-6 text-brand-ink transition hover:text-brand-blue dark:text-white"
+              className={cn(
+                "mt-1 block text-base font-extrabold leading-6 text-brand-ink transition hover:text-brand-blue dark:text-white",
+                compact ? "min-h-[42px]" : "min-h-[48px]"
+              )}
             >
               {product.name}
             </Link>
@@ -199,7 +220,7 @@ export function ProductCard({
             {/* Product image gallery */}
             <div className="bg-brand-mist dark:bg-zinc-950/20 rounded-2xl p-4 flex items-center justify-center aspect-square relative">
               <Image
-                src={product.images[0]}
+                src={imageSrc}
                 alt={product.name}
                 fill
                 className="object-contain p-6"
@@ -265,7 +286,7 @@ export function ProductCard({
                   <AddToCartButton
                     product={product}
                     className="flex-1 h-10 text-xs font-bold"
-                    label="Add to Cart"
+                    label={product.price > 0 ? "Add to Cart" : "Request Quote"}
                   />
                 </div>
               </div>

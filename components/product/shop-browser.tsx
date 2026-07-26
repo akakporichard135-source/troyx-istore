@@ -4,7 +4,6 @@ import {
   Grid2X2,
   List,
   Search,
-  Filter,
   SlidersHorizontal,
   ChevronLeft,
   ChevronRight,

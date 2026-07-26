@@ -2,10 +2,11 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Product, OrderStatus, ProductCondition, ProductCategory } from "@/types";
+import type { Product, OrderStatus, ProductCondition } from "@/types";
 import { products as initialProducts } from "@/database/products";
 
-export type AdminRole = "Owner" | "Administrator" | "Manager" | "Sales Staff" | "Support Staff";
+export type AdminRole =
+  "Owner" | "Administrator" | "Manager" | "Sales Staff" | "Support Staff";
 
 export interface AuditLog {
   id: string;
@@ -90,10 +91,10 @@ interface AdminState {
   coupons: Coupon[];
   settings: StoreSettings;
   auditLogs: AuditLog[];
-  
+
   // Actions
   setRole: (role: AdminRole) => void;
-  
+
   // Product actions
   addProduct: (product: Omit<Product, "slug">) => void;
   editProduct: (product: Product) => void;
@@ -102,28 +103,37 @@ interface AdminState {
   archiveProduct: (id: string) => void;
   bulkUploadProducts: (products: Omit<Product, "slug">[]) => void;
   bulkDeleteProducts: (ids: string[]) => void;
-  
+
   // Order actions
   updateOrderStatus: (orderId: string, status: OrderStatus) => void;
-  updateOrderDetails: (orderId: string, shippingStatus: AdminOrder["shippingStatus"], paymentStatus: AdminOrder["paymentStatus"]) => void;
+  updateOrderDetails: (
+    orderId: string,
+    shippingStatus: AdminOrder["shippingStatus"],
+    paymentStatus: AdminOrder["paymentStatus"]
+  ) => void;
   addOrderNote: (orderId: string, note: string) => void;
   cancelOrder: (orderId: string) => void;
   refundOrder: (orderId: string) => void;
-  
+
   // Customer actions
   addCustomer: (customer: Omit<CustomerProfile, "id" | "createdAt">) => void;
   addCustomerNote: (customerId: string, note: string) => void;
-  
+
   // Coupon actions
   addCoupon: (coupon: Coupon) => void;
   toggleCoupon: (code: string) => void;
   deleteCoupon: (code: string) => void;
-  
+
   // Settings actions
   updateSettings: (settings: Partial<StoreSettings>) => void;
-  
+
   // Audit log actions
-  addAuditLog: (action: string, entityType: string, entityId?: string, details?: string) => void;
+  addAuditLog: (
+    action: string,
+    entityType: string,
+    entityId?: string,
+    details?: string
+  ) => void;
   clearAuditLogs: () => void;
 }
 
@@ -139,7 +149,7 @@ const defaultSettings: StoreSettings = {
   taxRatePercent: 15,
   currencySymbol: "₵",
   currencyCode: "GHS",
-  allowPreorders: true,
+  allowPreorders: true
 };
 
 const initialCustomers: CustomerProfile[] = [
@@ -153,7 +163,10 @@ const initialCustomers: CustomerProfile[] = [
     ordersCount: 2,
     wishlist: ["iphone-16-pro-max", "apple-watch-10"],
     createdAt: "2026-02-10T10:15:30Z",
-    notes: ["Prefers morning delivery", "Requested callback regarding iPad trade-in"]
+    notes: [
+      "Prefers morning delivery",
+      "Requested callback regarding iPad trade-in"
+    ]
   },
   {
     id: "cust-2",
@@ -212,7 +225,10 @@ const initialOrders: AdminOrder[] = [
     paymentStatus: "Paid",
     shippingStatus: "Delivered",
     customerNotes: "Please deliver after 2 PM if possible.",
-    adminNotes: ["Dispatched via partner courier", "Signature confirmed by customer"],
+    adminNotes: [
+      "Dispatched via partner courier",
+      "Signature confirmed by customer"
+    ],
     createdAt: "2026-07-15T11:20:00Z"
   },
   {
@@ -269,9 +285,29 @@ const initialOrders: AdminOrder[] = [
 ];
 
 const initialCoupons: Coupon[] = [
-  { code: "TROYX10", discountType: "percentage", value: 10, minSpend: 500, active: true, expiryDate: "2026-12-31" },
-  { code: "ACCRA50", discountType: "fixed", value: 50, minSpend: 200, active: true, expiryDate: "2026-09-30" },
-  { code: "FREESHIP", discountType: "percentage", value: 100, active: false, expiryDate: "2026-08-15" }
+  {
+    code: "TROYX10",
+    discountType: "percentage",
+    value: 10,
+    minSpend: 500,
+    active: true,
+    expiryDate: "2026-12-31"
+  },
+  {
+    code: "ACCRA50",
+    discountType: "fixed",
+    value: 50,
+    minSpend: 200,
+    active: true,
+    expiryDate: "2026-09-30"
+  },
+  {
+    code: "FREESHIP",
+    discountType: "percentage",
+    value: 100,
+    active: false,
+    expiryDate: "2026-08-15"
+  }
 ];
 
 const initialAuditLogs: AuditLog[] = [
@@ -299,27 +335,45 @@ export const useAdminStore = create<AdminState>()(
 
       setRole: (role) => {
         set({ currentRole: role });
-        get().addAuditLog("Role Switched", "User", role, `Switched active session view to ${role}`);
+        get().addAuditLog(
+          "Role Switched",
+          "User",
+          role,
+          `Switched active session view to ${role}`
+        );
       },
 
       addProduct: (prod) => {
-        const slug = prod.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        const slug = prod.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "");
         const newProduct: Product = {
           ...prod,
           slug,
-          id: prod.id || slug,
+          id: prod.id || slug
         };
         set((state) => ({
           products: [newProduct, ...state.products]
         }));
-        get().addAuditLog("Product Created", "Product", newProduct.id, `Created product "${newProduct.name}"`);
+        get().addAuditLog(
+          "Product Created",
+          "Product",
+          newProduct.id,
+          `Created product "${newProduct.name}"`
+        );
       },
 
       editProduct: (prod) => {
         set((state) => ({
           products: state.products.map((p) => (p.id === prod.id ? prod : p))
         }));
-        get().addAuditLog("Product Edited", "Product", prod.id, `Updated details for product "${prod.name}"`);
+        get().addAuditLog(
+          "Product Edited",
+          "Product",
+          prod.id,
+          `Updated details for product "${prod.name}"`
+        );
       },
 
       deleteProduct: (id) => {
@@ -327,7 +381,12 @@ export const useAdminStore = create<AdminState>()(
         set((state) => ({
           products: state.products.filter((p) => p.id !== id)
         }));
-        get().addAuditLog("Product Deleted", "Product", id, `Deleted product "${product?.name || id}"`);
+        get().addAuditLog(
+          "Product Deleted",
+          "Product",
+          id,
+          `Deleted product "${product?.name || id}"`
+        );
       },
 
       duplicateProduct: (id) => {
@@ -342,7 +401,12 @@ export const useAdminStore = create<AdminState>()(
           set((state) => ({
             products: [duplicated, ...state.products]
           }));
-          get().addAuditLog("Product Duplicated", "Product", duplicated.id, `Duplicated product "${product.name}" as "${duplicated.name}"`);
+          get().addAuditLog(
+            "Product Duplicated",
+            "Product",
+            duplicated.id,
+            `Duplicated product "${product.name}" as "${duplicated.name}"`
+          );
         }
       },
 
@@ -357,53 +421,84 @@ export const useAdminStore = create<AdminState>()(
           set((state) => ({
             products: state.products.map((p) => (p.id === id ? updated : p))
           }));
-          get().addAuditLog("Product Archived", "Product", id, `Archived product "${product.name}"`);
+          get().addAuditLog(
+            "Product Archived",
+            "Product",
+            id,
+            `Archived product "${product.name}"`
+          );
         }
       },
 
       bulkUploadProducts: (newProds) => {
         const parsed = newProds.map((prod) => {
-          const slug = prod.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+          const slug = prod.name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "");
           return {
             ...prod,
             slug,
-            id: prod.id || slug,
+            id: prod.id || slug
           } as Product;
         });
         set((state) => ({
           products: [...parsed, ...state.products]
         }));
-        get().addAuditLog("Bulk Import", "Product", "Multiple", `Imported ${newProds.length} products via CSV`);
+        get().addAuditLog(
+          "Bulk Import",
+          "Product",
+          "Multiple",
+          `Imported ${newProds.length} products via CSV`
+        );
       },
 
       bulkDeleteProducts: (ids) => {
         set((state) => ({
           products: state.products.filter((p) => !ids.includes(p.id))
         }));
-        get().addAuditLog("Bulk Delete", "Product", "Multiple", `Bulk deleted ${ids.length} products`);
+        get().addAuditLog(
+          "Bulk Delete",
+          "Product",
+          "Multiple",
+          `Bulk deleted ${ids.length} products`
+        );
       },
 
       updateOrderStatus: (orderId, status) => {
         set((state) => ({
-          orders: state.orders.map((o) => (o.id === orderId ? { ...o, status } : o))
+          orders: state.orders.map((o) =>
+            o.id === orderId ? { ...o, status } : o
+          )
         }));
-        get().addAuditLog("Order Status Updated", "Order", orderId, `Set order status to "${status}"`);
+        get().addAuditLog(
+          "Order Status Updated",
+          "Order",
+          orderId,
+          `Set order status to "${status}"`
+        );
       },
 
       updateOrderDetails: (orderId, shippingStatus, paymentStatus) => {
         set((state) => ({
-          orders: state.orders.map((o) => 
-            o.id === orderId 
-              ? { 
-                  ...o, 
-                  shippingStatus, 
-                  paymentStatus, 
-                  status: shippingStatus === "Delivered" ? "Delivered" : o.status 
-                } 
+          orders: state.orders.map((o) =>
+            o.id === orderId
+              ? {
+                  ...o,
+                  shippingStatus,
+                  paymentStatus,
+                  status:
+                    shippingStatus === "Delivered" ? "Delivered" : o.status
+                }
               : o
           )
         }));
-        get().addAuditLog("Order Shipping/Payment Updated", "Order", orderId, `Set shipping to "${shippingStatus}", payment to "${paymentStatus}"`);
+        get().addAuditLog(
+          "Order Shipping/Payment Updated",
+          "Order",
+          orderId,
+          `Set shipping to "${shippingStatus}", payment to "${paymentStatus}"`
+        );
       },
 
       addOrderNote: (orderId, note) => {
@@ -422,21 +517,40 @@ export const useAdminStore = create<AdminState>()(
             return o;
           })
         }));
-        get().addAuditLog("Order Note Added", "Order", orderId, `Added note under ${role} role`);
+        get().addAuditLog(
+          "Order Note Added",
+          "Order",
+          orderId,
+          `Added note under ${role} role`
+        );
       },
 
       cancelOrder: (orderId) => {
         set((state) => ({
-          orders: state.orders.map((o) => (o.id === orderId ? { ...o, status: "Cancelled" as OrderStatus } : o))
+          orders: state.orders.map((o) =>
+            o.id === orderId ? { ...o, status: "Cancelled" as OrderStatus } : o
+          )
         }));
-        get().addAuditLog("Order Cancelled", "Order", orderId, `Cancelled order`);
+        get().addAuditLog(
+          "Order Cancelled",
+          "Order",
+          orderId,
+          `Cancelled order`
+        );
       },
 
       refundOrder: (orderId) => {
         set((state) => ({
-          orders: state.orders.map((o) => (o.id === orderId ? { ...o, paymentStatus: "Refunded" } : o))
+          orders: state.orders.map((o) =>
+            o.id === orderId ? { ...o, paymentStatus: "Refunded" } : o
+          )
         }));
-        get().addAuditLog("Order Refunded", "Order", orderId, `Processed refund (simulated)`);
+        get().addAuditLog(
+          "Order Refunded",
+          "Order",
+          orderId,
+          `Processed refund (simulated)`
+        );
       },
 
       addCustomer: (cust) => {
@@ -448,7 +562,12 @@ export const useAdminStore = create<AdminState>()(
         set((state) => ({
           customers: [newCustomer, ...state.customers]
         }));
-        get().addAuditLog("Customer Registered", "Customer", newCustomer.id, `Created customer profile for "${newCustomer.name}"`);
+        get().addAuditLog(
+          "Customer Registered",
+          "Customer",
+          newCustomer.id,
+          `Created customer profile for "${newCustomer.name}"`
+        );
       },
 
       addCustomerNote: (customerId, note) => {
@@ -464,35 +583,62 @@ export const useAdminStore = create<AdminState>()(
             return c;
           })
         }));
-        get().addAuditLog("Customer Note Added", "Customer", customerId, `Added note to customer profile`);
+        get().addAuditLog(
+          "Customer Note Added",
+          "Customer",
+          customerId,
+          `Added note to customer profile`
+        );
       },
 
       addCoupon: (coupon) => {
         set((state) => ({
           coupons: [coupon, ...state.coupons]
         }));
-        get().addAuditLog("Coupon Added", "Coupon", coupon.code, `Created coupon "${coupon.code}"`);
+        get().addAuditLog(
+          "Coupon Added",
+          "Coupon",
+          coupon.code,
+          `Created coupon "${coupon.code}"`
+        );
       },
 
       toggleCoupon: (code) => {
         set((state) => ({
-          coupons: state.coupons.map((c) => (c.code === code ? { ...c, active: !c.active } : c))
+          coupons: state.coupons.map((c) =>
+            c.code === code ? { ...c, active: !c.active } : c
+          )
         }));
-        get().addAuditLog("Coupon Toggled", "Coupon", code, `Toggled active status of coupon`);
+        get().addAuditLog(
+          "Coupon Toggled",
+          "Coupon",
+          code,
+          `Toggled active status of coupon`
+        );
       },
 
       deleteCoupon: (code) => {
         set((state) => ({
           coupons: state.coupons.filter((c) => c.code !== code)
         }));
-        get().addAuditLog("Coupon Deleted", "Coupon", code, `Deleted coupon "${code}"`);
+        get().addAuditLog(
+          "Coupon Deleted",
+          "Coupon",
+          code,
+          `Deleted coupon "${code}"`
+        );
       },
 
       updateSettings: (newSettings) => {
         set((state) => ({
           settings: { ...state.settings, ...newSettings }
         }));
-        get().addAuditLog("Settings Updated", "Settings", "Store", `Updated general store parameters`);
+        get().addAuditLog(
+          "Settings Updated",
+          "Settings",
+          "Store",
+          `Updated general store parameters`
+        );
       },
 
       addAuditLog: (action, entityType, entityId, details) => {

@@ -1,63 +1,62 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { 
-  FileText, 
-  Search, 
-  Filter, 
-  CheckCircle, 
-  XCircle, 
-  RotateCcw, 
-  Printer, 
-  MessageSquare, 
-  Calendar, 
+import {
+  Search,
+  XCircle,
+  RotateCcw,
+  Printer,
+  MessageSquare,
   Truck,
   CreditCard,
-  ChevronDown,
-  ChevronUp,
   AlertCircle
 } from "lucide-react";
 import { useAdminStore } from "@/context/admin-store";
 import { formatCurrency } from "@/lib/utils";
+import type { AdminOrder } from "@/context/admin-store";
 import type { OrderStatus } from "@/types";
 
 export default function OrdersManagerPage() {
-  const { 
-    orders, 
-    currentRole,
-    updateOrderStatus, 
+  const {
+    orders,
+    updateOrderStatus,
     updateOrderDetails,
-    addOrderNote, 
+    addOrderNote,
     cancelOrder,
-    refundOrder 
+    refundOrder
   } = useAdminStore();
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
-  
+
   // Note input state
   const [noteInput, setNoteInput] = useState("");
 
   const filteredOrders = useMemo(() => {
     return orders.filter((o) => {
-      const matchesSearch = o.customerName.toLowerCase().includes(search.toLowerCase()) || 
-                            o.id.toLowerCase().includes(search.toLowerCase()) ||
-                            o.email.toLowerCase().includes(search.toLowerCase());
+      const matchesSearch =
+        o.customerName.toLowerCase().includes(search.toLowerCase()) ||
+        o.id.toLowerCase().includes(search.toLowerCase()) ||
+        o.email.toLowerCase().includes(search.toLowerCase());
       const matchesStatus = statusFilter === "all" || o.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
   }, [orders, search, statusFilter]);
 
   const activeOrder = useMemo(() => {
-    return orders.find(o => o.id === activeOrderId) || null;
+    return orders.find((o) => o.id === activeOrderId) || null;
   }, [orders, activeOrderId]);
 
   const handleStatusChange = (orderId: string, status: OrderStatus) => {
     updateOrderStatus(orderId, status);
   };
 
-  const handleShippingPaymentChange = (orderId: string, shipStatus: any, payStatus: any) => {
+  const handleShippingPaymentChange = (
+    orderId: string,
+    shipStatus: AdminOrder["shippingStatus"],
+    payStatus: AdminOrder["paymentStatus"]
+  ) => {
     updateOrderDetails(orderId, shipStatus, payStatus);
   };
 
@@ -68,7 +67,7 @@ export default function OrdersManagerPage() {
     setNoteInput("");
   };
 
-  const handlePrint = (orderId: string) => {
+  const handlePrint = () => {
     // Basic browser trigger or print layout styling helper
     window.print();
   };
@@ -78,8 +77,13 @@ export default function OrdersManagerPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 print:hidden">
         <div>
-          <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">Orders Fulfillment</h1>
-          <p className="text-zinc-500 text-sm">Process incoming purchases, update tracking details, generate billing invoices, and log notes.</p>
+          <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">
+            Orders Fulfillment
+          </h1>
+          <p className="text-zinc-500 text-sm">
+            Process incoming purchases, update tracking details, generate
+            billing invoices, and log notes.
+          </p>
         </div>
       </div>
 
@@ -113,11 +117,12 @@ export default function OrdersManagerPage() {
 
       {/* Split view: Orders List / Order Detail Inspector */}
       <div className="grid gap-6 lg:grid-cols-[1.2fr_1.8fr]">
-        
         {/* Left Side: Order List */}
         <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm overflow-hidden flex flex-col print:hidden">
           <div className="p-4 border-b border-black/5 dark:border-white/5 bg-zinc-50/50 dark:bg-zinc-850/20">
-            <span className="text-xs font-bold text-zinc-500">{filteredOrders.length} matching orders</span>
+            <span className="text-xs font-bold text-zinc-500">
+              {filteredOrders.length} matching orders
+            </span>
           </div>
 
           <div className="divide-y divide-black/5 dark:divide-white/5 overflow-y-auto max-h-[500px]">
@@ -129,20 +134,31 @@ export default function OrdersManagerPage() {
                     key={o.id}
                     onClick={() => setActiveOrderId(o.id)}
                     className={`w-full text-left p-5 flex flex-col gap-2 transition ${
-                      isActive ? "bg-blue-50/40 dark:bg-blue-950/10 border-l-4 border-brand-blue" : "hover:bg-zinc-50 dark:hover:bg-zinc-800/30"
+                      isActive
+                        ? "bg-blue-50/40 dark:bg-blue-950/10 border-l-4 border-brand-blue"
+                        : "hover:bg-zinc-50 dark:hover:bg-zinc-800/30"
                     }`}
                   >
                     <div className="flex justify-between items-center w-full">
-                      <span className="font-mono font-bold text-brand-blue text-sm">{o.id}</span>
+                      <span className="font-mono font-bold text-brand-blue text-sm">
+                        {o.id}
+                      </span>
                       <span className="text-[10px] text-zinc-400 font-medium">
-                        {new Date(o.createdAt).toLocaleDateString([], { month: "short", day: "numeric" })}
+                        {new Date(o.createdAt).toLocaleDateString([], {
+                          month: "short",
+                          day: "numeric"
+                        })}
                       </span>
                     </div>
 
                     <div className="flex justify-between items-center w-full">
                       <div>
-                        <p className="font-bold text-sm text-brand-ink dark:text-white">{o.customerName}</p>
-                        <p className="text-[10px] text-zinc-400">{o.items.length} item(s)</p>
+                        <p className="font-bold text-sm text-brand-ink dark:text-white">
+                          {o.customerName}
+                        </p>
+                        <p className="text-[10px] text-zinc-400">
+                          {o.items.length} item(s)
+                        </p>
                       </div>
                       <span className="font-extrabold text-sm text-brand-ink dark:text-white">
                         {formatCurrency(o.total)}
@@ -150,20 +166,24 @@ export default function OrdersManagerPage() {
                     </div>
 
                     <div className="flex gap-2 items-center">
-                      <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
-                        o.status === "Delivered" 
-                          ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300"
-                          : o.status === "Cancelled"
-                          ? "bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300"
-                          : "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300"
-                      }`}>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                          o.status === "Delivered"
+                            ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300"
+                            : o.status === "Cancelled"
+                              ? "bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300"
+                              : "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300"
+                        }`}
+                      >
                         {o.status}
                       </span>
-                      <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
-                        o.paymentStatus === "Paid" 
-                          ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300"
-                          : "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300"
-                      }`}>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                          o.paymentStatus === "Paid"
+                            ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300"
+                            : "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300"
+                        }`}
+                      >
                         Card - {o.paymentStatus}
                       </span>
                     </div>
@@ -187,13 +207,20 @@ export default function OrdersManagerPage() {
                 {/* Print Invoice Header */}
                 <div className="flex justify-between items-start border-b border-black/5 dark:border-white/5 pb-5">
                   <div>
-                    <span className="text-[10px] font-mono font-bold text-zinc-400 uppercase">Fulfillment Invoice</span>
-                    <h2 className="text-2xl font-black text-brand-ink dark:text-white font-mono mt-0.5">{activeOrder.id}</h2>
-                    <p className="text-zinc-400 text-xs mt-1">Order Date: {new Date(activeOrder.createdAt).toLocaleString()}</p>
+                    <span className="text-[10px] font-mono font-bold text-zinc-400 uppercase">
+                      Fulfillment Invoice
+                    </span>
+                    <h2 className="text-2xl font-black text-brand-ink dark:text-white font-mono mt-0.5">
+                      {activeOrder.id}
+                    </h2>
+                    <p className="text-zinc-400 text-xs mt-1">
+                      Order Date:{" "}
+                      {new Date(activeOrder.createdAt).toLocaleString()}
+                    </p>
                   </div>
                   <div className="flex gap-2 print:hidden">
-                    <button 
-                      onClick={() => handlePrint(activeOrder.id)}
+                    <button
+                      onClick={handlePrint}
                       className="p-2 border border-black/10 hover:bg-zinc-50 dark:border-white/10 dark:bg-zinc-800 rounded-full text-zinc-600 dark:text-zinc-300 transition"
                       title="Print Invoice"
                     >
@@ -210,7 +237,13 @@ export default function OrdersManagerPage() {
                     </span>
                     <select
                       value={activeOrder.shippingStatus}
-                      onChange={(e) => handleShippingPaymentChange(activeOrder.id, e.target.value, activeOrder.paymentStatus)}
+                      onChange={(e) =>
+                        handleShippingPaymentChange(
+                          activeOrder.id,
+                          e.target.value as AdminOrder["shippingStatus"],
+                          activeOrder.paymentStatus
+                        )
+                      }
                       className="text-xs font-semibold bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-full px-3 py-1.5 outline-none"
                     >
                       <option value="Unshipped">Unshipped</option>
@@ -225,7 +258,13 @@ export default function OrdersManagerPage() {
                     </span>
                     <select
                       value={activeOrder.paymentStatus}
-                      onChange={(e) => handleShippingPaymentChange(activeOrder.id, activeOrder.shippingStatus, e.target.value)}
+                      onChange={(e) =>
+                        handleShippingPaymentChange(
+                          activeOrder.id,
+                          activeOrder.shippingStatus,
+                          e.target.value as AdminOrder["paymentStatus"]
+                        )
+                      }
                       className="text-xs font-semibold bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-full px-3 py-1.5 outline-none"
                     >
                       <option value="Pending">Pending</option>
@@ -237,14 +276,24 @@ export default function OrdersManagerPage() {
 
                 {/* Quick Status Setter */}
                 <div className="flex flex-wrap items-center gap-2 pb-4 border-b border-black/5 dark:border-white/5 print:hidden">
-                  <span className="text-xs text-zinc-400 font-semibold mr-1">Move Order Status:</span>
-                  {(["Confirmed", "Processing", "Packed", "Out for Delivery", "Delivered"] as OrderStatus[]).map((status) => (
+                  <span className="text-xs text-zinc-400 font-semibold mr-1">
+                    Move Order Status:
+                  </span>
+                  {(
+                    [
+                      "Confirmed",
+                      "Processing",
+                      "Packed",
+                      "Out for Delivery",
+                      "Delivered"
+                    ] as OrderStatus[]
+                  ).map((status) => (
                     <button
                       key={status}
                       onClick={() => handleStatusChange(activeOrder.id, status)}
                       className={`px-3 py-1 rounded-full text-[10px] font-semibold transition ${
-                        activeOrder.status === status 
-                          ? "bg-brand-blue text-white" 
+                        activeOrder.status === status
+                          ? "bg-brand-blue text-white"
                           : "bg-zinc-50 border border-black/5 hover:bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:border-white/5 dark:text-zinc-300"
                       }`}
                     >
@@ -256,19 +305,33 @@ export default function OrdersManagerPage() {
                 {/* Customer Details */}
                 <div className="grid gap-6 sm:grid-cols-2 text-xs">
                   <div>
-                    <h3 className="font-bold text-zinc-400 uppercase tracking-wider mb-2">Deliver To</h3>
-                    <p className="font-bold text-sm text-brand-ink dark:text-white">{activeOrder.customerName}</p>
+                    <h3 className="font-bold text-zinc-400 uppercase tracking-wider mb-2">
+                      Deliver To
+                    </h3>
+                    <p className="font-bold text-sm text-brand-ink dark:text-white">
+                      {activeOrder.customerName}
+                    </p>
                     <p className="text-zinc-500 mt-1">{activeOrder.phone}</p>
                     <p className="text-zinc-500">{activeOrder.email}</p>
-                    <p className="text-zinc-600 dark:text-zinc-300 mt-2 font-medium leading-relaxed">{activeOrder.shippingAddress}</p>
+                    <p className="text-zinc-600 dark:text-zinc-300 mt-2 font-medium leading-relaxed">
+                      {activeOrder.shippingAddress}
+                    </p>
                   </div>
                   <div>
-                    <h3 className="font-bold text-zinc-400 uppercase tracking-wider mb-2">Billing & Payment</h3>
-                    <p className="text-zinc-600 dark:text-zinc-300 font-medium">Method: {activeOrder.paymentMethod}</p>
-                    <p className="text-zinc-650 dark:text-zinc-350 mt-1 font-medium leading-relaxed">Billing Address: {activeOrder.billingAddress}</p>
+                    <h3 className="font-bold text-zinc-400 uppercase tracking-wider mb-2">
+                      Billing & Payment
+                    </h3>
+                    <p className="text-zinc-600 dark:text-zinc-300 font-medium">
+                      Method: {activeOrder.paymentMethod}
+                    </p>
+                    <p className="text-zinc-650 dark:text-zinc-350 mt-1 font-medium leading-relaxed">
+                      Billing Address: {activeOrder.billingAddress}
+                    </p>
                     {activeOrder.customerNotes && (
                       <div className="mt-3 p-3 bg-amber-50/50 border border-amber-200/50 text-amber-800 rounded-xl dark:bg-amber-950/20 dark:text-amber-300">
-                        <span className="font-bold block text-[10px] uppercase">Customer Notes</span>
+                        <span className="font-bold block text-[10px] uppercase">
+                          Customer Notes
+                        </span>
                         {activeOrder.customerNotes}
                       </div>
                     )}
@@ -296,8 +359,12 @@ export default function OrdersManagerPage() {
                             </p>
                           </td>
                           <td className="py-3 text-center">{item.quantity}</td>
-                          <td className="py-3 text-right">{formatCurrency(item.price)}</td>
-                          <td className="py-3 text-right font-bold">{formatCurrency(item.price * item.quantity)}</td>
+                          <td className="py-3 text-right">
+                            {formatCurrency(item.price)}
+                          </td>
+                          <td className="py-3 text-right font-bold">
+                            {formatCurrency(item.price * item.quantity)}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -306,15 +373,20 @@ export default function OrdersManagerPage() {
 
                 {/* Total pricing calculation */}
                 <div className="flex justify-between items-center text-sm font-black pt-2">
-                  <span className="text-zinc-400 uppercase tracking-wider text-xs">Invoice Total</span>
-                  <span className="text-xl text-brand-ink dark:text-white font-mono">{formatCurrency(activeOrder.total)}</span>
+                  <span className="text-zinc-400 uppercase tracking-wider text-xs">
+                    Invoice Total
+                  </span>
+                  <span className="text-xl text-brand-ink dark:text-white font-mono">
+                    {formatCurrency(activeOrder.total)}
+                  </span>
                 </div>
 
                 {/* Order cancellation and refund controls */}
                 <div className="flex gap-3 pt-4 border-t border-black/5 dark:border-white/5 print:hidden">
                   <button
                     onClick={() => {
-                      if (window.confirm("Process a refund for this order?")) refundOrder(activeOrder.id);
+                      if (window.confirm("Process a refund for this order?"))
+                        refundOrder(activeOrder.id);
                     }}
                     disabled={activeOrder.paymentStatus !== "Paid"}
                     className="flex-1 py-2.5 rounded-full border border-zinc-200 text-zinc-700 bg-white hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed dark:border-white/10 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-750 text-xs font-bold transition flex items-center justify-center gap-1"
@@ -324,9 +396,13 @@ export default function OrdersManagerPage() {
 
                   <button
                     onClick={() => {
-                      if (window.confirm("Cancel this order?")) cancelOrder(activeOrder.id);
+                      if (window.confirm("Cancel this order?"))
+                        cancelOrder(activeOrder.id);
                     }}
-                    disabled={activeOrder.status === "Cancelled" || activeOrder.status === "Delivered"}
+                    disabled={
+                      activeOrder.status === "Cancelled" ||
+                      activeOrder.status === "Delivered"
+                    }
                     className="flex-1 py-2.5 rounded-full bg-rose-50 border border-rose-200 hover:bg-rose-100 dark:bg-rose-950/20 dark:border-rose-900/40 text-rose-700 dark:text-rose-400 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-bold transition flex items-center justify-center gap-1"
                   >
                     <XCircle className="h-3.5 w-3.5" /> Cancel Order
@@ -337,18 +413,25 @@ export default function OrdersManagerPage() {
               {/* Admin Support Notes Widget */}
               <div className="p-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm space-y-4 print:hidden">
                 <h3 className="font-bold text-brand-ink dark:text-white flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-brand-blue" /> Support Log & Internal Notes
+                  <MessageSquare className="h-4 w-4 text-brand-blue" /> Support
+                  Log & Internal Notes
                 </h3>
-                
+
                 <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1">
-                  {activeOrder.adminNotes && activeOrder.adminNotes.length > 0 ? (
+                  {activeOrder.adminNotes &&
+                  activeOrder.adminNotes.length > 0 ? (
                     activeOrder.adminNotes.map((note, idx) => (
-                      <div key={idx} className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-xl text-xs font-semibold leading-relaxed border border-black/5 dark:border-white/5">
+                      <div
+                        key={idx}
+                        className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-xl text-xs font-semibold leading-relaxed border border-black/5 dark:border-white/5"
+                      >
                         {note}
                       </div>
                     ))
                   ) : (
-                    <p className="text-xs text-zinc-400 italic">No admin notes logged for this invoice.</p>
+                    <p className="text-xs text-zinc-400 italic">
+                      No admin notes logged for this invoice.
+                    </p>
                   )}
                 </div>
 
@@ -376,7 +459,6 @@ export default function OrdersManagerPage() {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );

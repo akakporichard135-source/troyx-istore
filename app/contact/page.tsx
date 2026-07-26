@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
-import { Mail, MapPin, Phone, MessageCircle, Clock, Navigation, CheckCircle2 } from "lucide-react";
-import Image from "next/image";
+import {
+  Mail,
+  MapPin,
+  Phone,
+  MessageCircle,
+  Clock,
+  Navigation
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { PageHeader } from "@/components/ui/page-header";
@@ -9,7 +15,8 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact & Showroom Location",
-  description: "Visit TroyX iStore flagship showroom in Accra or contact our tech support team."
+  description:
+    "Visit TroyX iStore flagship showroom in Accra or contact our tech support team."
 };
 
 export default function ContactPage() {
@@ -29,8 +36,12 @@ export default function ContactPage() {
               <div className="flex items-start gap-4 rounded-3xl border border-black/5 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-zinc-900">
                 <Phone className="h-6 w-6 text-brand-blue mt-1 flex-shrink-0" />
                 <div>
-                  <p className="text-[10px] font-bold uppercase text-zinc-400">Phone Support</p>
-                  <p className="font-bold text-brand-ink dark:text-white mt-1 text-xs">{siteConfig.phone}</p>
+                  <p className="text-[10px] font-bold uppercase text-zinc-400">
+                    Phone Support
+                  </p>
+                  <p className="font-bold text-brand-ink dark:text-white mt-1 text-xs">
+                    {siteConfig.phone}
+                  </p>
                   <p className="text-xs text-zinc-500">{siteConfig.phoneAlt}</p>
                 </div>
               </div>
@@ -38,8 +49,12 @@ export default function ContactPage() {
               <div className="flex items-start gap-4 rounded-3xl border border-black/5 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-zinc-900">
                 <Mail className="h-6 w-6 text-purple-400 mt-1 flex-shrink-0" />
                 <div>
-                  <p className="text-[10px] font-bold uppercase text-zinc-400">Email Inquiry</p>
-                  <p className="font-bold text-brand-ink dark:text-white mt-1 text-xs">{siteConfig.email}</p>
+                  <p className="text-[10px] font-bold uppercase text-zinc-400">
+                    Email Inquiry
+                  </p>
+                  <p className="font-bold text-brand-ink dark:text-white mt-1 text-xs">
+                    {siteConfig.email}
+                  </p>
                   <p className="text-xs text-zinc-500">Fast 2-hour response</p>
                 </div>
               </div>
@@ -53,8 +68,12 @@ export default function ContactPage() {
                     <MessageCircle className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-sm text-brand-ink dark:text-white">Instant WhatsApp Chat</h3>
-                    <p className="text-xs text-emerald-400">Speak directly with an Apple specialist</p>
+                    <h3 className="font-bold text-sm text-brand-ink dark:text-white">
+                      Instant WhatsApp Chat
+                    </h3>
+                    <p className="text-xs text-emerald-400">
+                      Speak directly with an Apple specialist
+                    </p>
                   </div>
                 </div>
                 <a
@@ -77,15 +96,21 @@ export default function ContactPage() {
               <div className="space-y-2.5 text-xs">
                 <div className="flex justify-between border-b border-black/5 dark:border-white/5 pb-2">
                   <span className="text-zinc-500">Monday - Friday</span>
-                  <span className="font-bold text-brand-ink dark:text-white">8:30 AM - 6:30 PM</span>
+                  <span className="font-bold text-brand-ink dark:text-white">
+                    8:30 AM - 6:30 PM
+                  </span>
                 </div>
                 <div className="flex justify-between border-b border-black/5 dark:border-white/5 pb-2">
                   <span className="text-zinc-500">Saturday</span>
-                  <span className="font-bold text-brand-ink dark:text-white">9:00 AM - 5:00 PM</span>
+                  <span className="font-bold text-brand-ink dark:text-white">
+                    9:00 AM - 5:00 PM
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-500">Sunday</span>
-                  <span className="font-bold text-amber-500">Closed (Online Orders Active)</span>
+                  <span className="font-bold text-amber-500">
+                    Closed (Online Orders Active)
+                  </span>
                 </div>
               </div>
             </div>
@@ -93,24 +118,50 @@ export default function ContactPage() {
 
           {/* Right Column: Contact Form */}
           <form className="space-y-4 rounded-3xl border border-black/5 bg-white p-8 shadow-sm dark:border-white/10 dark:bg-zinc-900">
-            <h2 className="text-lg font-bold text-brand-ink dark:text-white">Send Us a Direct Message</h2>
+            <h2 className="text-lg font-bold text-brand-ink dark:text-white">
+              Send Us a Direct Message
+            </h2>
             <div>
-              <label className="block text-xs font-semibold text-zinc-500 mb-1">Full Name</label>
-              <Input placeholder="e.g. Abena Mensah" className="h-11 rounded-xl text-xs" />
+              <label className="block text-xs font-semibold text-zinc-500 mb-1">
+                Full Name
+              </label>
+              <Input
+                placeholder="e.g. Abena Mensah"
+                className="h-11 rounded-xl text-xs"
+              />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-zinc-500 mb-1">Email Address</label>
-              <Input type="email" placeholder="your@email.com" className="h-11 rounded-xl text-xs" />
+              <label className="block text-xs font-semibold text-zinc-500 mb-1">
+                Email Address
+              </label>
+              <Input
+                type="email"
+                placeholder="your@email.com"
+                className="h-11 rounded-xl text-xs"
+              />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-zinc-500 mb-1">Subject</label>
-              <Input placeholder="Product availability, repair, trade-in..." className="h-11 rounded-xl text-xs" />
+              <label className="block text-xs font-semibold text-zinc-500 mb-1">
+                Subject
+              </label>
+              <Input
+                placeholder="Product availability, repair, trade-in..."
+                className="h-11 rounded-xl text-xs"
+              />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-zinc-500 mb-1">Message</label>
-              <Textarea placeholder="Tell us more about how we can assist you..." className="min-h-28 rounded-xl text-xs" />
+              <label className="block text-xs font-semibold text-zinc-500 mb-1">
+                Message
+              </label>
+              <Textarea
+                placeholder="Tell us more about how we can assist you..."
+                className="min-h-28 rounded-xl text-xs"
+              />
             </div>
-            <Button type="submit" className="w-full h-11 text-xs font-bold bg-brand-blue text-white hover:bg-brand-blue/90">
+            <Button
+              type="submit"
+              className="w-full h-11 text-xs font-bold bg-brand-blue text-white hover:bg-brand-blue/90"
+            >
               Submit Message
             </Button>
           </form>
@@ -129,7 +180,10 @@ export default function ContactPage() {
                 Spintex Road & East Legon Flagships
               </h2>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                Step inside Accra's premier Apple and gaming destination. Test-drive the latest MacBook M3 series, experience iPhone 16 Pro Max displays, and explore certified accessories with direct technician guidance.
+                Step inside Accra&apos;s premier Apple and gaming destination.
+                Test-drive the latest MacBook M3 series, experience iPhone 16
+                Pro Max displays, and explore certified accessories with direct
+                technician guidance.
               </p>
 
               <div className="space-y-3 text-xs text-zinc-700 dark:text-zinc-300">

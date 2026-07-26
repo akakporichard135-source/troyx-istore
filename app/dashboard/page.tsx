@@ -14,7 +14,6 @@ import {
   History,
   Settings,
   ShieldAlert,
-  ArrowRight,
   Download,
   Trash2,
   CheckCircle2
@@ -33,7 +32,9 @@ export default function CustomerDashboardPage() {
   const orders = useAdminStore((state) => state.orders);
 
   const wishlistProducts = products.filter((p) => wishlist.includes(p.id));
-  const recentlyViewedProducts = products.filter((p) => recentlyViewed.includes(p.id));
+  const recentlyViewedProducts = products.filter((p) =>
+    recentlyViewed.includes(p.id)
+  );
 
   // Security password state
   const [passSaved, setPassSaved] = useState(false);
@@ -45,9 +46,16 @@ export default function CustomerDashboardPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-black/5 dark:border-white/10 pb-6">
           <div>
-            <span className="text-xs font-extrabold uppercase text-brand-blue tracking-wider">Customer Portal</span>
-            <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">Ama K. Osei Account</h1>
-            <p className="text-xs text-zinc-500 mt-1">ama.k@example.com &bull; East Legon, Accra &bull; Member since 2025</p>
+            <span className="text-xs font-extrabold uppercase text-brand-blue tracking-wider">
+              Customer Portal
+            </span>
+            <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">
+              Ama K. Osei Account
+            </h1>
+            <p className="text-xs text-zinc-500 mt-1">
+              ama.k@example.com &bull; East Legon, Accra &bull; Member since
+              2025
+            </p>
           </div>
 
           <Link href="/shop">
@@ -64,7 +72,11 @@ export default function CustomerDashboardPage() {
             {[
               { id: "overview", label: "Dashboard Overview", icon: User },
               { id: "orders", label: "Orders & Tracking", icon: Package },
-              { id: "wishlist", label: `Wishlist (${wishlist.length})`, icon: Heart },
+              {
+                id: "wishlist",
+                label: `Wishlist (${wishlist.length})`,
+                icon: Heart
+              },
               { id: "addresses", label: "Saved Addresses", icon: MapPin },
               { id: "payments", label: "Payment Methods", icon: CreditCard },
               { id: "invoices", label: "Invoices & Downloads", icon: FileText },
@@ -101,45 +113,80 @@ export default function CustomerDashboardPage() {
               <div className="space-y-6">
                 <div className="grid gap-4 sm:grid-cols-3">
                   <div className="rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-5 shadow-sm">
-                    <span className="text-xs font-semibold text-zinc-500">Total Completed Orders</span>
-                    <p className="mt-2 text-2xl font-extrabold text-brand-ink dark:text-white">2 Orders</p>
-                    <span className="mt-1 text-[11px] text-emerald-500 font-bold">Total Spent: GH₵ 4,198</span>
+                    <span className="text-xs font-semibold text-zinc-500">
+                      Total Completed Orders
+                    </span>
+                    <p className="mt-2 text-2xl font-extrabold text-brand-ink dark:text-white">
+                      2 Orders
+                    </p>
+                    <span className="mt-1 text-[11px] text-emerald-500 font-bold">
+                      Total Spent: GH₵ 4,198
+                    </span>
                   </div>
 
                   <div className="rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-5 shadow-sm">
-                    <span className="text-xs font-semibold text-zinc-500">Saved Wishlist</span>
-                    <p className="mt-2 text-2xl font-extrabold text-brand-ink dark:text-white">{wishlist.length} Items</p>
-                    <button onClick={() => setActiveTab("wishlist")} className="mt-1 text-[11px] text-brand-blue font-bold hover:underline">
+                    <span className="text-xs font-semibold text-zinc-500">
+                      Saved Wishlist
+                    </span>
+                    <p className="mt-2 text-2xl font-extrabold text-brand-ink dark:text-white">
+                      {wishlist.length} Items
+                    </p>
+                    <button
+                      onClick={() => setActiveTab("wishlist")}
+                      className="mt-1 text-[11px] text-brand-blue font-bold hover:underline"
+                    >
                       View Wishlist &rarr;
                     </button>
                   </div>
 
                   <div className="rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-5 shadow-sm">
-                    <span className="text-xs font-semibold text-zinc-500">Default Shipping Address</span>
-                    <p className="mt-2 text-xs font-bold text-brand-ink dark:text-white">House 24, East Legon</p>
-                    <span className="mt-1 text-[10px] text-zinc-400">Accra, Ghana</span>
+                    <span className="text-xs font-semibold text-zinc-500">
+                      Default Shipping Address
+                    </span>
+                    <p className="mt-2 text-xs font-bold text-brand-ink dark:text-white">
+                      House 24, East Legon
+                    </p>
+                    <span className="mt-1 text-[10px] text-zinc-400">
+                      Accra, Ghana
+                    </span>
                   </div>
                 </div>
 
                 {/* Recent Orders Overview */}
                 <div className="rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-6 shadow-sm space-y-4">
                   <div className="flex items-center justify-between border-b border-black/5 dark:border-white/10 pb-4">
-                    <h2 className="text-base font-bold text-brand-ink dark:text-white">Recent Purchase Orders</h2>
-                    <button onClick={() => setActiveTab("orders")} className="text-xs font-bold text-brand-blue hover:underline">
+                    <h2 className="text-base font-bold text-brand-ink dark:text-white">
+                      Recent Purchase Orders
+                    </h2>
+                    <button
+                      onClick={() => setActiveTab("orders")}
+                      className="text-xs font-bold text-brand-blue hover:underline"
+                    >
                       View All Orders &rarr;
                     </button>
                   </div>
 
                   <div className="space-y-3">
                     {orders.slice(0, 2).map((o) => (
-                      <div key={o.id} className="flex items-center justify-between rounded-2xl border border-black/5 dark:border-white/5 bg-zinc-50 dark:bg-zinc-950 p-4 text-xs">
+                      <div
+                        key={o.id}
+                        className="flex items-center justify-between rounded-2xl border border-black/5 dark:border-white/5 bg-zinc-50 dark:bg-zinc-950 p-4 text-xs"
+                      >
                         <div>
-                          <p className="font-bold text-brand-blue font-mono">{o.id}</p>
-                          <p className="text-zinc-500 mt-0.5">{o.items[0]?.name} ({o.items.length} items)</p>
+                          <p className="font-bold text-brand-blue font-mono">
+                            {o.id}
+                          </p>
+                          <p className="text-zinc-500 mt-0.5">
+                            {o.items[0]?.name} ({o.items.length} items)
+                          </p>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold text-emerald-500">GH₵ {o.total.toLocaleString()}</p>
-                          <span className="text-[10px] font-bold text-zinc-400">{o.status}</span>
+                          <p className="font-bold text-emerald-500">
+                            GH₵ {o.total.toLocaleString()}
+                          </p>
+                          <span className="text-[10px] font-bold text-zinc-400">
+                            {o.status}
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -151,14 +198,24 @@ export default function CustomerDashboardPage() {
             {/* Orders & Tracking Tab */}
             {activeTab === "orders" && (
               <div className="space-y-4 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-6 shadow-sm">
-                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">Order History & Live Progress</h2>
+                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">
+                  Order History & Live Progress
+                </h2>
                 <div className="space-y-4">
                   {orders.map((o) => (
-                    <div key={o.id} className="rounded-2xl border border-black/5 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950 p-5 space-y-3 text-xs">
+                    <div
+                      key={o.id}
+                      className="rounded-2xl border border-black/5 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950 p-5 space-y-3 text-xs"
+                    >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-black/5 dark:border-white/10 pb-3 gap-2">
                         <div>
-                          <span className="font-mono font-bold text-brand-blue text-sm">{o.id}</span>
-                          <p className="text-zinc-500 text-[11px] mt-0.5">Placed on {new Date(o.createdAt).toLocaleDateString("en-GB")}</p>
+                          <span className="font-mono font-bold text-brand-blue text-sm">
+                            {o.id}
+                          </span>
+                          <p className="text-zinc-500 text-[11px] mt-0.5">
+                            Placed on{" "}
+                            {new Date(o.createdAt).toLocaleDateString("en-GB")}
+                          </p>
                         </div>
                         <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-500 border border-emerald-500/20">
                           {o.status}
@@ -167,16 +224,26 @@ export default function CustomerDashboardPage() {
 
                       <div className="space-y-2">
                         {o.items.map((item, idx) => (
-                          <div key={idx} className="flex justify-between items-center text-xs">
-                            <span className="font-semibold text-brand-ink dark:text-white">{item.name} x{item.quantity}</span>
-                            <span className="font-bold text-emerald-500">GH₵ {(item.price * item.quantity).toLocaleString()}</span>
+                          <div
+                            key={idx}
+                            className="flex justify-between items-center text-xs"
+                          >
+                            <span className="font-semibold text-brand-ink dark:text-white">
+                              {item.name} x{item.quantity}
+                            </span>
+                            <span className="font-bold text-emerald-500">
+                              GH₵{" "}
+                              {(item.price * item.quantity).toLocaleString()}
+                            </span>
                           </div>
                         ))}
                       </div>
 
                       <div className="flex justify-between items-center pt-2 border-t border-black/5 dark:border-white/5 font-bold">
                         <span>Total Paid:</span>
-                        <span className="text-brand-blue text-sm">GH₵ {o.total.toLocaleString()}</span>
+                        <span className="text-brand-blue text-sm">
+                          GH₵ {o.total.toLocaleString()}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -187,12 +254,15 @@ export default function CustomerDashboardPage() {
             {/* Wishlist Tab */}
             {activeTab === "wishlist" && (
               <div className="space-y-4">
-                <h2 className="text-lg font-bold text-brand-ink dark:text-white">Saved Wishlist Products</h2>
+                <h2 className="text-lg font-bold text-brand-ink dark:text-white">
+                  Saved Wishlist Products
+                </h2>
                 {wishlistProducts.length > 0 ? (
                   <ProductGrid products={wishlistProducts} />
                 ) : (
                   <div className="py-12 text-center text-xs text-zinc-500 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900">
-                    Your wishlist is currently empty. Browse our catalog to save items!
+                    Your wishlist is currently empty. Browse our catalog to save
+                    items!
                   </div>
                 )}
               </div>
@@ -201,12 +271,20 @@ export default function CustomerDashboardPage() {
             {/* Saved Addresses Tab */}
             {activeTab === "addresses" && (
               <div className="space-y-4 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-6 shadow-sm">
-                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">Saved Shipping & Billing Addresses</h2>
+                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">
+                  Saved Shipping & Billing Addresses
+                </h2>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="rounded-2xl border border-brand-blue/30 bg-brand-blue/5 p-4 text-xs space-y-1">
-                    <span className="font-bold text-brand-blue text-[10px] uppercase">Default Primary Address</span>
-                    <p className="font-bold text-brand-ink dark:text-white">House 24, East Legon</p>
-                    <p className="text-zinc-500">Accra, Greater Accra Region, Ghana</p>
+                    <span className="font-bold text-brand-blue text-[10px] uppercase">
+                      Default Primary Address
+                    </span>
+                    <p className="font-bold text-brand-ink dark:text-white">
+                      House 24, East Legon
+                    </p>
+                    <p className="text-zinc-500">
+                      Accra, Greater Accra Region, Ghana
+                    </p>
                     <p className="text-zinc-500">Phone: +233 20 445 1122</p>
                   </div>
                 </div>
@@ -216,14 +294,27 @@ export default function CustomerDashboardPage() {
             {/* Invoices & Downloads Tab */}
             {activeTab === "invoices" && (
               <div className="space-y-4 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-6 shadow-sm text-xs">
-                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">Invoices & Digital Receipts</h2>
+                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">
+                  Invoices & Digital Receipts
+                </h2>
                 {orders.map((o) => (
-                  <div key={o.id} className="flex items-center justify-between p-4 rounded-2xl border border-black/5 dark:border-white/5 bg-zinc-50 dark:bg-zinc-950">
+                  <div
+                    key={o.id}
+                    className="flex items-center justify-between p-4 rounded-2xl border border-black/5 dark:border-white/5 bg-zinc-50 dark:bg-zinc-950"
+                  >
                     <div>
-                      <p className="font-bold font-mono text-brand-blue">{o.id}-INVOICE.pdf</p>
-                      <p className="text-zinc-500 text-[11px]">{new Date(o.createdAt).toLocaleDateString("en-GB")} &bull; GH₵ {o.total.toLocaleString()}</p>
+                      <p className="font-bold font-mono text-brand-blue">
+                        {o.id}-INVOICE.pdf
+                      </p>
+                      <p className="text-zinc-500 text-[11px]">
+                        {new Date(o.createdAt).toLocaleDateString("en-GB")}{" "}
+                        &bull; GH₵ {o.total.toLocaleString()}
+                      </p>
                     </div>
-                    <Button variant="outline" className="h-9 px-3 text-xs font-bold">
+                    <Button
+                      variant="outline"
+                      className="h-9 px-3 text-xs font-bold"
+                    >
                       <Download className="h-3.5 w-3.5 mr-1" />
                       Download PDF
                     </Button>
@@ -232,33 +323,168 @@ export default function CustomerDashboardPage() {
               </div>
             )}
 
+            {/* Payment Methods Tab */}
+            {activeTab === "payments" && (
+              <div className="space-y-4 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-6 shadow-sm text-xs">
+                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">
+                  Saved Payment Methods
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-brand-blue/20 bg-brand-blue/5 p-4">
+                    <p className="font-bold text-brand-ink dark:text-white">
+                      MTN Mobile Money
+                    </p>
+                    <p className="mt-1 text-zinc-500">+233 20 445 1122</p>
+                    <span className="mt-3 inline-flex rounded-full bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold text-emerald-500">
+                      Default
+                    </span>
+                  </div>
+                  <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950 p-4">
+                    <p className="font-bold text-brand-ink dark:text-white">
+                      Card Payments
+                    </p>
+                    <p className="mt-1 text-zinc-500">
+                      Cards are entered securely during checkout.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Notifications Tab */}
+            {activeTab === "notifications" && (
+              <div className="space-y-4 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-6 shadow-sm text-xs">
+                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">
+                  Notification Preferences
+                </h2>
+                {[
+                  "Order status updates",
+                  "Trade-in valuation updates",
+                  "Repair booking reminders",
+                  "New arrival alerts"
+                ].map((item) => (
+                  <label
+                    key={item}
+                    className="flex items-center justify-between rounded-2xl border border-black/5 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950 p-4 font-semibold"
+                  >
+                    <span>{item}</span>
+                    <input
+                      type="checkbox"
+                      defaultChecked
+                      className="h-4 w-4 rounded border-black/20 text-brand-blue"
+                    />
+                  </label>
+                ))}
+              </div>
+            )}
+
+            {/* Recently Viewed Tab */}
+            {activeTab === "history" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold text-brand-ink dark:text-white">
+                  Recently Viewed Products
+                </h2>
+                {recentlyViewedProducts.length > 0 ? (
+                  <ProductGrid products={recentlyViewedProducts} />
+                ) : (
+                  <div className="py-12 text-center text-xs text-zinc-500 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900">
+                    Products you view will appear here for quick comparison
+                    later.
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Account Settings Tab */}
+            {activeTab === "settings" && (
+              <div className="space-y-4 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-6 shadow-sm text-xs">
+                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">
+                  Account Settings
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="space-y-1.5 font-semibold text-zinc-500">
+                    Display Name
+                    <input
+                      defaultValue="Ama K. Osei"
+                      className="w-full h-10 rounded-xl border border-black/10 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950 px-3 text-brand-ink dark:text-white"
+                    />
+                  </label>
+                  <label className="space-y-1.5 font-semibold text-zinc-500">
+                    Email Address
+                    <input
+                      defaultValue="ama.k@example.com"
+                      className="w-full h-10 rounded-xl border border-black/10 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950 px-3 text-brand-ink dark:text-white"
+                    />
+                  </label>
+                </div>
+                <Button className="h-10 px-5 text-xs font-bold bg-brand-blue text-white">
+                  Save Account Details
+                </Button>
+              </div>
+            )}
+
             {/* Security Tab */}
             {activeTab === "security" && (
               <div className="space-y-6 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900 p-6 shadow-sm text-xs">
-                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">Security & Authentication</h2>
+                <h2 className="text-lg font-bold text-brand-ink dark:text-white border-b border-black/5 dark:border-white/10 pb-4">
+                  Security & Authentication
+                </h2>
 
                 {passSaved && (
                   <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs font-bold text-emerald-500 flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4" /> Password updated successfully!
+                    <CheckCircle2 className="h-4 w-4" /> Password updated
+                    successfully!
                   </div>
                 )}
 
-                <form onSubmit={(e) => { e.preventDefault(); setPassSaved(true); setTimeout(() => setPassSaved(false), 3000); }} className="space-y-3 max-w-md">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setPassSaved(true);
+                    setTimeout(() => setPassSaved(false), 3000);
+                  }}
+                  className="space-y-3 max-w-md"
+                >
                   <div>
-                    <label className="block font-semibold text-zinc-500 mb-1">Current Password</label>
-                    <input type="password" required className="w-full h-10 rounded-xl border border-black/10 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950 px-3 text-brand-ink dark:text-white" />
+                    <label className="block font-semibold text-zinc-500 mb-1">
+                      Current Password
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      className="w-full h-10 rounded-xl border border-black/10 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950 px-3 text-brand-ink dark:text-white"
+                    />
                   </div>
                   <div>
-                    <label className="block font-semibold text-zinc-500 mb-1">New Password</label>
-                    <input type="password" required className="w-full h-10 rounded-xl border border-black/10 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950 px-3 text-brand-ink dark:text-white" />
+                    <label className="block font-semibold text-zinc-500 mb-1">
+                      New Password
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      className="w-full h-10 rounded-xl border border-black/10 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950 px-3 text-brand-ink dark:text-white"
+                    />
                   </div>
-                  <Button type="submit" className="h-10 px-5 text-xs font-bold bg-brand-blue text-white">Update Password</Button>
+                  <Button
+                    type="submit"
+                    className="h-10 px-5 text-xs font-bold bg-brand-blue text-white"
+                  >
+                    Update Password
+                  </Button>
                 </form>
 
                 <div className="pt-6 border-t border-red-500/20 space-y-2">
-                  <h3 className="font-bold text-red-500 text-sm">Danger Zone</h3>
-                  <p className="text-zinc-500 text-xs">Permanently delete your customer account and data.</p>
-                  <Button variant="outline" onClick={() => setDeleteModal(true)} className="h-9 border-red-500/30 text-red-500 hover:bg-red-500/10 text-xs font-bold">
+                  <h3 className="font-bold text-red-500 text-sm">
+                    Danger Zone
+                  </h3>
+                  <p className="text-zinc-500 text-xs">
+                    Permanently delete your customer account and data.
+                  </p>
+                  <Button
+                    variant="outline"
+                    onClick={() => setDeleteModal(true)}
+                    className="h-9 border-red-500/30 text-red-500 hover:bg-red-500/10 text-xs font-bold"
+                  >
                     <Trash2 className="h-3.5 w-3.5 mr-1" />
                     Delete Account
                   </Button>
@@ -268,6 +494,42 @@ export default function CustomerDashboardPage() {
           </div>
         </div>
       </div>
+      {deleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-3xl border border-red-500/30 bg-white p-6 text-brand-ink shadow-2xl dark:bg-zinc-900 dark:text-white">
+            <div className="flex items-start gap-3">
+              <span className="rounded-2xl bg-red-500/10 p-3 text-red-500">
+                <ShieldAlert className="h-5 w-5" />
+              </span>
+              <div className="space-y-2">
+                <h2 className="text-lg font-extrabold">
+                  Delete customer account?
+                </h2>
+                <p className="text-xs leading-relaxed text-zinc-500">
+                  This demo action shows the confirmation step. Production
+                  account deletion should be handled after identity
+                  verification.
+                </p>
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setDeleteModal(false)}
+                className="h-10 text-xs"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => setDeleteModal(false)}
+                className="h-10 bg-red-500 px-5 text-xs font-bold text-white hover:bg-red-600"
+              >
+                Keep Account Safe
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

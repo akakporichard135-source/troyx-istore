@@ -1,35 +1,36 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  Percent, 
-  Plus, 
-  Trash2, 
-  Sparkles,
+import {
+  Percent,
+  Plus,
+  Trash2,
   Volume2,
-  Calendar,
   Image as ImageIcon,
-  Check,
   ToggleLeft,
   ToggleRight,
   Save,
   Tag
 } from "lucide-react";
 import { useAdminStore } from "@/context/admin-store";
-import { formatCurrency } from "@/lib/utils";
+
+type DiscountType = "percentage" | "fixed";
 
 export default function PromotionsPage() {
-  const { coupons, addCoupon, toggleCoupon, deleteCoupon, currentRole } = useAdminStore();
+  const { coupons, addCoupon, toggleCoupon, deleteCoupon, currentRole } =
+    useAdminStore();
 
   const [newCoupon, setNewCoupon] = useState({
     code: "",
-    discountType: "percentage" as "percentage" | "fixed",
+    discountType: "percentage" as DiscountType,
     value: 10,
     minSpend: 200,
     expiryDate: "2026-12-31"
   });
 
-  const [announcement, setAnnouncement] = useState("🚚 Free same-day delivery on all Apple devices above ₵5,000 within Accra!");
+  const [announcement, setAnnouncement] = useState(
+    "🚚 Free same-day delivery on all Apple devices above ₵5,000 within Accra!"
+  );
   const [heroConfig, setHeroConfig] = useState({
     title: "iPhone 16 Pro Max",
     subtitle: "Built for Apple Intelligence. Titanium design.",
@@ -73,8 +74,13 @@ export default function PromotionsPage() {
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">Marketing & Promotions</h1>
-        <p className="text-zinc-500 text-sm">Schedule store coupon discounts, manage flash sales, and customize global banner announcements.</p>
+        <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">
+          Marketing & Promotions
+        </h1>
+        <p className="text-zinc-500 text-sm">
+          Schedule store coupon discounts, manage flash sales, and customize
+          global banner announcements.
+        </p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -93,7 +99,9 @@ export default function PromotionsPage() {
                   type="text"
                   placeholder="e.g. SUMMER20"
                   value={newCoupon.code}
-                  onChange={(e) => setNewCoupon(prev => ({ ...prev, code: e.target.value }))}
+                  onChange={(e) =>
+                    setNewCoupon((prev) => ({ ...prev, code: e.target.value }))
+                  }
                   className="px-4 py-2.5 rounded-full border border-black/10 focus:border-brand-blue bg-white text-zinc-800 dark:bg-zinc-850 dark:border-white/10 dark:text-white outline-none transition text-xs font-semibold"
                 />
               </label>
@@ -102,7 +110,12 @@ export default function PromotionsPage() {
                 Discount Type
                 <select
                   value={newCoupon.discountType}
-                  onChange={(e) => setNewCoupon(prev => ({ ...prev, discountType: e.target.value as any }))}
+                  onChange={(e) =>
+                    setNewCoupon((prev) => ({
+                      ...prev,
+                      discountType: e.target.value as DiscountType
+                    }))
+                  }
                   className="px-4 py-2.5 rounded-full border border-black/10 focus:border-brand-blue bg-white text-zinc-850 dark:bg-zinc-850 dark:border-white/10 dark:text-white outline-none transition text-xs font-semibold"
                 >
                   <option value="percentage">Percentage Off (%)</option>
@@ -117,7 +130,12 @@ export default function PromotionsPage() {
                 <input
                   type="number"
                   value={newCoupon.value}
-                  onChange={(e) => setNewCoupon(prev => ({ ...prev, value: Number(e.target.value) }))}
+                  onChange={(e) =>
+                    setNewCoupon((prev) => ({
+                      ...prev,
+                      value: Number(e.target.value)
+                    }))
+                  }
                   className="px-4 py-2.5 rounded-full border border-black/10 focus:border-brand-blue bg-white text-zinc-800 dark:bg-zinc-850 dark:border-white/10 dark:text-white outline-none transition text-xs font-semibold"
                 />
               </label>
@@ -127,7 +145,12 @@ export default function PromotionsPage() {
                 <input
                   type="number"
                   value={newCoupon.minSpend}
-                  onChange={(e) => setNewCoupon(prev => ({ ...prev, minSpend: Number(e.target.value) }))}
+                  onChange={(e) =>
+                    setNewCoupon((prev) => ({
+                      ...prev,
+                      minSpend: Number(e.target.value)
+                    }))
+                  }
                   className="px-4 py-2.5 rounded-full border border-black/10 focus:border-brand-blue bg-white text-zinc-800 dark:bg-zinc-850 dark:border-white/10 dark:text-white outline-none transition text-xs font-semibold"
                 />
               </label>
@@ -137,7 +160,12 @@ export default function PromotionsPage() {
                 <input
                   type="date"
                   value={newCoupon.expiryDate}
-                  onChange={(e) => setNewCoupon(prev => ({ ...prev, expiryDate: e.target.value }))}
+                  onChange={(e) =>
+                    setNewCoupon((prev) => ({
+                      ...prev,
+                      expiryDate: e.target.value
+                    }))
+                  }
                   className="px-4 py-2.5 rounded-full border border-black/10 focus:border-brand-blue bg-white text-zinc-850 dark:bg-zinc-850 dark:border-white/10 dark:text-white outline-none transition text-xs font-semibold"
                 />
               </label>
@@ -153,10 +181,15 @@ export default function PromotionsPage() {
 
           {/* Coupons List */}
           <div className="space-y-3 pt-3 border-t border-black/5 dark:border-white/5">
-            <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Active Coupons</h3>
+            <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+              Active Coupons
+            </h3>
             <div className="divide-y divide-black/5 dark:divide-white/5">
               {coupons.map((coupon) => (
-                <div key={coupon.code} className="py-3 flex justify-between items-center text-xs font-semibold">
+                <div
+                  key={coupon.code}
+                  className="py-3 flex justify-between items-center text-xs font-semibold"
+                >
                   <div className="flex items-center gap-2">
                     <Tag className="h-4 w-4 text-brand-blue" />
                     <div>
@@ -164,7 +197,10 @@ export default function PromotionsPage() {
                         {coupon.code}
                       </span>
                       <p className="text-[10px] text-zinc-500 mt-1">
-                        {coupon.discountType === "percentage" ? `${coupon.value}% off` : `₵${coupon.value} off`} | Min spend: ₵{coupon.minSpend || 0}
+                        {coupon.discountType === "percentage"
+                          ? `${coupon.value}% off`
+                          : `₵${coupon.value} off`}{" "}
+                        | Min spend: ₵{coupon.minSpend || 0}
                       </p>
                     </div>
                   </div>
@@ -200,7 +236,8 @@ export default function PromotionsPage() {
           {/* Top Announcement Editor */}
           <div className="p-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm space-y-4">
             <h2 className="text-lg font-bold text-brand-ink dark:text-white pb-3 border-b border-black/5 dark:border-white/5 flex items-center gap-2">
-              <Volume2 className="h-5 w-5 text-amber-500 animate-pulse" /> Announcement Bar
+              <Volume2 className="h-5 w-5 text-amber-500 animate-pulse" />{" "}
+              Announcement Bar
             </h2>
 
             <label className="grid gap-1.5 text-xs font-bold text-zinc-500">
@@ -224,7 +261,8 @@ export default function PromotionsPage() {
           {/* Hero Banner Manager */}
           <div className="p-6 bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm space-y-4">
             <h2 className="text-lg font-bold text-brand-ink dark:text-white pb-3 border-b border-black/5 dark:border-white/5 flex items-center gap-2">
-              <ImageIcon className="h-5 w-5 text-purple-500" /> Homepage Hero Configurator
+              <ImageIcon className="h-5 w-5 text-purple-500" /> Homepage Hero
+              Configurator
             </h2>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -233,7 +271,12 @@ export default function PromotionsPage() {
                 <input
                   type="text"
                   value={heroConfig.title}
-                  onChange={(e) => setHeroConfig(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) =>
+                    setHeroConfig((prev) => ({
+                      ...prev,
+                      title: e.target.value
+                    }))
+                  }
                   className="px-4 py-2.5 rounded-full border border-black/10 focus:border-brand-blue bg-white text-zinc-800 dark:bg-zinc-850 dark:border-white/10 dark:text-white outline-none transition text-xs font-semibold"
                 />
               </label>
@@ -243,7 +286,12 @@ export default function PromotionsPage() {
                 <input
                   type="text"
                   value={heroConfig.subtitle}
-                  onChange={(e) => setHeroConfig(prev => ({ ...prev, subtitle: e.target.value }))}
+                  onChange={(e) =>
+                    setHeroConfig((prev) => ({
+                      ...prev,
+                      subtitle: e.target.value
+                    }))
+                  }
                   className="px-4 py-2.5 rounded-full border border-black/10 focus:border-brand-blue bg-white text-zinc-800 dark:bg-zinc-850 dark:border-white/10 dark:text-white outline-none transition text-xs font-semibold"
                 />
               </label>
@@ -255,7 +303,12 @@ export default function PromotionsPage() {
                 <input
                   type="text"
                   value={heroConfig.buttonText}
-                  onChange={(e) => setHeroConfig(prev => ({ ...prev, buttonText: e.target.value }))}
+                  onChange={(e) =>
+                    setHeroConfig((prev) => ({
+                      ...prev,
+                      buttonText: e.target.value
+                    }))
+                  }
                   className="px-4 py-2.5 rounded-full border border-black/10 focus:border-brand-blue bg-white text-zinc-850 dark:bg-zinc-850 dark:border-white/10 dark:text-white outline-none transition text-xs font-semibold"
                 />
               </label>
@@ -265,7 +318,12 @@ export default function PromotionsPage() {
                 <input
                   type="text"
                   value={heroConfig.buttonLink}
-                  onChange={(e) => setHeroConfig(prev => ({ ...prev, buttonLink: e.target.value }))}
+                  onChange={(e) =>
+                    setHeroConfig((prev) => ({
+                      ...prev,
+                      buttonLink: e.target.value
+                    }))
+                  }
                   className="px-4 py-2.5 rounded-full border border-black/10 focus:border-brand-blue bg-white text-zinc-850 dark:bg-zinc-850 dark:border-white/10 dark:text-white outline-none transition text-xs font-semibold"
                 />
               </label>

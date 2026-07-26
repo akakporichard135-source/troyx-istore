@@ -7,7 +7,6 @@ import {
   Plus,
   Search,
   Filter,
-  MoreVertical,
   Copy,
   Archive,
   Trash2,
@@ -17,12 +16,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
-  RefreshCw,
   AlertTriangle
 } from "lucide-react";
 import { useAdminStore } from "@/context/admin-store";
 import { formatCurrency, cn } from "@/lib/utils";
 import type { Product, ProductCategory } from "@/types";
+
+type CsvProductImport = Omit<Product, "slug">;
 
 export default function ProductsManagerPage() {
   const {
@@ -127,7 +127,7 @@ export default function ProductsManagerPage() {
     reader.onload = (event) => {
       const text = event.target?.result as string;
       const lines = text.split("\n");
-      const newProducts: any[] = [];
+      const newProducts: CsvProductImport[] = [];
 
       // Skip headers (row 0)
       for (let i = 1; i < lines.length; i++) {
@@ -149,10 +149,12 @@ export default function ProductsManagerPage() {
             colors: ["Black"],
             storage: ["128GB"],
             condition: ["New"],
-            availability: (parts[4] || "Available on request") as any,
+            availability: (parts[4] ||
+              "Available on request") as Product["availability"],
             warranty: parts[5] || "12-month TroyX warranty",
             deliveryEstimate: "1-3 days",
-            description: `Imported ${parts[1]}`
+            description: `Imported ${parts[1]}`,
+            specs: {}
           });
         }
       }

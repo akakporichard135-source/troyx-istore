@@ -1,13 +1,12 @@
 "use client";
 
 import React from "react";
-import { 
-  Shield, 
-  Check, 
-  X, 
-  ShieldAlert, 
-  UserCheck, 
-  HelpCircle,
+import {
+  Shield,
+  Check,
+  X,
+  ShieldAlert,
+  UserCheck,
   Sparkles
 } from "lucide-react";
 import { useAdminStore } from "@/context/admin-store";
@@ -41,15 +40,79 @@ const rolesList = [
 ];
 
 const permissionsMatrix = [
-  { permission: "Access Admin Dashboard", owner: true, admin: true, manager: true, sales: true, support: true },
-  { permission: "Add/Edit Products", owner: true, admin: true, manager: true, sales: true, support: false },
-  { permission: "Delete Products", owner: true, admin: true, manager: false, sales: false, support: false },
-  { permission: "View Revenue & Conversion Analytics", owner: true, admin: true, manager: true, sales: false, support: false },
-  { permission: "Fulfill Orders & Generate Invoices", owner: true, admin: true, manager: true, sales: true, support: false },
-  { permission: "Issue Refunds (Mock Process)", owner: true, admin: true, manager: false, sales: false, support: false },
-  { permission: "Configure Tax & Currency Settings", owner: true, admin: false, manager: false, sales: false, support: false },
-  { permission: "Log Internal CRM Notes & Log support", owner: true, admin: true, manager: true, sales: true, support: true },
-  { permission: "Purge System Security Audit Logs", owner: true, stroke: false, admin: false, manager: false, sales: false, support: false }
+  {
+    permission: "Access Admin Dashboard",
+    owner: true,
+    admin: true,
+    manager: true,
+    sales: true,
+    support: true
+  },
+  {
+    permission: "Add/Edit Products",
+    owner: true,
+    admin: true,
+    manager: true,
+    sales: true,
+    support: false
+  },
+  {
+    permission: "Delete Products",
+    owner: true,
+    admin: true,
+    manager: false,
+    sales: false,
+    support: false
+  },
+  {
+    permission: "View Revenue & Conversion Analytics",
+    owner: true,
+    admin: true,
+    manager: true,
+    sales: false,
+    support: false
+  },
+  {
+    permission: "Fulfill Orders & Generate Invoices",
+    owner: true,
+    admin: true,
+    manager: true,
+    sales: true,
+    support: false
+  },
+  {
+    permission: "Issue Refunds (Mock Process)",
+    owner: true,
+    admin: true,
+    manager: false,
+    sales: false,
+    support: false
+  },
+  {
+    permission: "Configure Tax & Currency Settings",
+    owner: true,
+    admin: false,
+    manager: false,
+    sales: false,
+    support: false
+  },
+  {
+    permission: "Log Internal CRM Notes & Log support",
+    owner: true,
+    admin: true,
+    manager: true,
+    sales: true,
+    support: true
+  },
+  {
+    permission: "Purge System Security Audit Logs",
+    owner: true,
+    stroke: false,
+    admin: false,
+    manager: false,
+    sales: false,
+    support: false
+  }
 ];
 
 export default function RolesMatrixPage() {
@@ -59,8 +122,13 @@ export default function RolesMatrixPage() {
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">Role-Based Access (RBAC)</h1>
-        <p className="text-zinc-500 text-sm">Review operational boundaries and visual authorization layers for enterprise staff roles.</p>
+        <h1 className="text-3xl font-extrabold text-brand-ink dark:text-white">
+          Role-Based Access (RBAC)
+        </h1>
+        <p className="text-zinc-500 text-sm">
+          Review operational boundaries and visual authorization layers for
+          enterprise staff roles.
+        </p>
       </div>
 
       {/* Role Notice alert */}
@@ -69,9 +137,14 @@ export default function RolesMatrixPage() {
           <ShieldAlert className="h-5 w-5" />
         </span>
         <div className="text-xs">
-          <p className="font-bold text-zinc-800 dark:text-zinc-200">Active Simulation Engine</p>
+          <p className="font-bold text-zinc-800 dark:text-zinc-200">
+            Active Simulation Engine
+          </p>
           <p className="text-zinc-500 mt-0.5">
-            You are currently viewing the panel under the <strong className="text-brand-blue">{currentRole}</strong> role. Use the dropdown in the header to hot-swap profiles and observe lockouts.
+            You are currently viewing the panel under the{" "}
+            <strong className="text-brand-blue">{currentRole}</strong> role. Use
+            the dropdown in the header to hot-swap profiles and observe
+            lockouts.
           </p>
         </div>
       </div>
@@ -81,24 +154,29 @@ export default function RolesMatrixPage() {
         {rolesList.map((r) => {
           const isActive = r.name === currentRole;
           return (
-            <div 
-              key={r.name} 
+            <div
+              key={r.name}
               className={`p-6 rounded-[2rem] border transition relative flex flex-col justify-between ${
-                isActive 
-                  ? "bg-white border-brand-blue shadow-lg dark:bg-zinc-900" 
+                isActive
+                  ? "bg-white border-brand-blue shadow-lg dark:bg-zinc-900"
                   : "bg-white border-black/5 dark:bg-zinc-900 dark:border-white/5"
               }`}
             >
               <div>
                 <div className="flex justify-between items-center pb-3 border-b border-black/5 dark:border-white/5 mb-3">
                   <h3 className="font-bold text-brand-ink dark:text-white text-base flex items-center gap-2">
-                    <Shield className={`h-4.5 w-4.5 ${isActive ? "text-brand-blue" : "text-zinc-400"}`} /> {r.name}
+                    <Shield
+                      className={`h-4.5 w-4.5 ${isActive ? "text-brand-blue" : "text-zinc-400"}`}
+                    />{" "}
+                    {r.name}
                   </h3>
                   <span className="text-[9px] px-2 py-0.5 bg-zinc-100 text-zinc-500 rounded-md font-mono dark:bg-zinc-800 dark:text-zinc-400">
                     {r.level}
                   </span>
                 </div>
-                <p className="text-xs leading-relaxed text-zinc-500">{r.desc}</p>
+                <p className="text-xs leading-relaxed text-zinc-500">
+                  {r.desc}
+                </p>
               </div>
 
               {isActive && (
@@ -115,7 +193,8 @@ export default function RolesMatrixPage() {
       <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm overflow-hidden">
         <div className="p-4 border-b border-black/5 dark:border-white/5 bg-zinc-50/50 dark:bg-zinc-850/20">
           <h3 className="font-bold text-brand-ink dark:text-white text-sm flex items-center gap-1.5">
-            <Sparkles className="h-4 w-4 text-brand-blue" /> Access Authorization Matrix
+            <Sparkles className="h-4 w-4 text-brand-blue" /> Access
+            Authorization Matrix
           </h3>
         </div>
 
@@ -133,22 +212,47 @@ export default function RolesMatrixPage() {
             </thead>
             <tbody className="divide-y divide-black/5 dark:divide-white/5 font-semibold text-brand-ink dark:text-white">
               {permissionsMatrix.map((row, idx) => (
-                <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-850/20 transition">
-                  <td className="px-6 py-4 text-zinc-700 dark:text-zinc-300 font-bold">{row.permission}</td>
-                  <td className="px-6 py-4 text-center">
-                    {row.owner ? <Check className="h-4 w-4 text-emerald-500 mx-auto" /> : <X className="h-4 w-4 text-zinc-300 mx-auto" />}
+                <tr
+                  key={idx}
+                  className="hover:bg-zinc-50 dark:hover:bg-zinc-850/20 transition"
+                >
+                  <td className="px-6 py-4 text-zinc-700 dark:text-zinc-300 font-bold">
+                    {row.permission}
                   </td>
                   <td className="px-6 py-4 text-center">
-                    {row.admin ? <Check className="h-4 w-4 text-emerald-500 mx-auto" /> : <X className="h-4 w-4 text-zinc-300 mx-auto" />}
+                    {row.owner ? (
+                      <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+                    ) : (
+                      <X className="h-4 w-4 text-zinc-300 mx-auto" />
+                    )}
                   </td>
                   <td className="px-6 py-4 text-center">
-                    {row.manager ? <Check className="h-4 w-4 text-emerald-500 mx-auto" /> : <X className="h-4 w-4 text-zinc-300 mx-auto" />}
+                    {row.admin ? (
+                      <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+                    ) : (
+                      <X className="h-4 w-4 text-zinc-300 mx-auto" />
+                    )}
                   </td>
                   <td className="px-6 py-4 text-center">
-                    {row.sales ? <Check className="h-4 w-4 text-emerald-500 mx-auto" /> : <X className="h-4 w-4 text-zinc-300 mx-auto" />}
+                    {row.manager ? (
+                      <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+                    ) : (
+                      <X className="h-4 w-4 text-zinc-300 mx-auto" />
+                    )}
                   </td>
                   <td className="px-6 py-4 text-center">
-                    {row.support ? <Check className="h-4 w-4 text-emerald-500 mx-auto" /> : <X className="h-4 w-4 text-zinc-300 mx-auto" />}
+                    {row.sales ? (
+                      <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+                    ) : (
+                      <X className="h-4 w-4 text-zinc-300 mx-auto" />
+                    )}
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    {row.support ? (
+                      <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+                    ) : (
+                      <X className="h-4 w-4 text-zinc-300 mx-auto" />
+                    )}
                   </td>
                 </tr>
               ))}
