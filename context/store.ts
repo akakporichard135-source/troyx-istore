@@ -21,12 +21,13 @@ type StoreData = Pick<StoreState, "cart" | "wishlist" | "compare" | "recentlyVie
 
 const storageKey = "troyx-commerce";
 const listeners = new Set<() => void>();
-let data: StoreData = {
+const defaultData: StoreData = {
   cart: [],
   wishlist: [],
   compare: [],
   recentlyViewed: []
 };
+let data: StoreData = { ...defaultData };
 
 function loadData() {
   if (typeof window === "undefined") return;
@@ -34,7 +35,7 @@ function loadData() {
     const stored = window.localStorage.getItem(storageKey);
     if (stored) data = { ...data, ...JSON.parse(stored) };
   } catch {
-    data = { cart: [], wishlist: [], compare: [], recentlyViewed: [] };
+    data = { ...defaultData };
   }
 }
 
@@ -105,6 +106,10 @@ function getSnapshot(): StoreState {
   return { ...data, ...actions };
 }
 
+function getServerSnapshot(): StoreState {
+  return { ...defaultData, ...actions };
+}
+
 function subscribe(listener: () => void) {
   listeners.add(listener);
   return () => listeners.delete(listener);
@@ -119,7 +124,7 @@ export function useCommerceStore<T>(selector: (state: StoreState) => T): T {
   return useSyncExternalStore(
     subscribe,
     () => selector(getSnapshot()),
-    () => selector(getSnapshot())
+    () => selector(getServerSnapshot())
   );
 }
 
