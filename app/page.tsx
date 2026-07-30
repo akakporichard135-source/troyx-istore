@@ -158,11 +158,29 @@ const bestSellerSlugs = [
   "iphone-14-plus"
 ];
 
-const tradeInSteps = [
-  "Tell us your current device model and condition.",
-  "Share storage, battery health, and any visible faults.",
-  "Receive an estimated trade-in assessment.",
-  "Confirm final value after physical inspection."
+const newArrivalSlugs = ["iphone-14-pro", "iphone-14"];
+
+const tradeInSteps: Array<[LucideIcon, string, string]> = [
+  [
+    Smartphone,
+    "Device details",
+    "Tell us your current device model and condition."
+  ],
+  [
+    BadgeCheck,
+    "Condition review",
+    "Share storage, battery health, and any visible faults."
+  ],
+  [
+    MessageCircle,
+    "Estimate",
+    "Receive a guided trade-in assessment from the team."
+  ],
+  [
+    CheckCircle2,
+    "Inspection",
+    "Confirm final value after physical inspection."
+  ]
 ];
 
 const whatsappHref =
@@ -182,6 +200,10 @@ function colorDots(product: Product) {
   return product.colors.slice(0, 4);
 }
 
+function storageOptions(product: Product) {
+  return product.storage.slice(0, 3);
+}
+
 function HomeSection({
   eyebrow,
   title,
@@ -196,14 +218,14 @@ function HomeSection({
   action?: ReactNode;
 }) {
   return (
-    <section className="bg-[#07090F] px-4 py-12 text-white sm:px-6 sm:py-16 lg:px-8">
+    <section className="home-reveal bg-[#07090F] px-4 py-14 text-white sm:px-6 sm:py-20 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex flex-col gap-5 md:mb-10 md:flex-row md:items-end md:justify-between">
+        <div className="mb-9 flex flex-col gap-5 md:mb-12 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl">
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#65B4FF]">
               {eyebrow}
             </p>
-            <h2 className="mt-3 text-3xl font-bold leading-tight text-white sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
               {title}
             </h2>
             <p className="mt-4 max-w-2xl text-base leading-7 text-[#A8B0BF]">
@@ -222,10 +244,10 @@ function HomeProductCard({ product }: { product: Product }) {
   const image = homeProductImages[product.slug] || product.images[0];
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111722] shadow-[0_24px_80px_rgba(0,0,0,0.24)] transition duration-300 hover:-translate-y-1 hover:border-[#1687F8]/45">
+    <article className="home-card-shadow group flex h-full min-h-[520px] flex-col overflow-hidden rounded-[1.65rem] border border-white/10 home-premium-surface transition duration-500 hover:-translate-y-1.5 hover:border-[#1687F8]/45">
       <Link
         href={`/product/${product.slug}`}
-        className="focus-ring relative m-3 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl bg-[#151D2B] p-5"
+        className="focus-ring relative m-3 flex aspect-[5/4] items-center justify-center overflow-hidden rounded-[1.25rem] border border-white/10 bg-[radial-gradient(circle_at_50%_12%,rgba(101,180,255,0.20),transparent_45%),#151D2B] p-4"
         aria-label={`View ${product.name}`}
       >
         <Image
@@ -233,21 +255,31 @@ function HomeProductCard({ product }: { product: Product }) {
           alt={product.name}
           fill
           sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 90vw"
-          className="object-contain p-3 transition duration-500 group-hover:scale-[1.03]"
+          className="object-contain p-1 transition duration-700 group-hover:scale-[1.07] sm:p-2"
           loading="lazy"
         />
       </Link>
-      <div className="flex flex-1 flex-col px-5 pb-5 pt-2">
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-3">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#65B4FF]">
           {product.series}
         </p>
-        <h3 className="mt-2 text-xl font-bold leading-snug text-white">
+        <h3 className="mt-2 min-h-[3.25rem] text-xl font-bold leading-snug text-white">
           {product.name}
         </h3>
-        <p className="mt-3 line-clamp-2 min-h-[3.25rem] text-sm leading-6 text-[#A8B0BF]">
-          {product.condition.join(" / ")} - {product.storage.slice(0, 2).join(", ")}
+        <p className="mt-2 line-clamp-2 min-h-[3rem] text-sm leading-6 text-[#A8B0BF]">
+          {product.description}
         </p>
-        <div className="mt-4 flex min-h-6 flex-wrap gap-2" aria-label="Available colors">
+        <div className="mt-4 flex min-h-[2rem] flex-wrap gap-2" aria-label="Storage options">
+          {storageOptions(product).map((storage) => (
+            <span
+              key={`${product.id}-${storage}`}
+              className="rounded-full border border-[#65B4FF]/20 bg-[#1687F8]/10 px-3 py-1 text-[11px] font-bold text-[#DDEEFF]"
+            >
+              {storage}
+            </span>
+          ))}
+        </div>
+        <div className="mt-3 flex min-h-[2rem] flex-wrap gap-2" aria-label="Available colors">
           {colorDots(product).map((color) => (
             <span
               key={`${product.id}-${color}`}
@@ -257,11 +289,21 @@ function HomeProductCard({ product }: { product: Product }) {
             </span>
           ))}
         </div>
-        <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/10 pt-4">
+        <div className="mt-3 flex min-h-[1.75rem] flex-wrap gap-2" aria-label="Condition">
+          {product.condition.map((condition) => (
+            <span
+              key={`${product.id}-${condition}`}
+              className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] font-semibold text-[#A8B0BF]"
+            >
+              {condition}
+            </span>
+          ))}
+        </div>
+        <div className="mt-auto flex items-center justify-between gap-3 border-t border-white/10 pt-5">
           <p className="text-base font-bold text-white">{priceLabel(product)}</p>
           <Link
             href={`/product/${product.slug}`}
-            className="focus-ring inline-flex h-10 items-center justify-center rounded-full border border-white/10 px-4 text-sm font-bold text-white transition hover:border-[#1687F8] hover:text-[#65B4FF]"
+            className="focus-ring inline-flex h-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-4 text-sm font-bold text-white transition duration-300 hover:border-[#1687F8] hover:bg-[#1687F8] hover:text-white"
           >
             View Details
           </Link>
@@ -277,7 +319,7 @@ function CategoryTile({ section }: { section: CategoryCard }) {
   return (
     <Link
       href={section.href}
-      className="focus-ring group relative flex min-h-[260px] overflow-hidden rounded-2xl border border-white/10 bg-[#111722] shadow-[0_20px_70px_rgba(0,0,0,0.22)] transition duration-300 hover:-translate-y-1 hover:border-[#1687F8]/50"
+      className="focus-ring home-card-shadow group relative flex min-h-[300px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#111722] transition duration-500 hover:-translate-y-1.5 hover:border-[#1687F8]/50"
       aria-label={`Browse ${section.title}`}
     >
       {section.image ? (
@@ -287,21 +329,28 @@ function CategoryTile({ section }: { section: CategoryCard }) {
           fill
           sizes="(min-width: 1024px) 32vw, (min-width: 640px) 50vw, 100vw"
           className={cn(
-            "object-cover transition duration-700 group-hover:scale-105",
+            "object-cover transition duration-700 group-hover:scale-110",
             section.focal
           )}
           loading="lazy"
         />
       ) : (
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(22,135,248,0.22),transparent_36%),linear-gradient(135deg,#151D2B,#0D111B)]" />
+        <>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(22,135,248,0.24),transparent_34%),radial-gradient(circle_at_20%_74%,rgba(101,180,255,0.12),transparent_36%),linear-gradient(135deg,#151D2B,#0D111B)]" />
+          <div className="absolute right-6 top-6 flex h-32 w-32 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-[#65B4FF]/70 shadow-[0_20px_80px_rgba(22,135,248,0.16)] transition duration-700 group-hover:scale-110 group-hover:text-[#65B4FF]">
+            <Icon className="h-14 w-14" />
+          </div>
+        </>
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/52 to-black/16" />
-      <div className="relative mt-auto w-full p-6 sm:p-7">
-        <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 backdrop-blur">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/58 to-black/14" />
+      <div className="relative mt-auto w-full p-6 sm:p-8">
+        <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/10 shadow-[0_12px_42px_rgba(0,0,0,0.22)] backdrop-blur">
           <Icon className="h-5 w-5 text-[#65B4FF]" />
         </div>
-        <h3 className="text-2xl font-bold text-white">{section.title}</h3>
-        <p className="mt-3 max-w-lg text-sm leading-6 text-[#DDE6F3]">
+        <h3 className="text-2xl font-bold tracking-tight text-white">
+          {section.title}
+        </h3>
+        <p className="mt-3 min-h-[3rem] max-w-lg text-sm leading-6 text-[#DDE6F3]">
           {section.description}
         </p>
         <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#65B4FF]">
@@ -318,28 +367,30 @@ export default function HomePage() {
     products[0];
   const iphoneLineup = getProductsBySlugs(featuredIphoneSlugs);
   const bestSellers = getProductsBySlugs(bestSellerSlugs);
+  const newArrivals = getProductsBySlugs(newArrivalSlugs);
 
   return (
     <main className="overflow-x-hidden bg-[#07090F] text-white">
-      <section className="relative isolate overflow-hidden bg-[#07090F] px-4 pb-12 pt-10 sm:px-6 sm:pb-16 lg:px-8">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_78%_18%,rgba(22,135,248,0.22),transparent_34%),radial-gradient(circle_at_8%_18%,rgba(101,180,255,0.13),transparent_30%)]" />
-        <div className="mx-auto grid min-h-[620px] max-w-7xl items-center gap-10 lg:grid-cols-[0.96fr_1.04fr]">
-          <div className="max-w-3xl">
+      <section className="relative isolate overflow-hidden bg-[#07090F] px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_77%_20%,rgba(22,135,248,0.30),transparent_35%),radial-gradient(circle_at_10%_18%,rgba(101,180,255,0.15),transparent_28%),linear-gradient(180deg,#07090F_0%,#090C14_54%,#07090F_100%)]" />
+        <div className="absolute left-1/2 top-24 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-[#1687F8]/10 blur-3xl" />
+        <div className="mx-auto grid min-h-[700px] max-w-7xl items-center gap-12 lg:grid-cols-[0.94fr_1.06fr]">
+          <div className="home-reveal max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#65B4FF] shadow-[0_12px_40px_rgba(0,0,0,0.2)] backdrop-blur">
               <SparkleDot />
               Original Apple Products
             </div>
-            <h1 className="mt-7 max-w-3xl text-5xl font-bold leading-[1.02] text-white sm:text-6xl lg:text-7xl">
+            <h1 className="mt-8 max-w-3xl text-5xl font-bold leading-[1.01] text-white sm:text-6xl lg:text-7xl xl:text-[5.35rem]">
               Upgrade to Something Better.
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#A8B0BF] sm:text-xl">
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-[#A8B0BF] sm:text-xl">
               Shop iPhones, MacBooks, iPads, Apple Watch, AirPods, gaming
               consoles, and accessories with clear product information,
               trade-in help, and personal buying support from TroyX iStore.
             </p>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <LinkButton href="/iphones" className="w-full sm:w-auto">
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <LinkButton href="/iphones" className="w-full shadow-[0_18px_50px_rgba(22,135,248,0.28)] sm:w-auto">
                 Shop iPhones <ArrowRight className="h-4 w-4" />
               </LinkButton>
               <LinkButton
@@ -358,11 +409,11 @@ export default function HomePage() {
               </a>
             </div>
 
-            <div className="mt-10 grid gap-3 sm:grid-cols-2">
+            <div className="mt-12 grid gap-3 sm:grid-cols-2">
               {heroTrust.map(([Icon, title, description]) => (
                 <div
                   key={title}
-                  className="flex min-h-[92px] items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.055] p-4 backdrop-blur"
+                  className="flex min-h-[96px] items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.055] p-4 shadow-[0_18px_60px_rgba(0,0,0,0.18)] backdrop-blur transition duration-300 hover:border-[#1687F8]/35 hover:bg-white/[0.075]"
                 >
                   <Icon className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#65B4FF]" />
                   <div>
@@ -376,8 +427,9 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative flex min-h-[430px] items-center justify-center rounded-[2rem] border border-white/10 bg-[#0D111B]/86 p-7 shadow-[0_40px_120px_rgba(0,0,0,0.38)] sm:min-h-[540px] sm:p-10">
-            <div className="absolute inset-4 rounded-[1.5rem] border border-white/10 bg-[radial-gradient(circle_at_50%_20%,rgba(101,180,255,0.16),transparent_42%)]" />
+          <div className="home-reveal relative flex min-h-[470px] items-center justify-center rounded-[2.25rem] border border-white/10 bg-[#0D111B]/86 p-7 shadow-[0_44px_130px_rgba(0,0,0,0.42)] sm:min-h-[590px] sm:p-10 lg:min-h-[650px]">
+            <div className="home-glow-breathe absolute h-[68%] w-[68%] rounded-full bg-[#1687F8]/25 blur-[76px]" />
+            <div className="absolute inset-4 rounded-[1.75rem] border border-white/10 bg-[radial-gradient(circle_at_50%_20%,rgba(101,180,255,0.19),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.015))]" />
             <Image
               src={heroImage}
               alt="Premium iPhone model displayed by TroyX iStore"
@@ -385,7 +437,7 @@ export default function HomePage() {
               height={952}
               priority
               sizes="(min-width: 1024px) 34vw, (min-width: 640px) 58vw, 78vw"
-              className="relative z-10 max-h-[380px] w-auto max-w-[82%] rounded-[1.35rem] object-contain shadow-[0_34px_90px_rgba(0,0,0,0.38)] sm:max-h-[470px] lg:max-h-[510px]"
+              className="home-device-float relative z-10 max-h-[420px] w-auto max-w-[88%] rounded-[1.35rem] object-contain drop-shadow-[0_42px_80px_rgba(0,0,0,0.52)] sm:max-h-[540px] lg:max-h-[600px]"
             />
           </div>
         </div>
@@ -429,37 +481,38 @@ export default function HomePage() {
         </div>
       </HomeSection>
 
-      <section className="bg-[#07090F] px-4 py-12 text-white sm:px-6 sm:py-16 lg:px-8">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(135deg,#111722,#10162A_46%,#0D111B)] shadow-[0_30px_100px_rgba(0,0,0,0.3)]">
-          <div className="grid items-center gap-8 p-6 sm:p-8 md:grid-cols-[1fr_0.95fr] lg:p-12">
+      <section className="home-reveal bg-[#07090F] px-4 py-14 text-white sm:px-6 sm:py-20 lg:px-8">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.25rem] border border-white/10 bg-[linear-gradient(135deg,#111722,#10162A_46%,#0D111B)] shadow-[0_34px_120px_rgba(0,0,0,0.38)]">
+          <div className="home-glow-breathe absolute right-0 top-0 h-80 w-80 rounded-full bg-[#1687F8]/18 blur-[86px]" />
+          <div className="relative grid items-center gap-10 p-6 sm:p-9 md:grid-cols-[1fr_0.95fr] lg:p-14">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#65B4FF]">
                 Featured Deal
               </p>
-              <h2 className="mt-3 text-3xl font-bold leading-tight text-white sm:text-5xl">
+              <h2 className="mt-4 text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
                 {featuredDeal.name}
               </h2>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-[#DDE6F3] sm:text-lg">
+              <p className="mt-6 max-w-2xl text-base leading-7 text-[#DDE6F3] sm:text-lg">
                 Flagship iPhone performance with a larger display, pro camera
                 capability, and TroyX support before you choose a configuration.
               </p>
-              <div className="mt-6 grid gap-3 text-sm text-[#A8B0BF] sm:grid-cols-2">
+              <div className="mt-7 grid gap-3 text-sm text-[#A8B0BF] sm:grid-cols-2">
                 {["New or refurbished options", "USB-C charging", "Storage confirmed before sale", "Final price on request"].map(
                   (item) => (
-                    <p key={item} className="flex items-center gap-2">
+                    <p key={item} className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2">
                       <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-[#65B4FF]" />
                       {item}
                     </p>
                   )
                 )}
               </div>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <p className="text-2xl font-bold text-white">
                   {priceLabel(featuredDeal)}
                 </p>
                 <LinkButton
                   href={`/product/${featuredDeal.slug}`}
-                  className="w-full sm:w-auto"
+                  className="w-full shadow-[0_18px_48px_rgba(22,135,248,0.24)] sm:w-auto"
                 >
                   View Details
                 </LinkButton>
@@ -472,14 +525,15 @@ export default function HomePage() {
                 </a>
               </div>
             </div>
-            <div className="relative flex min-h-[360px] items-center justify-center rounded-3xl border border-white/10 bg-[#07090F]/60 p-7 sm:min-h-[440px]">
+            <div className="relative flex min-h-[400px] items-center justify-center rounded-[1.85rem] border border-white/10 bg-[radial-gradient(circle_at_50%_18%,rgba(101,180,255,0.16),transparent_44%),#07090F] p-7 sm:min-h-[500px]">
+              <div className="absolute h-[70%] w-[62%] rounded-full bg-[#1687F8]/18 blur-[70px]" />
               <Image
                 src={featuredDealImage}
                 alt={featuredDeal.name}
                 width={736}
                 height={952}
                 sizes="(min-width: 768px) 36vw, 82vw"
-                className="max-h-[360px] w-auto max-w-[84%] rounded-[1.25rem] object-contain shadow-[0_28px_78px_rgba(0,0,0,0.35)] sm:max-h-[420px]"
+                className="home-device-float relative z-10 max-h-[390px] w-auto max-w-[88%] rounded-[1.25rem] object-contain drop-shadow-[0_38px_82px_rgba(0,0,0,0.44)] sm:max-h-[470px]"
                 loading="lazy"
               />
             </div>
@@ -508,16 +562,37 @@ export default function HomePage() {
         </div>
       </HomeSection>
 
-      <section className="bg-[#0D111B] px-4 py-14 text-white sm:px-6 sm:py-18 lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+      <HomeSection
+        eyebrow="New Arrivals"
+        title="Recently added, kept intentionally short."
+        description="A small update row for fresh catalogue additions, using different products from the best-seller set."
+        action={
+          <LinkButton
+            href="/shop?filter=new"
+            variant="secondary"
+            className="w-full !border-white/10 !bg-[#151D2B] !text-white hover:!border-[#1687F8] md:w-auto"
+          >
+            View New Arrivals <ArrowRight className="h-4 w-4" />
+          </LinkButton>
+        }
+      >
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {newArrivals.map((product) => (
+            <HomeProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </HomeSection>
+
+      <section className="home-reveal bg-[#0D111B] px-4 py-14 text-white sm:px-6 sm:py-20 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#65B4FF]">
               Trade-In and Repair
             </p>
-            <h2 className="mt-3 text-3xl font-bold leading-tight sm:text-5xl">
+            <h2 className="mt-4 text-3xl font-bold leading-tight sm:text-5xl">
               Upgrade Without Starting From Zero.
             </h2>
-            <p className="mt-5 text-base leading-7 text-[#A8B0BF] sm:text-lg">
+            <p className="mt-6 text-base leading-7 text-[#A8B0BF] sm:text-lg">
               Tell us about your current device and receive an estimated
               trade-in assessment. Final value is confirmed after physical
               inspection.
@@ -536,15 +611,23 @@ export default function HomePage() {
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            {tradeInSteps.map((step, index) => (
+            {tradeInSteps.map(([Icon, title, description], index) => (
               <div
-                key={step}
-                className="rounded-2xl border border-white/10 bg-[#111722] p-5"
+                key={title}
+                className="group rounded-[1.5rem] border border-white/10 bg-[#111722] p-5 shadow-[0_18px_70px_rgba(0,0,0,0.22)] transition duration-500 hover:-translate-y-1 hover:border-[#1687F8]/40"
               >
-                <p className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1687F8] text-sm font-bold text-white">
-                  {index + 1}
+                <div className="flex items-center gap-3">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1687F8]/15 text-[#65B4FF] transition duration-500 group-hover:bg-[#1687F8] group-hover:text-white">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#65B4FF]">
+                    Step {index + 1}
+                  </span>
+                </div>
+                <h3 className="mt-5 text-lg font-bold text-white">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[#DDE6F3]">
+                  {description}
                 </p>
-                <p className="mt-4 text-sm leading-6 text-[#DDE6F3]">{step}</p>
               </div>
             ))}
           </div>
@@ -560,9 +643,11 @@ export default function HomePage() {
           {benefits.map(([Icon, title, description]) => (
             <div
               key={title}
-              className="rounded-2xl border border-white/10 bg-[#111722] p-6"
+              className="group rounded-[1.5rem] border border-white/10 bg-[#111722] p-6 shadow-[0_18px_70px_rgba(0,0,0,0.20)] transition duration-500 hover:-translate-y-1 hover:border-[#1687F8]/40 hover:bg-[#151D2B]"
             >
-              <Icon className="h-7 w-7 text-[#65B4FF]" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] text-[#65B4FF] transition duration-500 group-hover:border-[#1687F8]/40 group-hover:bg-[#1687F8] group-hover:text-white">
+                <Icon className="h-6 w-6" />
+              </div>
               <h3 className="mt-5 text-lg font-bold text-white">{title}</h3>
               <p className="mt-3 text-sm leading-6 text-[#A8B0BF]">
                 {description}
@@ -572,8 +657,10 @@ export default function HomePage() {
         </div>
       </HomeSection>
 
-      <section className="bg-[#07090F] px-4 pb-16 pt-8 text-white sm:px-6 sm:pb-20 lg:px-8">
-        <div className="mx-auto max-w-7xl rounded-[2rem] border border-white/10 bg-[#111722] p-7 text-center shadow-[0_30px_90px_rgba(0,0,0,0.28)] sm:p-10 lg:p-14">
+      <section className="home-reveal bg-[#07090F] px-4 pb-16 pt-8 text-white sm:px-6 sm:pb-24 lg:px-8">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.25rem] border border-white/10 bg-[radial-gradient(circle_at_50%_0%,rgba(22,135,248,0.22),transparent_40%),linear-gradient(135deg,#151D2B,#0D111B)] p-7 text-center shadow-[0_34px_110px_rgba(0,0,0,0.34)] sm:p-10 lg:p-16">
+          <div className="home-glow-breathe absolute left-1/2 top-0 h-52 w-80 -translate-x-1/2 rounded-full bg-[#1687F8]/18 blur-[70px]" />
+          <div className="relative">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#65B4FF]">
             Personal Support
           </p>
@@ -611,6 +698,7 @@ export default function HomePage() {
           <p className="mt-7 text-sm text-[#A8B0BF]">
             {siteConfig.address} - {siteConfig.phone}
           </p>
+          </div>
         </div>
       </section>
     </main>

@@ -132,3 +132,70 @@ body {
 .animate-pulse-fast {
   animation: pulse-fast 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+@keyframes home-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes home-device-float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0) scale(1.015);
+  }
+}
+
+@keyframes home-glow-breathe {
+  0%, 100% {
+    opacity: 0.56;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.88;
+    transform: scale(1.08);
+  }
+}
+
+.home-reveal {
+  animation: home-fade-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.home-device-float {
+  animation: home-device-float 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+.home-glow-breathe {
+  animation: home-glow-breathe 8s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.home-premium-surface {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    #111722;
+}
+
+.home-card-shadow {
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.26);
+}
+
+.home-card-shadow:hover {
+  box-shadow: 0 34px 110px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(101, 180, 255, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-reveal,
+  .home-device-float,
+  .home-glow-breathe {
+    animation: none;
+  }
+}
