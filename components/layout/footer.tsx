@@ -94,20 +94,20 @@ export function Footer() {
               {legalDisclaimer}
             </p>
 
-            <div className="mt-6 space-y-2.5 text-xs text-zinc-300">
-              <p className="flex items-center gap-2.5">
+            <div className="mt-6 space-y-3 text-xs text-zinc-300">
+              <p className="flex items-center gap-2.5 leading-5">
                 <MapPin
-                  className="h-4 w-4 text-brand-blue"
+                  className="h-4 w-4 shrink-0 text-brand-blue"
                   aria-hidden="true"
                 />{" "}
                 {siteConfig.address}
               </p>
-              <p className="flex items-center gap-2.5">
-                <Phone className="h-4 w-4 text-brand-blue" aria-hidden="true" />{" "}
+              <p className="flex items-center gap-2.5 leading-5">
+                <Phone className="h-4 w-4 shrink-0 text-brand-blue" aria-hidden="true" />{" "}
                 {siteConfig.phone}
               </p>
-              <p className="flex items-center gap-2.5">
-                <Mail className="h-4 w-4 text-brand-blue" aria-hidden="true" />{" "}
+              <p className="flex items-center gap-2.5 leading-5">
+                <Mail className="h-4 w-4 shrink-0 text-brand-blue" aria-hidden="true" />{" "}
                 {siteConfig.email}
               </p>
             </div>
@@ -128,7 +128,7 @@ export function Footer() {
                     <li key={href}>
                       <Link
                         href={href}
-                        className="text-sm text-zinc-300 transition hover:text-white"
+                        className="text-sm text-zinc-300 transition duration-200 hover:text-[#65B4FF]"
                       >
                         {label}
                       </Link>
@@ -148,7 +148,7 @@ export function Footer() {
                     <li key={href}>
                       <Link
                         href={href}
-                        className="text-sm text-zinc-300 transition hover:text-white"
+                        className="text-sm text-zinc-300 transition duration-200 hover:text-[#65B4FF]"
                       >
                         {label}
                       </Link>
@@ -237,21 +237,21 @@ export function Footer() {
               <Link
                 href={siteConfig.socials.instagram}
                 aria-label="Instagram"
-                className="hover:text-white"
+                className="transition duration-200 hover:-translate-y-0.5 hover:text-[#65B4FF]"
               >
                 <Instagram className="h-4 w-4" />
               </Link>
               <Link
                 href={siteConfig.socials.facebook}
                 aria-label="Facebook"
-                className="hover:text-white"
+                className="transition duration-200 hover:-translate-y-0.5 hover:text-[#65B4FF]"
               >
                 <Facebook className="h-4 w-4" />
               </Link>
               <Link
                 href={siteConfig.socials.x}
                 aria-label="X"
-                className="hover:text-white"
+                className="transition duration-200 hover:-translate-y-0.5 hover:text-[#65B4FF]"
               >
                 <Twitter className="h-4 w-4" />
               </Link>

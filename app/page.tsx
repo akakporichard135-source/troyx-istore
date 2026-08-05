@@ -42,21 +42,24 @@ const heroPhones = [
     image: lineupLeftImage,
     alt: "iPhone 16 Pro in Black Titanium arranged in a dark blue studio",
     placement:
-      "left-[2%] top-24 z-10 h-[48%] max-h-[280px] opacity-80 blur-[0.1px] sm:left-[6%] sm:top-24 sm:h-[56%] md:left-0 md:top-10 md:h-[68%] md:max-h-[390px]"
+      "left-[1%] top-32 z-10 h-[40%] max-h-[255px] opacity-[0.55] blur-[1.1px] sm:left-[5%] sm:top-32 sm:h-[48%] md:left-[2%] md:top-24 md:h-[56%] md:max-h-[350px]",
+    imageClass: "home-hero-support-device"
   },
   {
     name: "iPhone 16 Pro Max",
     image: lineupMainImage,
     alt: "iPhone 16 Pro Max in Natural Titanium, rear view",
     placement:
-      "left-1/2 top-8 z-20 h-[76%] max-h-[520px] -translate-x-1/2 sm:top-4 sm:h-[84%] md:top-0 md:h-[92%] md:max-h-[560px]"
+      "left-1/2 top-4 z-20 h-[88%] max-h-[610px] -translate-x-1/2 sm:top-0 sm:h-[94%] md:h-[108%] md:max-h-[670px]",
+    imageClass: "home-hero-main-device"
   },
   {
     name: "iPhone 16",
     image: lineupRightImage,
     alt: "iPhone 16 in Ultramarine blue arranged in a dark blue studio",
     placement:
-      "right-[2%] top-28 z-10 h-[46%] max-h-[270px] opacity-80 blur-[0.1px] sm:right-[6%] sm:top-28 sm:h-[54%] md:right-0 md:top-14 md:h-[64%] md:max-h-[370px]"
+      "right-[1%] top-36 z-10 h-[38%] max-h-[245px] opacity-[0.55] blur-[1.1px] sm:right-[5%] sm:top-[8.5rem] sm:h-[46%] md:right-[2%] md:top-28 md:h-[54%] md:max-h-[335px]",
+    imageClass: "home-hero-support-device"
   }
 ];
 
@@ -125,19 +128,20 @@ function SparkleDot() {
 function HeroIphoneShowcase() {
   return (
     <div className="home-reveal relative min-h-[420px] overflow-visible sm:min-h-[520px] lg:min-h-[650px]">
-      <div className="home-glow-breathe absolute left-1/2 top-6 h-[70%] w-[74%] -translate-x-1/2 rounded-full bg-[#1687F8]/25 blur-[90px]" />
-      <div className="absolute inset-x-[10%] bottom-[12%] h-16 rounded-full bg-[#1687F8]/14 blur-[26px]" />
-      <div className="absolute inset-x-[14%] bottom-[9%] h-8 rounded-full bg-black/70 blur-2xl" />
+      <div className="home-glow-breathe absolute left-1/2 top-2 h-[82%] w-[82%] -translate-x-1/2 rounded-full bg-[#1687F8]/28 blur-[104px]" />
+      <div className="absolute left-1/2 top-[13%] h-[68%] w-[22%] -translate-x-1/2 rounded-full bg-[#65B4FF]/20 blur-[38px]" />
+      <div className="home-hero-light-sweep absolute left-[18%] top-[18%] h-[56%] w-[64%] rounded-full bg-gradient-to-r from-transparent via-white/10 to-transparent blur-2xl" />
+      <div className="absolute inset-x-[8%] bottom-[12%] h-20 rounded-full bg-[#1687F8]/16 blur-[28px]" />
+      <div className="absolute inset-x-[13%] bottom-[8%] h-10 rounded-full bg-black/72 blur-2xl" />
       <div className="absolute bottom-[7%] left-1/2 h-px w-[76%] -translate-x-1/2 bg-gradient-to-r from-transparent via-[#65B4FF]/30 to-transparent" />
 
       {heroPhones.map((phone, index) => (
         <div
           key={phone.name}
           className={cn(
-            "home-device-float absolute flex items-center justify-center",
+            "absolute flex items-center justify-center",
             phone.placement
           )}
-          style={{ animationDelay: `${index * 0.65}s` }}
         >
           <Image
             src={phone.image}
@@ -150,7 +154,11 @@ function HeroIphoneShowcase() {
                 ? "(min-width: 1024px) 35vw, 78vw"
                 : "(min-width: 1024px) 20vw, 34vw"
             }
-            className="h-full w-auto object-contain drop-shadow-[0_42px_90px_rgba(0,0,0,0.58)]"
+            className={cn(
+              "home-device-float h-full w-auto object-contain drop-shadow-[0_42px_90px_rgba(0,0,0,0.58)]",
+              phone.imageClass
+            )}
+            style={{ animationDelay: `${index * 0.65}s` }}
           />
         </div>
       ))}
@@ -209,9 +217,10 @@ function CinematicProductSection({
           )}
         </div>
 
-        <div className="relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_50%_18%,rgba(101,180,255,0.20),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.01))] p-6 sm:min-h-[420px]">
-          <div className="home-glow-breathe absolute h-[60%] w-[62%] rounded-full bg-[#1687F8]/18 blur-[76px]" />
-          <div className="absolute inset-x-[22%] bottom-10 h-8 rounded-full bg-black/60 blur-2xl" />
+        <div className="home-product-stage relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_50%_18%,rgba(101,180,255,0.24),transparent_44%),linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.012))] p-4 sm:min-h-[420px] sm:p-5">
+          <div className="home-glow-breathe absolute h-[66%] w-[68%] rounded-full bg-[#1687F8]/22 blur-[82px]" />
+          <div className="absolute inset-x-[18%] bottom-9 h-10 rounded-full bg-black/64 blur-2xl" />
+          <div className="absolute inset-x-[16%] bottom-10 h-px bg-gradient-to-r from-transparent via-[#65B4FF]/22 to-transparent" />
           <Image
             src={section.image}
             alt={section.imageAlt}
@@ -219,7 +228,7 @@ function CinematicProductSection({
             height={720}
             sizes="(min-width: 1024px) 42vw, 88vw"
             className={cn(
-              "home-device-float relative z-10 max-h-[330px] w-auto max-w-[92%] object-contain drop-shadow-[0_38px_82px_rgba(0,0,0,0.44)] sm:max-h-[390px]",
+              "home-device-float relative z-10 max-h-[365px] w-auto max-w-[96%] object-contain drop-shadow-[0_42px_88px_rgba(0,0,0,0.50)] sm:max-h-[440px]",
               section.pending && "max-w-[320px]"
             )}
             loading="lazy"
@@ -247,9 +256,13 @@ function CompactCta({
 }) {
   return (
     <section className="home-reveal bg-[#07090F] px-4 py-8 text-white sm:px-6 sm:py-12 lg:px-8">
-      <div className="mx-auto grid max-w-7xl gap-6 overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_15%,rgba(22,135,248,0.22),transparent_34%),linear-gradient(135deg,#111722,#0D111B)] p-6 shadow-[0_28px_100px_rgba(0,0,0,0.32)] sm:p-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-        <div className="flex h-20 w-20 items-center justify-center rounded-[1.5rem] border border-white/10 bg-white/[0.06] text-[#65B4FF] shadow-[0_22px_80px_rgba(22,135,248,0.18)]">
-          <Icon className="h-9 w-9" />
+      <div className="mx-auto grid max-w-7xl gap-6 overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_15%,rgba(22,135,248,0.26),transparent_35%),linear-gradient(135deg,#111722,#0D111B)] p-6 shadow-[0_28px_100px_rgba(0,0,0,0.32)] sm:p-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+        <div className="flex h-24 w-28 items-center justify-center rounded-[1.5rem] border border-white/10 bg-white/[0.06] text-[#65B4FF] shadow-[0_22px_80px_rgba(22,135,248,0.18)]">
+          {eyebrow === "Trade-In" ? (
+            <TradeInIllustration />
+          ) : (
+            <Icon className="h-9 w-9" />
+          )}
         </div>
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#65B4FF]">
@@ -276,6 +289,24 @@ function CompactCta({
         </div>
       </div>
     </section>
+  );
+}
+
+function TradeInIllustration() {
+  return (
+    <div className="relative h-20 w-24" aria-hidden="true">
+      <div className="absolute left-1 top-3 h-14 w-8 rotate-[-8deg] rounded-[0.7rem] border border-white/15 bg-[linear-gradient(160deg,#151D2B,#03060B)] shadow-[0_18px_42px_rgba(0,0,0,0.34)]">
+        <div className="absolute left-2 top-2 h-2 w-2 rounded-full bg-[#65B4FF]/70" />
+        <div className="absolute inset-x-1 bottom-2 h-1 rounded-full bg-[#65B4FF]/20" />
+      </div>
+      <div className="absolute right-1 top-1 h-[4.25rem] w-9 rotate-[7deg] rounded-[0.8rem] border border-[#65B4FF]/30 bg-[linear-gradient(160deg,#D9E8F8,#7CA7DD_48%,#15233C)] shadow-[0_20px_54px_rgba(22,135,248,0.28)]">
+        <div className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-black/70 ring-1 ring-white/25" />
+        <div className="absolute inset-x-1.5 bottom-2 h-1 rounded-full bg-white/30" />
+      </div>
+      <div className="absolute left-1/2 top-1/2 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#1687F8] text-white shadow-[0_0_28px_rgba(22,135,248,0.55)]">
+        <RefreshCw className="h-4 w-4" />
+      </div>
+    </div>
   );
 }
 
@@ -351,7 +382,7 @@ export default function HomePage() {
       />
 
       <section className="home-reveal bg-[#07090F] px-4 pb-14 pt-8 text-white sm:px-6 sm:pb-20 lg:px-8">
-        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.25rem] border border-white/10 bg-[radial-gradient(circle_at_50%_0%,rgba(22,135,248,0.22),transparent_40%),linear-gradient(135deg,#151D2B,#0D111B)] p-7 text-center shadow-[0_34px_110px_rgba(0,0,0,0.34)] sm:p-10 lg:p-14">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.25rem] border border-white/10 bg-[radial-gradient(circle_at_50%_0%,rgba(22,135,248,0.28),transparent_42%),radial-gradient(circle_at_18%_88%,rgba(101,180,255,0.10),transparent_32%),linear-gradient(135deg,#151D2B,#0D111B)] p-7 text-center shadow-[0_34px_110px_rgba(0,0,0,0.34)] sm:p-10 lg:p-14">
           <div className="home-glow-breathe absolute left-1/2 top-0 h-52 w-80 -translate-x-1/2 rounded-full bg-[#1687F8]/18 blur-[70px]" />
           <div className="relative">
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#65B4FF]">
@@ -368,7 +399,7 @@ export default function HomePage() {
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <a
                 href={whatsappHref}
-                className="focus-ring inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#1687F8] px-5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-600 sm:w-auto"
+                className="focus-ring inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#1687F8] px-5 text-sm font-bold text-white shadow-[0_18px_52px_rgba(22,135,248,0.34)] transition duration-300 hover:-translate-y-0.5 hover:bg-blue-600 hover:shadow-[0_24px_70px_rgba(22,135,248,0.42)] sm:w-auto"
               >
                 <MessageCircle className="h-4 w-4" />
                 Chat on WhatsApp
@@ -376,14 +407,14 @@ export default function HomePage() {
               <LinkButton
                 href="/contact"
                 variant="secondary"
-                className="w-full !border-white/10 !bg-[#151D2B] !text-white hover:!border-[#1687F8] sm:w-auto"
+                className="w-full !border-white/10 !bg-[#151D2B] !text-white hover:!-translate-y-0.5 hover:!border-[#1687F8] hover:!shadow-[0_18px_48px_rgba(22,135,248,0.18)] sm:w-auto"
               >
                 Contact Support
               </LinkButton>
               <LinkButton
                 href="/support"
                 variant="secondary"
-                className="w-full !border-white/10 !bg-[#151D2B] !text-white hover:!border-[#1687F8] sm:w-auto"
+                className="w-full !border-white/10 !bg-[#151D2B] !text-white hover:!-translate-y-0.5 hover:!border-[#1687F8] hover:!shadow-[0_18px_48px_rgba(22,135,248,0.18)] sm:w-auto"
               >
                 Browse Support
               </LinkButton>

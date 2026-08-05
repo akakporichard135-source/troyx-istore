@@ -150,10 +150,10 @@ body {
 
 @keyframes home-device-float {
   0%, 100% {
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 0, 0) rotateZ(-0.35deg) scale(1);
   }
   50% {
-    transform: translate3d(0, -14px, 0) scale(1.015);
+    transform: translate3d(0, -14px, 0) rotateZ(0.35deg) scale(1.018);
   }
 }
 
@@ -188,6 +188,17 @@ body {
   }
 }
 
+@keyframes home-hero-light-sweep {
+  0%, 100% {
+    opacity: 0.18;
+    transform: translate3d(-8%, 0, 0) rotate(-8deg);
+  }
+  50% {
+    opacity: 0.34;
+    transform: translate3d(8%, -3%, 0) rotate(-4deg);
+  }
+}
+
 .home-reveal {
   animation: home-fade-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -197,9 +208,33 @@ body {
   will-change: transform;
 }
 
+.home-hero-main-device {
+  filter: drop-shadow(0 50px 100px rgba(0, 0, 0, 0.64)) drop-shadow(0 0 32px rgba(101, 180, 255, 0.18));
+}
+
+.home-hero-support-device {
+  filter: drop-shadow(0 32px 72px rgba(0, 0, 0, 0.54)) drop-shadow(0 0 18px rgba(101, 180, 255, 0.12));
+}
+
 .home-glow-breathe {
   animation: home-glow-breathe 8s ease-in-out infinite;
   will-change: transform, opacity;
+}
+
+.home-hero-light-sweep {
+  animation: home-hero-light-sweep 10s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.home-product-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(115deg, transparent 18%, rgba(255, 255, 255, 0.075) 45%, transparent 62%),
+    radial-gradient(circle at 50% 92%, rgba(101, 180, 255, 0.16), transparent 38%);
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 .home-hero-camera-drift {
@@ -311,6 +346,7 @@ body {
   .home-device-float,
   .home-glow-breathe,
   .home-hero-camera-drift,
+  .home-hero-light-sweep,
   .home-hero-particles {
     animation: none;
   }
