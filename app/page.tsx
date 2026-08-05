@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import {
   ArrowRight,
   BadgeCheck,
@@ -19,6 +21,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { HeroVideo } from "@/components/home/hero-video";
 import type { Product } from "@/types";
 import { LinkButton } from "@/components/ui/button";
 import { products } from "@/database/products";
@@ -126,6 +129,9 @@ const benefits: Array<[LucideIcon, string, string]> = [
 
 const heroImage = "/images/home/hero-iphone-17-pro-max.webp";
 const featuredDealImage = "/images/home/featured-iphone-16-pro-max-cutout.webp";
+const heroVideoWebm = "/videos/hero/iphone-cinematic-loop.webm";
+const heroVideoMp4 = "/videos/hero/iphone-cinematic-loop.mp4";
+const heroVideoPoster = "/images/hero/iphone-cinematic-poster.webp";
 
 const featuredIphoneSlugs = [
   "iphone-16-pro-max",
@@ -173,6 +179,10 @@ const tradeInSteps: Array<[LucideIcon, string, string]> = [
 
 const whatsappHref =
   "https://wa.me/233207137437?text=Hello%20TroyX%20iStore%2C%20I%20need%20help%20choosing%20an%20Apple%20device.";
+
+function publicFileExists(publicPath: string) {
+  return existsSync(join(process.cwd(), "public", publicPath.replace(/^\//, "")));
+}
 
 function getProductsBySlugs(slugs: string[]) {
   return slugs
@@ -387,6 +397,10 @@ export default function HomePage() {
   const iphoneLineup = getProductsBySlugs(featuredIphoneSlugs);
   const bestSellers = getProductsBySlugs(bestSellerSlugs);
   const newArrivals = getProductsBySlugs(newArrivalSlugs);
+  const hasHeroWebm = publicFileExists(heroVideoWebm);
+  const hasHeroMp4 = publicFileExists(heroVideoMp4);
+  const hasHeroPoster = publicFileExists(heroVideoPoster);
+  const heroPosterSrc = hasHeroPoster ? heroVideoPoster : heroImage;
   const featuredDealSpecs = [
     featuredDeal.specs.Display,
     featuredDeal.specs.Chip,
@@ -452,19 +466,14 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="home-reveal relative flex min-h-[420px] items-center justify-center rounded-[2rem] border border-white/10 bg-[#0D111B]/86 p-5 shadow-[0_44px_130px_rgba(0,0,0,0.42)] sm:min-h-[590px] sm:p-10 lg:min-h-[650px]">
-            <div className="home-glow-breathe absolute h-[68%] w-[68%] rounded-full bg-[#1687F8]/25 blur-[76px]" />
-            <div className="absolute inset-4 rounded-[1.75rem] border border-white/10 bg-[radial-gradient(circle_at_50%_20%,rgba(101,180,255,0.19),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.015))]" />
-            <Image
-              src={heroImage}
-              alt="iPhone 17 Pro Max in orange, rear view"
-              width={736}
-              height={952}
-              priority
-              sizes="(min-width: 1024px) 34vw, (min-width: 640px) 58vw, 78vw"
-              className="home-device-float relative z-10 max-h-[390px] w-auto max-w-[88%] rounded-[1.35rem] object-contain drop-shadow-[0_42px_80px_rgba(0,0,0,0.52)] sm:max-h-[540px] lg:max-h-[600px]"
-            />
-          </div>
+          <HeroVideo
+            alt="iPhone 17 Pro Max in orange, rear view"
+            fallbackImageSrc={heroImage}
+            hasVideo={hasHeroWebm || hasHeroMp4}
+            mp4Src={hasHeroMp4 ? heroVideoMp4 : undefined}
+            posterSrc={heroPosterSrc}
+            webmSrc={hasHeroWebm ? heroVideoWebm : undefined}
+          />
         </div>
       </section>
 
@@ -557,15 +566,16 @@ export default function HomePage() {
                 </a>
               </div>
             </div>
-            <div className="relative flex min-h-[320px] items-center justify-center rounded-[1.6rem] border border-white/10 bg-[radial-gradient(circle_at_50%_18%,rgba(101,180,255,0.16),transparent_44%),#07090F] p-5 sm:min-h-[390px] md:min-h-[430px]">
+            <div className="relative flex min-h-[320px] items-center justify-center rounded-[1.6rem] border border-white/10 bg-[radial-gradient(circle_at_50%_18%,rgba(101,180,255,0.18),transparent_44%),#07090F] p-5 sm:min-h-[390px] md:min-h-[430px]">
               <div className="absolute h-[70%] w-[62%] rounded-full bg-[#1687F8]/18 blur-[70px]" />
+              <div className="absolute inset-x-[22%] bottom-7 h-8 rounded-full bg-black/50 blur-2xl" />
               <Image
                 src={featuredDealImage}
                 alt="iPhone 16 Pro Max in Natural Titanium, rear view"
                 width={736}
                 height={952}
                 sizes="(min-width: 768px) 36vw, 82vw"
-                className="home-device-float relative z-10 max-h-[330px] w-auto max-w-[92%] rounded-[1.25rem] object-contain drop-shadow-[0_38px_82px_rgba(0,0,0,0.44)] sm:max-h-[390px] md:max-h-[430px]"
+                className="home-device-float relative z-10 max-h-[350px] w-auto max-w-[94%] rounded-[1.25rem] object-contain drop-shadow-[0_38px_82px_rgba(0,0,0,0.44)] sm:max-h-[410px] md:max-h-[450px]"
                 loading="lazy"
               />
             </div>
