@@ -26,9 +26,12 @@ type CinematicSection = {
   pending?: boolean;
 };
 
-const verifiedIphoneImage =
-  "/images/home/featured-iphone-16-pro-max-cutout.webp";
-const pendingProductImage = "/images/products/verified-image-pending.webp";
+const lineupMainImage =
+  "/images/home/lineup/iphone-lineup-main-natural-titanium.webp";
+const lineupLeftImage =
+  "/images/home/lineup/iphone-lineup-left-black-titanium.webp";
+const lineupRightImage =
+  "/images/home/lineup/iphone-lineup-right-ultramarine.webp";
 
 const whatsappHref =
   "https://wa.me/233207137437?text=Hello%20TroyX%20iStore%2C%20I%20need%20help%20choosing%20the%20right%20device.";
@@ -36,24 +39,24 @@ const whatsappHref =
 const heroPhones = [
   {
     name: "iPhone 16 Pro",
-    image: pendingProductImage,
-    alt: "Verified product image pending for iPhone 16 Pro",
+    image: lineupLeftImage,
+    alt: "iPhone 16 Pro in Black Titanium arranged in a dark blue studio",
     placement:
-      "left-0 top-10 z-10 hidden h-[68%] max-h-[390px] opacity-80 blur-[0.1px] md:flex"
+      "left-[2%] top-24 z-10 h-[48%] max-h-[280px] opacity-80 blur-[0.1px] sm:left-[6%] sm:top-24 sm:h-[56%] md:left-0 md:top-10 md:h-[68%] md:max-h-[390px]"
   },
   {
     name: "iPhone 16 Pro Max",
-    image: verifiedIphoneImage,
+    image: lineupMainImage,
     alt: "iPhone 16 Pro Max in Natural Titanium, rear view",
     placement:
-      "left-1/2 top-0 z-20 h-[84%] max-h-[560px] -translate-x-1/2 md:h-[92%]"
+      "left-1/2 top-8 z-20 h-[76%] max-h-[520px] -translate-x-1/2 sm:top-4 sm:h-[84%] md:top-0 md:h-[92%] md:max-h-[560px]"
   },
   {
     name: "iPhone 16",
-    image: pendingProductImage,
-    alt: "Verified product image pending for iPhone 16",
+    image: lineupRightImage,
+    alt: "iPhone 16 in Ultramarine blue arranged in a dark blue studio",
     placement:
-      "right-0 top-14 z-10 hidden h-[64%] max-h-[370px] opacity-80 blur-[0.1px] md:flex"
+      "right-[2%] top-28 z-10 h-[46%] max-h-[270px] opacity-80 blur-[0.1px] sm:right-[6%] sm:top-28 sm:h-[54%] md:right-0 md:top-14 md:h-[64%] md:max-h-[370px]"
   }
 ];
 
@@ -63,43 +66,43 @@ const cinematicSections: CinematicSection[] = [
     headline: "Light. Powerful. Ready for More.",
     description:
       "Explore thin, capable MacBook Air options for school, work, travel, and everyday creative tasks with TroyX guidance before you buy.",
-    image: pendingProductImage,
-    imageAlt: "Verified product image pending for MacBook Air",
+    image: "/images/home/macbook-air/macbook-air-open-midnight.webp",
+    imageAlt: "Open MacBook Air in Midnight finish in a dark blue studio",
     primaryLabel: "Explore MacBook Air",
     primaryHref: "/shop?category=MacBook&q=MacBook%20Air",
     secondaryLabel: "View All Macs",
     secondaryHref: "/macbooks",
     tone: "air",
-    pending: true
+    pending: false
   },
   {
     eyebrow: "iPad Air",
     headline: "Powerful Creativity in Your Hands.",
     description:
       "Find iPad Air and the broader iPad range for note-taking, design, entertainment, study, and flexible everyday productivity.",
-    image: pendingProductImage,
-    imageAlt: "Verified product image pending for iPad Air",
+    image: "/images/home/ipad-air/ipad-air-front-side-blue.webp",
+    imageAlt: "Blue iPad Air shown from the front and side in a dark studio",
     primaryLabel: "Explore iPad Air",
     primaryHref: "/shop?category=iPad&q=iPad%20Air",
     secondaryLabel: "View All iPads",
     secondaryHref: "/ipads",
     tone: "ipad",
     reverse: true,
-    pending: true
+    pending: false
   },
   {
     eyebrow: "MacBook Pro",
     headline: "Built for Serious Performance.",
     description:
       "Compare MacBook Pro options for demanding work, creative production, development, and high-performance daily use.",
-    image: pendingProductImage,
-    imageAlt: "Verified product image pending for MacBook Pro",
+    image: "/images/home/macbook-pro/macbook-pro-open-space-black.webp",
+    imageAlt: "Open MacBook Pro in Space Black in a dark studio setting",
     primaryLabel: "Explore MacBook Pro",
     primaryHref: "/shop?category=MacBook&q=MacBook%20Pro",
     secondaryLabel: "Compare Macs",
     secondaryHref: "/compare",
     tone: "pro",
-    pending: true
+    pending: false
   }
 ];
 
@@ -131,7 +134,7 @@ function HeroIphoneShowcase() {
         <div
           key={phone.name}
           className={cn(
-            "home-device-float absolute items-center justify-center",
+            "home-device-float absolute flex items-center justify-center",
             phone.placement
           )}
           style={{ animationDelay: `${index * 0.65}s` }}
@@ -147,18 +150,10 @@ function HeroIphoneShowcase() {
                 ? "(min-width: 1024px) 35vw, 78vw"
                 : "(min-width: 1024px) 20vw, 34vw"
             }
-            className={cn(
-              "h-full w-auto object-contain drop-shadow-[0_42px_90px_rgba(0,0,0,0.58)]",
-              phone.image === pendingProductImage ? "max-w-[240px]" : ""
-            )}
+            className="h-full w-auto object-contain drop-shadow-[0_42px_90px_rgba(0,0,0,0.58)]"
           />
         </div>
       ))}
-
-      <div className="absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-[11px] font-semibold text-[#A8B0BF] backdrop-blur">
-        <SparkleDot />
-        Verified imagery pending for supporting models
-      </div>
     </div>
   );
 }
