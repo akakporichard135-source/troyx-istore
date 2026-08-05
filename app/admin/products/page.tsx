@@ -483,7 +483,7 @@ export default function ProductsManagerPage() {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="p-2 border border-black/5 dark:border-white/5 bg-white dark:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-750 transition"
+                className="rounded-lg border border-black/5 bg-white p-2 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/5 dark:bg-zinc-800 dark:hover:bg-zinc-700"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
               </button>
@@ -492,7 +492,7 @@ export default function ProductsManagerPage() {
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
                 disabled={currentPage === totalPages}
-                className="p-2 border border-black/5 dark:border-white/5 bg-white dark:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-750 transition"
+                className="rounded-lg border border-black/5 bg-white p-2 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/5 dark:bg-zinc-800 dark:hover:bg-zinc-700"
               >
                 <ChevronRight className="h-3.5 w-3.5" />
               </button>

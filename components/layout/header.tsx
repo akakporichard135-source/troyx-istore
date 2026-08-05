@@ -40,9 +40,9 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-white/88 shadow-sm shadow-black/[0.02] backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-950/86">
+    <header className="sticky top-0 z-50 border-b border-black/5 bg-white/95 shadow-sm shadow-black/[0.02] backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/95">
       <nav
-        className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
+        className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:h-16 sm:px-6 lg:px-8"
         aria-label="Main"
       >
         <Link href="/" className="focus-ring flex items-center gap-3 rounded-full">

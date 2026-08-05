@@ -22,9 +22,9 @@ export function RepairBookingForm() {
         <label className="grid gap-2 text-sm font-semibold">Preferred date<Input name="preferredDate" type="date" required /></label>
       </div>
       <label className="grid gap-2 text-sm font-semibold">Describe issue<Textarea name="issue" placeholder="Tell us what happened, what you see, and when it started." required /></label>
-      <label className="grid gap-2 text-sm font-semibold">Photo URL placeholder<Input name="photoUrl" placeholder="Cloudinary upload URL after signed upload" /></label>
+      <label className="grid gap-2 text-sm font-semibold">Photo or video link<Input name="photoUrl" placeholder="Optional link showing the issue" /></label>
       <Button type="submit"><CalendarCheck className="h-4 w-4" /> Book appointment</Button>
-      {submitted && <p className="rounded-2xl bg-emerald-50 p-4 text-sm text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200">Booking request saved. Email confirmation hooks are ready to connect.</p>}
+      {submitted && <p className="rounded-2xl bg-emerald-50 p-4 text-sm text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200">Booking request received. TroyX iStore will review the issue and confirm the appointment details.</p>}
     </form>
   );
 }

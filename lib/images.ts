@@ -56,7 +56,7 @@ export const productImages: Record<string, string[]> = {
   "iphone-16-pro": ["/images/iphone/iphone-16-pro.webp"],
   "iphone-16-pro-max": ["/images/iphone/iphone-16-pro-max.webp"],
   "iphone-17": ["/images/iphone/iphone-17.webp"],
-  "iphone-air": ["/images/iphone/iphone-17-air.webp"],
+  "iphone-17-air": ["/images/iphone/iphone-17-air.webp"],
   "iphone-17-pro": ["/images/iphone/iphone-17-pro.webp"],
   "iphone-17-pro-max": ["/images/iphone/iphone-17-pro-max.webp"]
 };

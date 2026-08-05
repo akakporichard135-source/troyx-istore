@@ -8,16 +8,37 @@ export const metadata: Metadata = {
   description: "Shop genuine Apple devices and premium accessories from TroyX iStore."
 };
 
-export default function ShopPage() {
+type ShopPageProps = {
+  searchParams?: Promise<{
+    category?: string | string[];
+    filter?: string | string[];
+    q?: string | string[];
+    sort?: string | string[];
+  }>;
+};
+
+export default async function ShopPage({ searchParams }: ShopPageProps) {
+  const params = await searchParams;
+  const category =
+    typeof params?.category === "string" ? params.category : undefined;
+  const filter = typeof params?.filter === "string" ? params.filter : undefined;
+  const q = typeof params?.q === "string" ? params.q : undefined;
+  const sort = typeof params?.sort === "string" ? params.sort : undefined;
+
   return (
     <>
       <PageHeader
         eyebrow="Shop"
         title="Find the right device, accessory, and condition."
-        description="Use advanced search, filters, sorting, grid or list views, recommendations, and recently viewed support powered by the local catalog."
+        description="Search, filter, sort, and compare a focused catalogue of Apple devices, gaming products, and accessories."
       />
       <Section>
-        <ShopBrowser />
+        <ShopBrowser
+          initialCategory={category}
+          initialFilter={filter}
+          initialQuery={q}
+          initialSort={sort}
+        />
       </Section>
     </>
   );

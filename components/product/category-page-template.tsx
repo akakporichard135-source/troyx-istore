@@ -45,7 +45,7 @@ export function CategoryPageTemplate({ route }: { route: CategoryRoute }) {
             ["Pricing", "Contact for price until final inventory is confirmed"],
             [
               "Images",
-              "Local catalogue assets, with placeholders only where review is needed"
+              "Verified local assets are used where available; items awaiting approved media are clearly marked"
             ]
           ].map(([label, value]) => (
             <div

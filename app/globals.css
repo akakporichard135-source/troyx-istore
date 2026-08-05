@@ -34,6 +34,10 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+section {
+  scroll-margin-top: 5rem;
+}
+
 body {
   margin: 0;
   background: var(--background);
@@ -190,6 +194,80 @@ body {
 
 .home-card-shadow:hover {
   box-shadow: 0 34px 110px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(101, 180, 255, 0.14);
+}
+
+.home-product-rail {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: visible;
+  overscroll-behavior-inline: contain;
+  scroll-behavior: smooth;
+  scroll-padding-inline: 1rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.home-product-rail::-webkit-scrollbar,
+.home-compact-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.home-product-rail-item {
+  flex: 0 0 auto;
+  width: 86vw;
+  min-width: 280px;
+  max-width: 360px;
+  scroll-snap-align: start;
+}
+
+.home-compact-rail {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: visible;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.home-compact-rail-item {
+  flex: 0 0 auto;
+  width: min(82vw, 320px);
+  scroll-snap-align: start;
+}
+
+@media (min-width: 430px) {
+  .home-product-rail-item {
+    width: 80vw;
+  }
+}
+
+@media (min-width: 480px) {
+  .home-product-rail-item {
+    width: 78vw;
+  }
+}
+
+@media (min-width: 768px) {
+  .home-product-rail,
+  .home-compact-rail {
+    display: grid;
+    gap: 1.25rem;
+    overflow: visible;
+    scroll-padding-inline: 0;
+    scroll-snap-type: none;
+  }
+
+  .home-product-rail-item,
+  .home-compact-rail-item {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    scroll-snap-align: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

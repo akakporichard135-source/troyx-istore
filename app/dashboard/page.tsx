@@ -388,8 +388,7 @@ export default function CustomerDashboardPage() {
                   <ProductGrid products={recentlyViewedProducts} />
                 ) : (
                   <div className="py-12 text-center text-xs text-zinc-500 rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-zinc-900">
-                    Products you view will appear here for quick comparison
-                    later.
+                    Products you view will appear here for quick comparison.
                   </div>
                 )}
               </div>
@@ -506,9 +505,8 @@ export default function CustomerDashboardPage() {
                   Delete customer account?
                 </h2>
                 <p className="text-xs leading-relaxed text-zinc-500">
-                  This demo action shows the confirmation step. Production
-                  account deletion should be handled after identity
-                  verification.
+                  For your safety, account deletion should be completed only
+                  after identity verification by TroyX iStore support.
                 </p>
               </div>
             </div>

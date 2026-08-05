@@ -320,7 +320,7 @@ export default function EditProductPage({ params }: Props) {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="grid gap-1.5 text-xs font-bold text-zinc-500">
-                Regular Price (â‚µ)
+                Regular Price (GHS)
                 <input
                   type="number"
                   name="price"
@@ -332,7 +332,7 @@ export default function EditProductPage({ params }: Props) {
               </label>
 
               <label className="grid gap-1.5 text-xs font-bold text-zinc-500">
-                Compare At Price (â‚µ)
+                Compare At Price (GHS)
                 <input
                   type="number"
                   name="compareAtPrice"

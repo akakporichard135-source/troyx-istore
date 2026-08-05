@@ -26,9 +26,9 @@ export function cn(...inputs: ClassValue[]) {
 export function formatCurrency(value: number) {
   if (value <= 0) return "Contact for price";
 
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-GH", {
     style: "currency",
-    currency: "USD",
+    currency: "GHS",
     maximumFractionDigits: 0
   }).format(value);
 }

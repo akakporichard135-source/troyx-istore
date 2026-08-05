@@ -190,7 +190,7 @@ export default function NewProductPage() {
         <div className="flex gap-3">
           <Link
             href="/admin/products"
-            className="px-4 py-2 border border-black/10 text-xs font-bold text-zinc-700 bg-white hover:bg-zinc-50 rounded-full dark:border-white/10 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-750 transition"
+            className="rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-bold text-zinc-700 transition hover:bg-zinc-50 dark:border-white/10 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
           >
             Cancel
           </Link>
@@ -246,7 +246,7 @@ export default function NewProductPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="grid gap-1.5 text-xs font-bold text-zinc-500">
-                Regular Price (â‚µ) *
+                Regular Price (GHS) *
                 <input
                   type="number"
                   name="price"
@@ -259,7 +259,7 @@ export default function NewProductPage() {
               </label>
 
               <label className="grid gap-1.5 text-xs font-bold text-zinc-500">
-                Compare At Price (â‚µ)
+                Compare At Price (GHS)
                 <input
                   type="number"
                   name="compareAtPrice"

@@ -32,7 +32,12 @@ export function AuthForm({ mode }: { mode: Mode }) {
           <Input name="password" type="password" required minLength={8} />
         </label>
       )}
-      {submitted && <p className="rounded-2xl bg-emerald-50 p-3 text-sm text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200">Authentication flow placeholder is ready for Supabase Auth.</p>}
+      {submitted && (
+        <p className="rounded-2xl bg-emerald-50 p-3 text-sm text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200">
+          Request received. TroyX iStore will complete secure account access
+          after customer verification is enabled.
+        </p>
+      )}
       <Button type="submit">{mode === "login" ? "Sign in" : mode === "register" ? "Create account" : "Send reset link"}</Button>
     </form>
   );

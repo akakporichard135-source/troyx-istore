@@ -59,12 +59,12 @@ export function CartManager() {
           : found.value;
       setAppliedDiscount(discountVal);
       setCouponMsg(
-        `Coupon ${found.code} applied! Discount: GH₵ ${discountVal.toFixed(0)}`
+        `Coupon ${found.code} applied. Discount: ${formatCurrency(discountVal)}`
       );
     } else if (couponCode.trim().toUpperCase() === "TROYX10") {
       const discountVal = (subtotal * 10) / 100;
       setAppliedDiscount(discountVal);
-      setCouponMsg("Promo Code TROYX10 applied! (10% Off)");
+      setCouponMsg("Promo code TROYX10 applied. 10% off.");
     } else {
       setCouponMsg("Invalid or expired promo code.");
     }

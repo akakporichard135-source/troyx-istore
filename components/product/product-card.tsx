@@ -282,7 +282,7 @@ export function ProductCard({
                 <div className="flex gap-3">
                   <Link
                     href={`/product/${product.slug}`}
-                    className="flex-1 py-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-750 rounded-full text-xs font-bold text-center text-zinc-800 dark:text-white transition"
+                    className="flex-1 rounded-full bg-zinc-100 py-2.5 text-center text-xs font-bold text-zinc-800 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
                   >
                     View Details
                   </Link>

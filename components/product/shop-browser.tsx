@@ -16,11 +16,49 @@ import { Input, Select } from "@/components/ui/input";
 import { categories, products } from "@/database/products";
 import { cn } from "@/lib/utils";
 
-export function ShopBrowser() {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("All");
-  const [sort, setSort] = useState("featured");
+const primaryDepartments = [
+  "All",
+  "iPhone",
+  "MacBook",
+  "iPad",
+  "Apple Watch",
+  "AirPods",
+  "Gaming",
+  "Controllers",
+  "Gaming Headsets",
+  "Accessories"
+];
+
+type ShopBrowserProps = {
+  initialCategory?: string;
+  initialFilter?: string;
+  initialQuery?: string;
+  initialSort?: string;
+};
+
+export function ShopBrowser({
+  initialCategory = "All",
+  initialFilter = "all",
+  initialQuery = "",
+  initialSort = "featured"
+}: ShopBrowserProps) {
+  const [query, setQuery] = useState(initialQuery);
+  const [category, setCategory] = useState(
+    categories.includes(initialCategory as (typeof categories)[number])
+      ? initialCategory
+      : "All"
+  );
+  const [sort, setSort] = useState(
+    ["featured", "new", "price-low", "price-high"].includes(initialSort)
+      ? initialSort
+      : "featured"
+  );
   const [view, setView] = useState<"grid" | "list">("grid");
+  const [collection, setCollection] = useState(
+    ["all", "bestseller", "new"].includes(initialFilter)
+      ? initialFilter
+      : "all"
+  );
 
   // Advanced Filters
   const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
@@ -37,7 +75,15 @@ export function ShopBrowser() {
     setIsLoading(true);
     const timer = setTimeout(() => setIsLoading(false), 400);
     return () => clearTimeout(timer);
-  }, [category, query, sort, selectedConditions, priceRange, stockStatus]);
+  }, [
+    category,
+    collection,
+    priceRange,
+    query,
+    selectedConditions,
+    sort,
+    stockStatus
+  ]);
 
   const handleConditionToggle = (cond: string) => {
     setSelectedConditions((prev) =>
@@ -63,6 +109,11 @@ export function ShopBrowser() {
         .filter(
           (product) => category === "All" || product.category === category
         )
+        .filter((product) => {
+          if (collection === "bestseller") return Boolean(product.bestSeller);
+          if (collection === "new") return Boolean(product.newArrival);
+          return true;
+        })
         .filter((product) =>
           [product.name, product.category, product.series, product.description]
             .join(" ")
@@ -105,7 +156,15 @@ export function ShopBrowser() {
           return Number(Boolean(b.bestSeller)) - Number(Boolean(a.bestSeller));
         })
     );
-  }, [category, query, sort, selectedConditions, priceRange, stockStatus]);
+  }, [
+    category,
+    collection,
+    priceRange,
+    query,
+    selectedConditions,
+    sort,
+    stockStatus
+  ]);
 
   // Paginated list
   const paginatedList = useMemo(() => {
@@ -119,6 +178,7 @@ export function ShopBrowser() {
     setQuery("");
     setCategory("All");
     setSort("featured");
+    setCollection("all");
     setSelectedConditions([]);
     setPriceRange("all");
     setStockStatus([]);
@@ -147,7 +207,7 @@ export function ShopBrowser() {
             Department
           </p>
           <div className="flex flex-col gap-1 text-xs font-semibold">
-            {["All", ...categories.slice(0, 7)].map((cat) => (
+            {primaryDepartments.map((cat) => (
               <button
                 key={cat}
                 onClick={() => {
@@ -162,6 +222,36 @@ export function ShopBrowser() {
                 )}
               >
                 {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+            Collection
+          </p>
+          <div className="grid gap-1 text-xs font-semibold">
+            {[
+              ["all", "All products"],
+              ["bestseller", "Best sellers"],
+              ["new", "New arrivals"]
+            ].map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => {
+                  setCollection(value);
+                  setCurrentPage(1);
+                }}
+                className={cn(
+                  "rounded-xl px-3 py-2 text-left transition",
+                  collection === value
+                    ? "bg-brand-blue/10 font-bold text-brand-blue dark:bg-brand-blue/20"
+                    : "text-zinc-600 hover:bg-black/5 dark:text-zinc-300 dark:hover:bg-white/5"
+                )}
+              >
+                {label}
               </button>
             ))}
           </div>
@@ -318,7 +408,9 @@ export function ShopBrowser() {
 
         {/* Results Info */}
         <div className="flex items-center justify-between text-xs text-zinc-400 font-semibold px-2">
-          <p>{filtered.length} products found</p>
+          <p>
+            {filtered.length} product{filtered.length === 1 ? "" : "s"} found
+          </p>
           <p>
             Page {currentPage} of {totalPages}
           </p>
@@ -365,7 +457,7 @@ export function ShopBrowser() {
           </div>
         ) : (
           <div className="p-12 text-center text-zinc-400 border border-black/5 dark:border-white/5 bg-white dark:bg-zinc-900 rounded-[2rem] shadow-sm font-semibold max-w-md mx-auto space-y-3">
-            <AlertCircle className="h-8 w-8 text-zinc-350 mx-auto" />
+            <AlertCircle className="mx-auto h-8 w-8 text-zinc-400" />
             <p>No products match your filter parameters.</p>
             <button
               onClick={handleResetFilters}

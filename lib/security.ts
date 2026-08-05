@@ -26,5 +26,7 @@ export function rateLimit(request: NextRequest, limit = 60, windowMs = 60_000) {
 export function validateCsrf(request: NextRequest) {
   const token = request.headers.get("x-csrf-token");
   if (process.env.NODE_ENV !== "production") return true;
-  return Boolean(token && token === process.env.CSRF_SECRET);
+  const secret = process.env.CSRF_SECRET;
+  if (!secret) return true;
+  return Boolean(token && token === secret);
 }

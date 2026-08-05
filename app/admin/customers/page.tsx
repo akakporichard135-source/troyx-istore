@@ -197,7 +197,7 @@ export default function CustomersPage() {
                     <h3 className="font-bold text-zinc-400 uppercase tracking-wider">
                       Default Address
                     </h3>
-                    <p className="flex items-start gap-2 text-zinc-650 dark:text-zinc-350 font-semibold leading-relaxed">
+                    <p className="flex items-start gap-2 font-semibold leading-relaxed text-zinc-600 dark:text-zinc-400">
                       <MapPin className="h-4 w-4 text-zinc-400 mt-0.5" />{" "}
                       {activeCustomer.address}
                     </p>

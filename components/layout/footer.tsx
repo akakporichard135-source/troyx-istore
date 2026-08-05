@@ -13,7 +13,8 @@ import {
   ArrowUp,
   ShieldCheck,
   Truck,
-  CreditCard
+  CreditCard,
+  ChevronDown
 } from "lucide-react";
 import { siteConfig, legalDisclaimer } from "@/lib/site";
 import { Button } from "@/components/ui/button";
@@ -23,8 +24,8 @@ const footerGroups = [
     title: "Quick Links",
     links: [
       ["Shop Catalog", "/shop"],
-      ["Best Sellers", "/shop?sort=best"],
-      ["New Arrivals", "/shop?sort=new"]
+      ["Best Sellers", "/shop?filter=bestseller"],
+      ["New Arrivals", "/shop?filter=new"]
     ]
   },
   {
@@ -54,8 +55,7 @@ const footerGroups = [
       ["FAQ", "/faq"],
       ["About Us", "/about"],
       ["Privacy Policy", "/privacy-policy"],
-      ["Terms of Service", "/terms"],
-      ["Admin Portal", "/admin"]
+      ["Terms of Service", "/terms"]
     ]
   }
 ];
@@ -111,7 +111,33 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-3 sm:hidden">
+            {footerGroups.map((group) => (
+              <details
+                key={group.title}
+                className="group rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold [&::-webkit-details-marker]:hidden">
+                  {group.title}
+                  <ChevronDown className="h-4 w-4 text-zinc-400 transition group-open:rotate-180" />
+                </summary>
+                <ul className="mt-4 space-y-3 border-t border-white/10 pt-4">
+                  {group.links.map(([label, href]) => (
+                    <li key={href}>
+                      <Link
+                        href={href}
+                        className="text-sm text-zinc-300 transition hover:text-white"
+                      >
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ))}
+          </div>
+
+          <div className="hidden gap-8 sm:grid sm:grid-cols-2 lg:grid-cols-4">
             {footerGroups.map((group) => (
               <div key={group.title}>
                 <h2 className="text-sm font-semibold">{group.title}</h2>
@@ -133,7 +159,7 @@ export function Footer() {
         </div>
 
         {/* Unified Single Newsletter Subscription Block */}
-        <div className="mt-12 grid gap-5 rounded-[2.5rem] bg-white/8 p-6 md:grid-cols-[1fr_auto] md:items-center border border-white/10">
+        <div className="mt-12 grid gap-5 rounded-[2.5rem] border border-white/10 bg-white/[0.08] p-6 md:grid-cols-[1fr_auto] md:items-center">
           <div>
             <h2 className="text-lg font-bold text-white">
               Join the TroyX Insider Newsletter
@@ -143,7 +169,10 @@ export function Footer() {
               guides across Ghana.
             </p>
           </div>
-          <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="grid gap-2 min-[390px]:grid-cols-[1fr_auto]"
+          >
             <input
               type="email"
               placeholder="Enter your email address"
@@ -152,7 +181,7 @@ export function Footer() {
             />
             <Button
               type="submit"
-              className="h-11 px-5 bg-brand-blue text-white font-bold hover:bg-brand-blue/90"
+              className="h-11 w-full bg-brand-blue px-5 font-bold text-white hover:bg-brand-blue/90 min-[390px]:w-auto"
               aria-label="Subscribe"
             >
               <Send className="h-4 w-4 mr-1.5" />

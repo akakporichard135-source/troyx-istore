@@ -55,7 +55,7 @@ export default function ContactPage() {
                   <p className="font-bold text-brand-ink dark:text-white mt-1 text-xs">
                     {siteConfig.email}
                   </p>
-                  <p className="text-xs text-zinc-500">Fast 2-hour response</p>
+                  <p className="text-xs text-zinc-500">Sales, repair, and trade-in support</p>
                 </div>
               </div>
             </div>
@@ -117,7 +117,12 @@ export default function ContactPage() {
           </div>
 
           {/* Right Column: Contact Form */}
-          <form className="space-y-4 rounded-3xl border border-black/5 bg-white p-8 shadow-sm dark:border-white/10 dark:bg-zinc-900">
+          <form
+            action={`mailto:${siteConfig.email}`}
+            method="post"
+            encType="text/plain"
+            className="space-y-4 rounded-3xl border border-black/5 bg-white p-8 shadow-sm dark:border-white/10 dark:bg-zinc-900"
+          >
             <h2 className="text-lg font-bold text-brand-ink dark:text-white">
               Send Us a Direct Message
             </h2>
@@ -126,8 +131,10 @@ export default function ContactPage() {
                 Full Name
               </label>
               <Input
+                name="name"
                 placeholder="e.g. Abena Mensah"
                 className="h-11 rounded-xl text-xs"
+                required
               />
             </div>
             <div>
@@ -135,9 +142,11 @@ export default function ContactPage() {
                 Email Address
               </label>
               <Input
+                name="email"
                 type="email"
                 placeholder="your@email.com"
                 className="h-11 rounded-xl text-xs"
+                required
               />
             </div>
             <div>
@@ -145,8 +154,10 @@ export default function ContactPage() {
                 Subject
               </label>
               <Input
+                name="subject"
                 placeholder="Product availability, repair, trade-in..."
                 className="h-11 rounded-xl text-xs"
+                required
               />
             </div>
             <div>
@@ -154,8 +165,10 @@ export default function ContactPage() {
                 Message
               </label>
               <Textarea
+                name="message"
                 placeholder="Tell us more about how we can assist you..."
                 className="min-h-28 rounded-xl text-xs"
+                required
               />
             </div>
             <Button
@@ -177,13 +190,12 @@ export default function ContactPage() {
                 Flagship Experience Showroom
               </span>
               <h2 className="text-3xl font-black text-brand-ink dark:text-white">
-                Spintex Road & East Legon Flagships
+                Visit TroyX iStore in East Legon
               </h2>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                Step inside Accra&apos;s premier Apple and gaming destination.
-                Test-drive the latest MacBook M3 series, experience iPhone 16
-                Pro Max displays, and explore certified accessories with direct
-                technician guidance.
+                Visit or message before you buy. The team can confirm stock,
+                inspect trade-in devices, guide repairs, and help you compare
+                Apple products and gaming accessories.
               </p>
 
               <div className="space-y-3 text-xs text-zinc-700 dark:text-zinc-300">
@@ -193,7 +205,7 @@ export default function ContactPage() {
                 </div>
                 <div className="flex items-start gap-3">
                   <Navigation className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-                  <span>Free Customer Parking & Security Escort Available</span>
+                  <span>Confirm showroom availability before visiting.</span>
                 </div>
               </div>
 

@@ -85,16 +85,16 @@ export const products: Product[] = [
     }
   },
   {
-    id: "iphone-air",
-    slug: "iphone-air",
-    name: "iPhone Air",
+    id: "iphone-17-air",
+    slug: "iphone-17-air",
+    name: "iPhone 17 Air",
     category: "iPhone",
     series: "iPhone 17 Series",
     price: 0,
     compareAtPrice: undefined,
     rating: 4.8,
     reviewCount: 3,
-    images: getProductImages("iphone-air", "iPhone"),
+    images: getProductImages("iphone-17-air", "iPhone"),
     colors: ["Space Black", "Cloud White", "Light Gold", "Sky Blue"],
     storage: ["256GB", "512GB", "1TB"],
     condition: ["New"],
@@ -103,7 +103,7 @@ export const products: Product[] = [
     deliveryEstimate: "Confirmed after availability check",
     badge: "Ultra Thin",
     description:
-      "Official iPhone Air catalogue entry with an ultra-thin design, A19 Pro performance, and a 48MP Fusion camera. Final TroyX pricing and stock are confirmed on request.",
+      "Official iPhone 17 Air catalogue entry with an ultra-thin design, A19 Pro performance, and a 48MP Fusion camera. Final TroyX pricing and stock are confirmed on request.",
     specs: {
       Display: "Super Retina XDR display",
       Chip: "A19 Pro",

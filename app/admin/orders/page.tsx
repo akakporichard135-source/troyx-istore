@@ -324,7 +324,7 @@ export default function OrdersManagerPage() {
                     <p className="text-zinc-600 dark:text-zinc-300 font-medium">
                       Method: {activeOrder.paymentMethod}
                     </p>
-                    <p className="text-zinc-650 dark:text-zinc-350 mt-1 font-medium leading-relaxed">
+                    <p className="mt-1 font-medium leading-relaxed text-zinc-600 dark:text-zinc-400">
                       Billing Address: {activeOrder.billingAddress}
                     </p>
                     {activeOrder.customerNotes && (
@@ -389,7 +389,7 @@ export default function OrdersManagerPage() {
                         refundOrder(activeOrder.id);
                     }}
                     disabled={activeOrder.paymentStatus !== "Paid"}
-                    className="flex-1 py-2.5 rounded-full border border-zinc-200 text-zinc-700 bg-white hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed dark:border-white/10 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-750 text-xs font-bold transition flex items-center justify-center gap-1"
+                    className="flex flex-1 items-center justify-center gap-1 rounded-full border border-zinc-200 bg-white py-2.5 text-xs font-bold text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
                   >
                     <RotateCcw className="h-3.5 w-3.5" /> Refund Order
                   </button>
