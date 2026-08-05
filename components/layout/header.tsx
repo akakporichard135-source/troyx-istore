@@ -1,7 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, Menu, Moon, Search, ShoppingBag, User, X } from "lucide-react";
+import {
+  ChevronDown,
+  Heart,
+  Menu,
+  Moon,
+  Search,
+  ShoppingBag,
+  User,
+  X
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
@@ -11,15 +20,20 @@ import { useCommerceStore } from "@/context/store";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/shop", label: "Shop" },
-  { href: "/iphones", label: "iPhones" },
-  { href: "/macbooks", label: "MacBooks" },
-  { href: "/ipads", label: "iPads" },
-  { href: "/gaming-consoles", label: "Gaming" },
-  { href: "/repair-booking", label: "Repair" },
-  { href: "/trade-in", label: "Trade-In" }
+  { href: "/shop", label: "Store" },
+  { href: "/macbooks", label: "Mac" },
+  { href: "/ipads", label: "iPad" },
+  { href: "/iphones", label: "iPhone" },
+  { href: "/apple-watch", label: "Watch" },
+  { href: "/vision", label: "Vision" },
+  { href: "/airpods", label: "AirPods" },
+  { href: "/apple-accessories", label: "Accessories" },
+  { href: "/gaming", label: "Entertainment" },
+  { href: "/support", label: "Support" }
 ];
+
+const compactDesktopLinks = links.slice(0, 6);
+const moreDesktopLinks = links.slice(6);
 
 export function Header() {
   const pathname = usePathname();
@@ -60,10 +74,10 @@ export function Header() {
         </Link>
 
         <div className="hidden items-center gap-1 lg:flex">
-          {links.map((link) => (
+          {compactDesktopLinks.map((link) => (
             <Link
               key={link.label}
-              href={link.href || "#"}
+              href={link.href}
               className={cn(
                 "focus-ring rounded-full px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-black/5 hover:text-brand-ink dark:text-zinc-200 dark:hover:bg-white/10 dark:hover:text-white",
                 pathname === link.href &&
@@ -73,6 +87,27 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          <details className="group relative">
+            <summary className="focus-ring flex cursor-pointer list-none items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-black/5 hover:text-brand-ink dark:text-zinc-200 dark:hover:bg-white/10 dark:hover:text-white [&::-webkit-details-marker]:hidden">
+              More
+              <ChevronDown className="h-3.5 w-3.5 transition group-open:rotate-180" />
+            </summary>
+            <div className="absolute right-0 top-11 z-50 min-w-56 rounded-2xl border border-black/10 bg-white p-2 shadow-2xl dark:border-white/10 dark:bg-zinc-950">
+              {moreDesktopLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={cn(
+                    "block rounded-xl px-3 py-2.5 text-sm font-semibold text-zinc-700 transition hover:bg-black/5 hover:text-brand-ink dark:text-zinc-200 dark:hover:bg-white/10 dark:hover:text-white",
+                    pathname === link.href &&
+                      "bg-brand-blue/10 text-brand-blue dark:bg-brand-blue/15 dark:text-blue-300"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </details>
         </div>
 
         <div className="flex items-center gap-2">
@@ -143,7 +178,7 @@ export function Header() {
             {links.map((link) => (
               <Link
                 key={link.label}
-                href={link.href || "#"}
+                href={link.href}
                 className={cn(
                   "rounded-2xl px-4 py-3 text-sm font-semibold text-zinc-700 hover:bg-black/5 dark:text-zinc-200 dark:hover:bg-white/10",
                   pathname === link.href &&

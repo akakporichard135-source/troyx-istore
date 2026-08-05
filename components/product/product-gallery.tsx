@@ -6,7 +6,12 @@ import type { Product } from "@/types";
 import { cn } from "@/lib/utils";
 
 export function ProductGallery({ product }: { product: Product }) {
+  const pendingImage = "/images/products/verified-image-pending.webp";
   const [active, setActive] = useState(product.images[0]);
+  const activeAlt =
+    active === pendingImage
+      ? `Verified product image pending for ${product.name}`
+      : product.name;
   const [zoomStyle, setZoomStyle] = useState<React.CSSProperties>({
     transform: "scale(1)"
   });
@@ -64,12 +69,10 @@ export function ProductGallery({ product }: { product: Product }) {
       >
         <Image
           src={active}
-          alt={product.name}
+          alt={activeAlt}
           fill
           priority
-          onError={() =>
-            setActive("/images/products/official-image-coming-soon.svg")
-          }
+          onError={() => setActive(pendingImage)}
           sizes="(min-width: 1024px) 50vw, 100vw"
           className="object-contain p-10 transition-transform duration-100 ease-out"
           style={zoomStyle}

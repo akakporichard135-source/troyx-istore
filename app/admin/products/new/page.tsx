@@ -51,7 +51,7 @@ export default function NewProductPage() {
   ]);
 
   const [uploadedImages, setUploadedImages] = useState<string[]>([
-    "/images/products/official-image-coming-soon.svg"
+    "/images/products/verified-image-pending.webp"
   ]);
 
   const handleChange = (

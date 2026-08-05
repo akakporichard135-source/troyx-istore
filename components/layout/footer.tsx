@@ -23,24 +23,26 @@ const footerGroups = [
   {
     title: "Quick Links",
     links: [
-      ["Shop Catalog", "/shop"],
-      ["Best Sellers", "/shop?filter=bestseller"],
-      ["New Arrivals", "/shop?filter=new"]
+      ["Store", "/shop"],
+      ["Support", "/support"],
+      ["Contact", "/contact"]
     ]
   },
   {
     title: "Categories",
     links: [
-      ["iPhones", "/iphones"],
-      ["MacBooks", "/macbooks"],
-      ["iPads", "/ipads"],
-      ["Apple Watch", "/apple-watch"],
+      ["iPhone", "/iphones"],
+      ["Mac", "/macbooks"],
+      ["iPad", "/ipads"],
+      ["Watch", "/apple-watch"],
       ["AirPods", "/airpods"],
-      ["Gaming", "/gaming-consoles"]
+      ["Accessories", "/apple-accessories"],
+      ["Entertainment", "/gaming"],
+      ["Vision", "/vision"]
     ]
   },
   {
-    title: "Apple Services",
+    title: "Services",
     links: [
       ["Trade-In Program", "/trade-in"],
       ["Repair Booking", "/repair-booking"],

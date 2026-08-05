@@ -145,7 +145,7 @@ export default function ProductsManagerPage() {
             price: Number(parts[3]) || 0,
             rating: 4.8,
             reviewCount: 15,
-            images: ["/images/products/official-image-coming-soon.svg"],
+            images: ["/images/products/verified-image-pending.webp"],
             colors: ["Black"],
             storage: ["128GB"],
             condition: ["New"],
@@ -352,7 +352,7 @@ export default function ProductsManagerPage() {
                             <Image
                               src={
                                 p.images[0] ||
-                                "/images/products/official-image-coming-soon.svg"
+                                "/images/products/verified-image-pending.webp"
                               }
                               alt={p.name}
                               width={32}

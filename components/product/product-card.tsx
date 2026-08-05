@@ -23,13 +23,17 @@ export function ProductCard({
   const saved = wishlist.includes(product.id);
   const compared = compare.includes(product.id);
 
-  const categoryFallback = "/images/products/official-image-coming-soon.svg";
+  const categoryFallback = "/images/products/verified-image-pending.webp";
 
   // Quick view modal state
   const [quickViewOpen, setQuickViewOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState(
     product.images[0] || categoryFallback
   );
+  const imageAlt =
+    imageSrc === categoryFallback
+      ? `Verified product image pending for ${product.name}`
+      : product.name;
 
   return (
     <>
@@ -79,7 +83,7 @@ export function ProductCard({
           >
             <Image
               src={imageSrc}
-              alt={product.name}
+              alt={imageAlt}
               fill
               onError={() => setImageSrc(categoryFallback)}
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
@@ -231,7 +235,7 @@ export function ProductCard({
             <div className="bg-brand-mist dark:bg-zinc-950/20 rounded-2xl p-4 flex items-center justify-center aspect-square relative">
               <Image
                 src={imageSrc}
-                alt={product.name}
+                alt={imageAlt}
                 fill
                 className="object-contain p-6"
               />
