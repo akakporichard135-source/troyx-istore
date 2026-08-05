@@ -168,6 +168,26 @@ body {
   }
 }
 
+@keyframes home-hero-camera-drift {
+  0%, 100% {
+    transform: perspective(1200px) rotateY(-2.5deg) rotateX(0deg) translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(2.5deg) rotateX(0.5deg) translate3d(0, -12px, 0) scale(1.018);
+  }
+}
+
+@keyframes home-hero-particle-drift {
+  0%, 100% {
+    opacity: 0.38;
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    opacity: 0.68;
+    transform: translate3d(12px, -16px, 0);
+  }
+}
+
 .home-reveal {
   animation: home-fade-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -180,6 +200,22 @@ body {
 .home-glow-breathe {
   animation: home-glow-breathe 8s ease-in-out infinite;
   will-change: transform, opacity;
+}
+
+.home-hero-camera-drift {
+  animation: home-hero-camera-drift 9s ease-in-out infinite;
+  transform-origin: 50% 60%;
+  will-change: transform;
+}
+
+.home-hero-particles {
+  background-image:
+    radial-gradient(circle at 18% 28%, rgba(101, 180, 255, 0.32) 0 1px, transparent 2px),
+    radial-gradient(circle at 72% 18%, rgba(101, 180, 255, 0.24) 0 1px, transparent 2px),
+    radial-gradient(circle at 82% 62%, rgba(101, 180, 255, 0.22) 0 1px, transparent 2px),
+    radial-gradient(circle at 32% 72%, rgba(101, 180, 255, 0.18) 0 1px, transparent 2px);
+  animation: home-hero-particle-drift 11s ease-in-out infinite;
+  filter: blur(0.15px);
 }
 
 .home-premium-surface {
@@ -273,7 +309,9 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .home-reveal,
   .home-device-float,
-  .home-glow-breathe {
+  .home-glow-breathe,
+  .home-hero-camera-drift,
+  .home-hero-particles {
     animation: none;
   }
 }

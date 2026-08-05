@@ -73,17 +73,19 @@ export function HeroVideo({
   };
 
   return (
-    <div className="home-reveal relative flex min-h-[420px] items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-[#0D111B]/90 p-5 shadow-[0_44px_130px_rgba(0,0,0,0.42)] sm:min-h-[590px] sm:p-10 lg:min-h-[650px]">
-      <div className="home-glow-breathe absolute h-[68%] w-[68%] rounded-full bg-[#1687F8]/25 blur-[76px]" />
-      <div className="absolute inset-4 rounded-[1.75rem] border border-white/10 bg-[radial-gradient(circle_at_50%_20%,rgba(101,180,255,0.19),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.015))]" />
-      <div className="absolute inset-x-12 bottom-8 h-20 rounded-full bg-[#1687F8]/14 blur-3xl" />
+    <div className="home-reveal relative flex min-h-[390px] items-center justify-center overflow-visible p-3 sm:min-h-[560px] sm:p-8 lg:min-h-[650px]">
+      <div className="absolute inset-[-12%] rounded-full bg-[radial-gradient(circle_at_50%_34%,rgba(101,180,255,0.20),transparent_38%),radial-gradient(circle_at_50%_62%,rgba(22,135,248,0.15),transparent_50%),radial-gradient(circle_at_50%_82%,rgba(0,0,0,0.62),transparent_58%)]" />
+      <div className="home-glow-breathe absolute h-[74%] w-[74%] rounded-full bg-[#1687F8]/24 blur-[90px]" />
+      <div className="absolute inset-x-[14%] bottom-8 h-24 rounded-full bg-[#1687F8]/12 blur-3xl" />
+      <div className="absolute inset-x-[22%] bottom-10 h-9 rounded-full bg-black/55 blur-2xl" />
+      <div className="home-hero-particles pointer-events-none absolute inset-0" />
 
       <div className="relative z-10 flex h-full w-full items-center justify-center">
         {shouldUseVideo ? (
           <video
             ref={videoRef}
             aria-label="Cinematic iPhone product video"
-            className="relative z-10 h-auto max-h-[390px] w-auto max-w-[88%] rounded-[1.35rem] object-contain drop-shadow-[0_42px_80px_rgba(0,0,0,0.52)] sm:max-h-[540px] lg:max-h-[600px]"
+            className="relative z-10 h-auto max-h-[410px] w-auto max-w-[94%] object-contain drop-shadow-[0_46px_88px_rgba(0,0,0,0.58)] sm:max-h-[560px] lg:max-h-[620px]"
             loop
             muted
             playsInline
@@ -101,13 +103,12 @@ export function HeroVideo({
             height={952}
             priority
             sizes="(min-width: 1024px) 34vw, (min-width: 640px) 58vw, 78vw"
-            className="home-device-float relative z-10 max-h-[390px] w-auto max-w-[88%] rounded-[1.35rem] object-contain drop-shadow-[0_42px_80px_rgba(0,0,0,0.52)] sm:max-h-[540px] lg:max-h-[600px]"
+            className="home-device-float home-hero-camera-drift relative z-10 max-h-[410px] w-auto max-w-[94%] object-contain drop-shadow-[0_46px_88px_rgba(0,0,0,0.58)] sm:max-h-[560px] lg:max-h-[620px]"
           />
         )}
       </div>
 
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(7,9,15,0.04),rgba(7,9,15,0.36))]" />
-      <div className="absolute inset-x-[20%] bottom-7 h-6 rounded-full bg-black/50 blur-2xl" />
+      <div className="pointer-events-none absolute inset-[-6%] bg-[radial-gradient(circle_at_50%_50%,transparent_42%,rgba(7,9,15,0.52)_78%)]" />
 
       {hasVideo && shouldUseVideo ? (
         <button

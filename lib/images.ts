@@ -4,61 +4,59 @@
  */
 
 export const productCategoryFallbacks: Record<string, string> = {
-  iPhone: "/images/iphone/iphone-17-pro-max.webp",
-  MacBook: "/images/products/official-image-coming-soon.svg",
-  iPad: "/images/products/official-image-coming-soon.svg",
-  "Apple Watch": "/images/products/official-image-coming-soon.svg",
-  AirPods: "/images/products/official-image-coming-soon.svg",
-  "Apple TV": "/images/products/official-image-coming-soon.svg",
-  HomePod: "/images/products/official-image-coming-soon.svg",
-  Accessories: "/images/products/official-image-coming-soon.svg",
-  Cases: "/images/products/official-image-coming-soon.svg",
-  Chargers: "/images/products/official-image-coming-soon.svg",
-  "Power Banks": "/images/products/official-image-coming-soon.svg",
-  "Screen Protectors": "/images/products/official-image-coming-soon.svg",
-  Adapters: "/images/products/official-image-coming-soon.svg",
-  Cables: "/images/products/official-image-coming-soon.svg",
-  Speakers: "/images/products/official-image-coming-soon.svg",
-  "Smart Accessories": "/images/products/official-image-coming-soon.svg",
-  Gaming: "/images/products/official-image-coming-soon.svg",
-  PlayStation: "/images/products/official-image-coming-soon.svg",
-  Xbox: "/images/products/official-image-coming-soon.svg",
-  Nintendo: "/images/products/official-image-coming-soon.svg",
-  Controllers: "/images/products/official-image-coming-soon.svg",
-  "Gaming Headsets": "/images/products/official-image-coming-soon.svg"
+  iPhone: "/images/iphone/studio/iphone-17-pro-max.webp",
+  MacBook: "/images/categories/macbooks.webp",
+  iPad: "/images/categories/ipads.webp",
+  "Apple Watch": "/images/categories/apple-watch.webp",
+  AirPods: "/images/categories/airpods.webp",
+  "Apple TV": "/images/categories/accessories.webp",
+  HomePod: "/images/categories/accessories.webp",
+  Accessories: "/images/categories/accessories.webp",
+  Cases: "/images/categories/accessories.webp",
+  Chargers: "/images/categories/accessories.webp",
+  "Power Banks": "/images/categories/accessories.webp",
+  "Screen Protectors": "/images/categories/accessories.webp",
+  Adapters: "/images/categories/accessories.webp",
+  Cables: "/images/categories/accessories.webp",
+  Speakers: "/images/categories/airpods.webp",
+  "Smart Accessories": "/images/categories/accessories.webp",
+  Gaming: "/images/categories/gaming.webp",
+  PlayStation: "/images/categories/gaming.webp",
+  Xbox: "/images/categories/gaming.webp",
+  Nintendo: "/images/categories/gaming.webp",
+  Controllers: "/images/categories/gaming.webp",
+  "Gaming Headsets": "/images/categories/gaming.webp"
 };
 
-// Curated high-res Apple & Gaming product photography
+// Curated clean studio product renders for the storefront.
 export const productImages: Record<string, string[]> = {
-  // Audited Wikimedia Commons imports for the TroyX iPhone catalog.
-  // Source and license details are stored in /public/images/iphone/sources.json.
-  "iphone-11": ["/images/iphone/iphone-11.webp"],
-  "iphone-11-pro": ["/images/iphone/iphone-11-pro.webp"],
-  "iphone-11-pro-max": ["/images/iphone/iphone-11-pro-max.webp"],
-  "iphone-12": ["/images/iphone/iphone-12.webp"],
-  "iphone-12-mini": ["/images/iphone/iphone-12-mini.webp"],
-  "iphone-12-pro": ["/images/iphone/iphone-12-pro.webp"],
-  "iphone-12-pro-max": ["/images/iphone/iphone-12-pro-max.webp"],
-  "iphone-13": ["/images/iphone/iphone-13.webp"],
-  "iphone-13-mini": ["/images/iphone/iphone-13-mini.webp"],
-  "iphone-13-pro": ["/images/iphone/iphone-13-pro.webp"],
-  "iphone-13-pro-max": ["/images/iphone/iphone-13-pro-max.webp"],
-  "iphone-14": ["/images/iphone/iphone-14.webp"],
-  "iphone-14-plus": ["/images/iphone/iphone-14-plus.webp"],
-  "iphone-14-pro": ["/images/iphone/iphone-14-pro.webp"],
-  "iphone-14-pro-max": ["/images/iphone/iphone-14-pro-max.webp"],
-  "iphone-15": ["/images/iphone/iphone-15.webp"],
-  "iphone-15-plus": ["/images/iphone/iphone-15-plus.webp"],
-  "iphone-15-pro": ["/images/iphone/iphone-15-pro.webp"],
-  "iphone-15-pro-max": ["/images/iphone/iphone-15-pro-max.webp"],
-  "iphone-16": ["/images/iphone/iphone-16.webp"],
-  "iphone-16-plus": ["/images/iphone/iphone-16-plus.webp"],
-  "iphone-16-pro": ["/images/iphone/iphone-16-pro.webp"],
-  "iphone-16-pro-max": ["/images/iphone/iphone-16-pro-max.webp"],
-  "iphone-17": ["/images/iphone/iphone-17.webp"],
-  "iphone-17-air": ["/images/iphone/iphone-17-air.webp"],
-  "iphone-17-pro": ["/images/iphone/iphone-17-pro.webp"],
-  "iphone-17-pro-max": ["/images/iphone/iphone-17-pro-max.webp"]
+  "iphone-11": ["/images/iphone/studio/iphone-11.webp"],
+  "iphone-11-pro": ["/images/iphone/studio/iphone-11-pro.webp"],
+  "iphone-11-pro-max": ["/images/iphone/studio/iphone-11-pro-max.webp"],
+  "iphone-12": ["/images/iphone/studio/iphone-12.webp"],
+  "iphone-12-mini": ["/images/iphone/studio/iphone-12-mini.webp"],
+  "iphone-12-pro": ["/images/iphone/studio/iphone-12-pro.webp"],
+  "iphone-12-pro-max": ["/images/iphone/studio/iphone-12-pro-max.webp"],
+  "iphone-13": ["/images/iphone/studio/iphone-13.webp"],
+  "iphone-13-mini": ["/images/iphone/studio/iphone-13-mini.webp"],
+  "iphone-13-pro": ["/images/iphone/studio/iphone-13-pro.webp"],
+  "iphone-13-pro-max": ["/images/iphone/studio/iphone-13-pro-max.webp"],
+  "iphone-14": ["/images/iphone/studio/iphone-14.webp"],
+  "iphone-14-plus": ["/images/iphone/studio/iphone-14-plus.webp"],
+  "iphone-14-pro": ["/images/iphone/studio/iphone-14-pro.webp"],
+  "iphone-14-pro-max": ["/images/iphone/studio/iphone-14-pro-max.webp"],
+  "iphone-15": ["/images/iphone/studio/iphone-15.webp"],
+  "iphone-15-plus": ["/images/iphone/studio/iphone-15-plus.webp"],
+  "iphone-15-pro": ["/images/iphone/studio/iphone-15-pro.webp"],
+  "iphone-15-pro-max": ["/images/iphone/studio/iphone-15-pro-max.webp"],
+  "iphone-16": ["/images/iphone/studio/iphone-16.webp"],
+  "iphone-16-plus": ["/images/iphone/studio/iphone-16-plus.webp"],
+  "iphone-16-pro": ["/images/iphone/studio/iphone-16-pro.webp"],
+  "iphone-16-pro-max": ["/images/iphone/studio/iphone-16-pro-max.webp"],
+  "iphone-17": ["/images/iphone/studio/iphone-17.webp"],
+  "iphone-17-air": ["/images/iphone/studio/iphone-17-air.webp"],
+  "iphone-17-pro": ["/images/iphone/studio/iphone-17-pro.webp"],
+  "iphone-17-pro-max": ["/images/iphone/studio/iphone-17-pro-max.webp"]
 };
 
 /**
@@ -99,11 +97,11 @@ export function getFeaturedImage(productId: string, category?: string): string {
  * Banner images for sections
  */
 export const bannerImages = {
-  iphones: "/images/iphone/iphone-17-pro-max.webp",
+  iphones: "/images/iphone/studio/iphone-17-pro-max.webp",
   macbooks: "/images/categories/macbooks.webp",
   ipads: "/images/categories/ipads.webp",
-  watches: "/images/products/official-image-coming-soon.svg",
-  airpods: "/images/products/official-image-coming-soon.svg",
+  watches: "/images/categories/apple-watch.webp",
+  airpods: "/images/categories/airpods.webp",
   gaming: "/images/categories/gaming.webp",
-  accessories: "/images/products/official-image-coming-soon.svg"
+  accessories: "/images/categories/accessories.webp"
 };

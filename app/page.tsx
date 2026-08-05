@@ -74,16 +74,20 @@ const categorySections: CategoryCard[] = [
     title: "Apple Watch",
     description:
       "Everyday health, fitness, notifications, and stylish watch options.",
+    image: "/images/categories/apple-watch.webp",
     href: "/apple-watch",
-    icon: Watch
+    icon: Watch,
+    focal: "object-center"
   },
   {
     id: "airpods",
     title: "AirPods",
     description:
       "Wireless audio for calls, workouts, travel, and immersive listening.",
+    image: "/images/categories/airpods.webp",
     href: "/airpods",
-    icon: Headphones
+    icon: Headphones,
+    focal: "object-center"
   },
   {
     id: "gaming",
@@ -127,11 +131,26 @@ const benefits: Array<[LucideIcon, string, string]> = [
   ]
 ];
 
-const heroImage = "/images/home/hero-iphone-17-pro-max.webp";
 const featuredDealImage = "/images/home/featured-iphone-16-pro-max-cutout.webp";
+const heroImage = "/images/hero/iphone-cinematic-poster.webp";
 const heroVideoWebm = "/videos/hero/iphone-cinematic-loop.webm";
 const heroVideoMp4 = "/videos/hero/iphone-cinematic-loop.mp4";
 const heroVideoPoster = "/images/hero/iphone-cinematic-poster.webp";
+
+const homeProductImages: Record<string, string> = {
+  "iphone-17-pro-max": "/images/home/products/iphone-17-pro-max.webp",
+  "iphone-17-pro": "/images/home/products/iphone-17-pro.webp",
+  "iphone-17-air": "/images/home/products/iphone-17-air.webp",
+  "iphone-17": "/images/home/products/iphone-17.webp",
+  "iphone-16-pro-max": "/images/home/products/iphone-16-pro-max.webp",
+  "iphone-16-pro": "/images/home/products/iphone-16-pro.webp",
+  "iphone-16-plus": "/images/home/products/iphone-16-plus.webp",
+  "iphone-16": "/images/home/products/iphone-16.webp",
+  "iphone-15-pro-max": "/images/home/products/iphone-15-pro-max.webp",
+  "iphone-15-plus": "/images/home/products/iphone-15-plus.webp",
+  "iphone-14-pro": "/images/home/products/iphone-14-pro.webp",
+  "iphone-14": "/images/home/products/iphone-14.webp"
+};
 
 const featuredIphoneSlugs = [
   "iphone-16-pro-max",
@@ -248,23 +267,28 @@ function HomeSection({
 }
 
 function HomeProductCard({ product }: { product: Product }) {
-  const image = product.images[0];
+  const image = homeProductImages[product.slug] || product.images[0];
   const conditionLabel = product.condition[0] || product.availability;
+  const hasStagedImage = image.startsWith("/images/home/products/");
 
   return (
     <article className="home-card-shadow group flex h-full min-h-[500px] flex-col overflow-hidden rounded-[1.35rem] border border-white/10 home-premium-surface transition duration-500 hover:-translate-y-1 hover:border-[#1687F8]/45 md:min-h-[430px]">
       <Link
         href={`/product/${product.slug}`}
-        className="focus-ring relative m-2.5 flex h-[220px] items-center justify-center overflow-hidden rounded-[1.05rem] border border-white/10 bg-[radial-gradient(circle_at_50%_12%,rgba(101,180,255,0.20),transparent_45%),#151D2B] p-4 sm:h-[230px]"
+        className="focus-ring relative m-2.5 flex h-[220px] items-center justify-center overflow-hidden rounded-[1.05rem] border border-white/10 bg-[radial-gradient(circle_at_50%_8%,rgba(101,180,255,0.22),transparent_42%),radial-gradient(circle_at_50%_86%,rgba(8,15,29,0.96),transparent_58%),#121A28] p-4 sm:h-[230px]"
         aria-label={`View ${product.name}`}
       >
-        <div className="absolute inset-x-8 bottom-6 h-10 rounded-full bg-black/35 blur-2xl transition duration-700 group-hover:bg-[#1687F8]/20" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.01))]" />
+        <div className="absolute inset-x-8 bottom-6 h-10 rounded-full bg-black/40 blur-2xl transition duration-700 group-hover:bg-[#1687F8]/22" />
         <Image
           src={image}
           alt={productImageAlt(product)}
           fill
           sizes="(min-width: 1024px) 18vw, (min-width: 640px) 42vw, 88vw"
-          className="object-contain p-5 transition duration-700 group-hover:scale-[1.035] sm:p-6"
+          className={cn(
+            "relative z-10 drop-shadow-[0_26px_52px_rgba(0,0,0,0.42)] transition duration-700 group-hover:scale-[1.035]",
+            hasStagedImage ? "object-cover p-0" : "object-contain p-5 sm:p-6"
+          )}
           loading="lazy"
         />
       </Link>
@@ -467,7 +491,7 @@ export default function HomePage() {
           </div>
 
           <HeroVideo
-            alt="iPhone 17 Pro Max in orange, rear view"
+            alt="iPhone Pro Max in Natural Titanium, rear view"
             fallbackImageSrc={heroImage}
             hasVideo={hasHeroWebm || hasHeroMp4}
             mp4Src={hasHeroMp4 ? heroVideoMp4 : undefined}
@@ -575,7 +599,7 @@ export default function HomePage() {
                 width={736}
                 height={952}
                 sizes="(min-width: 768px) 36vw, 82vw"
-                className="home-device-float relative z-10 max-h-[350px] w-auto max-w-[94%] rounded-[1.25rem] object-contain drop-shadow-[0_38px_82px_rgba(0,0,0,0.44)] sm:max-h-[410px] md:max-h-[450px]"
+                className="home-device-float relative z-10 max-h-[350px] w-auto max-w-[94%] object-contain drop-shadow-[0_38px_82px_rgba(0,0,0,0.44)] sm:max-h-[410px] md:max-h-[450px]"
                 loading="lazy"
               />
             </div>
