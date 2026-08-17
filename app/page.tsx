@@ -2,8 +2,14 @@ import Image from "next/image";
 import {
   ArrowRight,
   BadgeCheck,
+  BatteryCharging,
+  Camera,
+  ClipboardCheck,
+  Gauge,
+  HardDrive,
   MessageCircle,
   RefreshCw,
+  SearchCheck,
   ShieldCheck
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -114,6 +120,85 @@ const trustPoints: Array<[LucideIcon, string]> = [
   [BadgeCheck, "Clear condition notes"],
   [RefreshCw, "Trade-in support"],
   [MessageCircle, "Personal buying help"]
+];
+
+const conditionCards = [
+  {
+    title: "Brand New",
+    description:
+      "Sealed or fresh catalogue stock with clean official-style imagery, warranty guidance, and configuration checks before purchase."
+  },
+  {
+    title: "UK Used",
+    description:
+      "Imported pre-owned devices verified for condition, storage, battery health, cosmetic grade, and exact buyer expectations."
+  },
+  {
+    title: "Excellent / Very Good",
+    description:
+      "Used-device grades explained clearly so you understand visible wear, performance confidence, and final inspection notes."
+  },
+  {
+    title: "To Confirm",
+    description:
+      "Enquiry-only listings where TroyX confirms exact price, photos, condition, and availability before you commit."
+  }
+];
+
+const whyBuyCards: Array<[LucideIcon, string, string]> = [
+  [
+    ShieldCheck,
+    "Verified devices",
+    "Every recommendation is checked against model, storage, and buyer needs."
+  ],
+  [
+    BadgeCheck,
+    "Honest condition grading",
+    "Brand New, UK Used, Excellent, Very Good, and To Confirm are explained clearly."
+  ],
+  [
+    BatteryCharging,
+    "Battery health guidance",
+    "Used iPhones include battery expectations before the final buying decision."
+  ],
+  [
+    ClipboardCheck,
+    "Device inspection",
+    "Key functions, condition, and included items are reviewed before handover."
+  ],
+  [
+    SearchCheck,
+    "UK Used verification",
+    "Storage, colour, cosmetic state, and buyer notes are confirmed for used units."
+  ],
+  [
+    MessageCircle,
+    "WhatsApp buying assistance",
+    "Get personal help choosing the right Apple device before you order."
+  ]
+];
+
+const buyingGuideCards: Array<[LucideIcon, string, string[]]> = [
+  [
+    Camera,
+    "Buying your first iPhone?",
+    ["Camera needs", "Battery expectations", "Storage size", "Performance level"]
+  ],
+  [
+    BatteryCharging,
+    "Buying UK Used?",
+    ["Battery health", "Cosmetic condition", "Storage verification", "Device inspection"]
+  ],
+  [
+    HardDrive,
+    "Choosing storage?",
+    ["128GB everyday", "256GB photos/video", "512GB+ pro work", "Ask before buying"]
+  ],
+  [
+    Gauge,
+    "Need performance?",
+    ["A-series chip", "Display quality", "Camera system", "Long-term support"]
+  ]
 ];
 
 function SparkleDot() {
@@ -239,13 +324,124 @@ function CinematicProductSection({
   );
 }
 
+function ConditionGuideSection() {
+  return (
+    <section className="home-reveal bg-[#07090F] px-4 py-8 text-white sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-6 max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#65B4FF]">
+            Condition Guide
+          </p>
+          <h2 className="mt-3 text-3xl font-bold leading-tight sm:text-5xl">
+            Know exactly what you are buying.
+          </h2>
+          <p className="mt-4 text-base leading-7 text-[#A8B0BF]">
+            TroyX keeps the experience premium while making used-device details
+            clear, calm, and easy to compare.
+          </p>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+          {conditionCards.map((card) => (
+            <article
+              key={card.title}
+              className="rounded-[1.5rem] border border-white/10 bg-white/[0.055] p-5 shadow-[0_22px_80px_rgba(0,0,0,0.22)] transition duration-300 hover:-translate-y-1 hover:border-[#1687F8]/40 hover:bg-white/[0.075]"
+            >
+              <h3 className="text-lg font-bold text-white">{card.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-[#A8B0BF]">
+                {card.description}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhyBuySection() {
+  return (
+    <section className="home-reveal bg-[#07090F] px-4 py-8 text-white sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto max-w-7xl rounded-[2.25rem] border border-white/10 bg-[radial-gradient(circle_at_82%_12%,rgba(22,135,248,0.22),transparent_34%),linear-gradient(135deg,#101722,#090D15)] p-6 shadow-[0_30px_110px_rgba(0,0,0,0.32)] sm:p-8 lg:p-10">
+        <div className="mb-7 max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#65B4FF]">
+            Why Buy From TroyX?
+          </p>
+          <h2 className="mt-3 text-3xl font-bold leading-tight sm:text-5xl">
+            Premium Apple buying, with honest guidance.
+          </h2>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {whyBuyCards.map(([Icon, title, description]) => (
+            <article
+              key={title}
+              className="rounded-[1.35rem] border border-white/10 bg-white/[0.05] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#1687F8]/40 hover:bg-white/[0.075]"
+            >
+              <Icon className="h-6 w-6 text-[#65B4FF]" />
+              <h3 className="mt-4 text-base font-bold text-white">{title}</h3>
+              <p className="mt-2 text-sm leading-6 text-[#A8B0BF]">
+                {description}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BuyingGuideSection() {
+  return (
+    <section className="home-reveal bg-[#07090F] px-4 py-8 text-white sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#65B4FF]">
+              Buying Guide
+            </p>
+            <h2 className="mt-3 text-3xl font-bold leading-tight sm:text-5xl">
+              Choose faster, with less guesswork.
+            </h2>
+          </div>
+          <LinkButton
+            href="/support"
+            variant="secondary"
+            className="w-full !border-white/10 !bg-white/[0.055] !text-white hover:!border-[#1687F8] sm:w-auto"
+          >
+            Get Help Choosing
+          </LinkButton>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+          {buyingGuideCards.map(([Icon, title, points]) => (
+            <article
+              key={title}
+              className="rounded-[1.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.065),rgba(255,255,255,0.025))] p-5"
+            >
+              <Icon className="h-6 w-6 text-[#65B4FF]" />
+              <h3 className="mt-4 text-base font-bold text-white">{title}</h3>
+              <ul className="mt-3 grid gap-2 text-sm text-[#A8B0BF]">
+                {points.map((point) => (
+                  <li key={point} className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#65B4FF]" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function CompactCta({
   eyebrow,
   headline,
   description,
   icon: Icon,
   primary,
-  secondary
+  secondary,
+  steps
 }: {
   eyebrow: string;
   headline: string;
@@ -253,6 +449,7 @@ function CompactCta({
   icon: LucideIcon;
   primary: { label: string; href: string };
   secondary: { label: string; href: string };
+  steps?: string[];
 }) {
   return (
     <section className="home-reveal bg-[#07090F] px-4 py-8 text-white sm:px-6 sm:py-12 lg:px-8">
@@ -274,6 +471,23 @@ function CompactCta({
           <p className="mt-4 max-w-3xl text-base leading-7 text-[#A8B0BF]">
             {description}
           </p>
+          {steps && (
+            <div className="mt-5 grid gap-2 sm:grid-cols-3">
+              {steps.map((step, index) => (
+                <div
+                  key={step}
+                  className="rounded-2xl border border-white/10 bg-white/[0.045] p-3"
+                >
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#65B4FF]">
+                    Step {index + 1}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-white">
+                    {step}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <LinkButton href={primary.href} className="w-full sm:w-auto">
               {primary.label} <ArrowRight className="h-4 w-4" />
@@ -372,13 +586,24 @@ export default function HomePage() {
         <CinematicProductSection key={section.eyebrow} section={section} />
       ))}
 
+      <ConditionGuideSection />
+
+      <WhyBuySection />
+
+      <BuyingGuideSection />
+
       <CompactCta
         eyebrow="Trade-In"
         headline="Upgrade Without Starting From Zero."
-        description="Trade in your current device and receive a guided assessment before moving to your next iPhone, iPad, Mac, or accessory."
+        description="Bring your old device, receive a clear evaluation, then upgrade to another Apple device with practical TroyX guidance."
         icon={RefreshCw}
         primary={{ label: "Estimate Trade-In", href: "/trade-in" }}
         secondary={{ label: "Learn How It Works", href: "/trade-in" }}
+        steps={[
+          "Bring your old device",
+          "Receive an evaluation",
+          "Upgrade with confidence"
+        ]}
       />
 
       <section className="home-reveal bg-[#07090F] px-4 pb-14 pt-8 text-white sm:px-6 sm:pb-20 lg:px-8">

@@ -6,6 +6,7 @@ import { GitCompare, Heart, Eye, X } from "lucide-react";
 import { useState } from "react";
 import { AddToCartButton } from "@/components/product/add-to-cart";
 import { useCommerceStore } from "@/context/store";
+import { normalizeConditionLabel } from "@/lib/condition-guide";
 import { cn, formatCurrency } from "@/lib/utils";
 import type { Product } from "@/types";
 
@@ -157,7 +158,7 @@ export function ProductCard({
 
             <div className="mt-3 flex flex-wrap items-center gap-1.5">
               <span className="inline-flex items-center rounded-full bg-brand-blue/10 px-2.5 py-1 text-[10px] font-bold text-brand-blue dark:bg-brand-blue/20">
-                {product.condition[0] || "Available on Request"}
+                {normalizeConditionLabel(product.condition[0])}
               </span>
               {product.storage.slice(0, compact ? 1 : 2).map((opt) => (
                 <span

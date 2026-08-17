@@ -1,4 +1,12 @@
-export type ProductCondition = "New" | "Used" | "Refurbished";
+export type ProductCondition =
+  | "New"
+  | "Used"
+  | "Refurbished"
+  | "Brand New"
+  | "UK Used"
+  | "Excellent"
+  | "Very Good"
+  | "To Confirm";
 
 export type ProductCategory =
   | "iPhone"

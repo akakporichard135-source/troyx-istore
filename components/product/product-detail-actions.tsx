@@ -6,6 +6,7 @@ import { GitCompare, Heart, MessageCircle, Share2, Zap } from "lucide-react";
 import { AddToCartButton } from "@/components/product/add-to-cart";
 import { Button } from "@/components/ui/button";
 import { useCommerceStore } from "@/context/store";
+import { normalizeConditionLabel } from "@/lib/condition-guide";
 import { siteConfig } from "@/lib/site";
 import type { Product, ProductCondition } from "@/types";
 import { cn } from "@/lib/utils";
@@ -114,7 +115,7 @@ function OptionGroup({
                 style={{ backgroundColor: colorToSwatch(option) }}
               />
             )}
-            {option}
+            {label === "Condition" ? normalizeConditionLabel(option) : option}
           </button>
         ))}
       </div>
