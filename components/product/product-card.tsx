@@ -6,7 +6,10 @@ import { GitCompare, Heart, Eye, X } from "lucide-react";
 import { useState } from "react";
 import { AddToCartButton } from "@/components/product/add-to-cart";
 import { useCommerceStore } from "@/context/store";
-import { normalizeConditionLabel } from "@/lib/condition-guide";
+import {
+  isUsedCondition,
+  normalizeConditionLabel
+} from "@/lib/condition-guide";
 import { cn, formatCurrency } from "@/lib/utils";
 import type { Product } from "@/types";
 
@@ -24,7 +27,7 @@ export function ProductCard({
   const saved = wishlist.includes(product.id);
   const compared = compare.includes(product.id);
 
-  const categoryFallback = "/images/products/verified-image-pending.webp";
+  const categoryFallback = "/images/categories/accessories.webp";
 
   // Quick view modal state
   const [quickViewOpen, setQuickViewOpen] = useState(false);
@@ -33,8 +36,18 @@ export function ProductCard({
   );
   const imageAlt =
     imageSrc === categoryFallback
-      ? `Verified product image pending for ${product.name}`
+      ? `${product.category} product image for ${product.name}`
       : product.name;
+  const tradeInEligible = ["iPhone", "iPad", "MacBook", "Apple Watch"].includes(
+    product.category
+  );
+  const batteryHealthAvailable =
+    Boolean(product.batteryHealth) ||
+    (product.category === "iPhone" && product.condition.some(isUsedCondition));
+  const cardIndicators = [
+    tradeInEligible && "Trade-In Available",
+    batteryHealthAvailable && "Battery Health Available"
+  ].filter(Boolean) as string[];
 
   return (
     <>
@@ -91,7 +104,7 @@ export function ProductCard({
               loading="lazy"
               className={cn(
                 "object-contain transition-transform duration-500 group-hover:scale-105",
-                compact ? "p-6" : "p-8"
+                compact ? "p-5" : "p-6"
               )}
             />
           </Link>
@@ -169,6 +182,19 @@ export function ProductCard({
                 </span>
               ))}
             </div>
+
+            {cardIndicators.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {cardIndicators.slice(0, 2).map((indicator) => (
+                  <span
+                    key={indicator}
+                    className="rounded-full border border-emerald-500/15 bg-emerald-500/10 px-2.5 py-1 text-[9px] font-bold text-emerald-700 dark:text-emerald-300"
+                  >
+                    {indicator}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="mt-4 space-y-3 border-t border-black/5 pt-4 dark:border-white/5">

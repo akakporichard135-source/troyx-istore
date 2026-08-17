@@ -5,11 +5,11 @@ export const productionConditions = [
   "UK Used",
   "Excellent",
   "Very Good",
-  "To Confirm"
+  "Refurbished"
 ] as const;
 
 export function normalizeConditionLabel(condition?: string) {
-  if (!condition) return "To Confirm";
+  if (!condition) return "Brand New";
   if (condition === "New") return "Brand New";
   if (condition === "Used") return "UK Used";
   return condition;
@@ -27,16 +27,16 @@ export function getConditionSummary(condition?: ProductCondition | string) {
       "Very clean used condition with minimal visible wear and strong expected battery guidance where relevant.",
     "Very Good":
       "Good everyday used condition with clear notes on visible wear, battery expectations, and final inspection.",
-    "To Confirm":
-      "Enquiry-only availability where final condition, price, stock, or photos are confirmed directly before purchase.",
     Refurbished:
       "Professionally checked stock with service history or replacement parts explained before purchase."
   };
 
-  return summaries[normalized] || summaries["To Confirm"];
+  return summaries[normalized] || summaries["Brand New"];
 }
 
 export function isUsedCondition(condition?: ProductCondition | string) {
   const normalized = normalizeConditionLabel(condition);
-  return ["UK Used", "Excellent", "Very Good", "Used"].includes(normalized);
+  return ["UK Used", "Excellent", "Very Good", "Refurbished"].includes(
+    normalized
+  );
 }

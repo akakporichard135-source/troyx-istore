@@ -8,6 +8,7 @@ import { Button, LinkButton } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useCommerceStore } from "@/context/store";
 import { useAdminStore } from "@/context/admin-store";
+import { normalizeConditionLabel } from "@/lib/condition-guide";
 import { formatCurrency } from "@/lib/utils";
 import { ProductGrid } from "@/components/product/product-grid";
 
@@ -110,7 +111,7 @@ export function CartManager() {
                 </h2>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
                   {item.color || "Standard"} &bull; {item.storage || "N/A"}{" "}
-                  &bull; {item.condition || "New"}
+                  &bull; {normalizeConditionLabel(item.condition)}
                 </p>
                 <p className="text-xs font-semibold text-emerald-500">
                   TroyX iStore verified inventory

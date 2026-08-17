@@ -14,6 +14,11 @@ import { useMemo, useState, useEffect } from "react";
 import { ProductCard } from "@/components/product/product-card";
 import { Input, Select } from "@/components/ui/input";
 import { categories, products } from "@/database/products";
+import {
+  getConditionSummary,
+  normalizeConditionLabel,
+  productionConditions
+} from "@/lib/condition-guide";
 import { cn } from "@/lib/utils";
 
 const primaryDepartments = [
@@ -123,7 +128,9 @@ export function ShopBrowser({
         // Condition filter
         .filter((product) => {
           if (selectedConditions.length === 0) return true;
-          return product.condition.some((c) => selectedConditions.includes(c));
+          return product.condition.some((condition) =>
+            selectedConditions.includes(normalizeConditionLabel(condition))
+          );
         })
         // Stock availability filter
         .filter((product) => {
@@ -186,7 +193,40 @@ export function ShopBrowser({
   };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[240px_1fr] items-start">
+    <div className="space-y-6">
+      <div className="rounded-[2rem] border border-black/5 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-zinc-900">
+        <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand-blue">
+              Condition Guide
+            </p>
+            <h2 className="mt-1 text-xl font-extrabold text-brand-ink dark:text-white">
+              Choose the right device condition.
+            </h2>
+          </div>
+          <p className="max-w-2xl text-xs leading-5 text-zinc-500 dark:text-zinc-400">
+            Brand New devices use catalogue imagery. UK Used, Excellent, Very
+            Good, and Refurbished devices are checked before final confirmation.
+          </p>
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+          {productionConditions.map((condition) => (
+            <article
+              key={condition}
+              className="rounded-2xl border border-black/5 bg-brand-mist p-3 dark:border-white/10 dark:bg-white/5"
+            >
+              <p className="text-xs font-extrabold text-brand-ink dark:text-white">
+                {condition}
+              </p>
+              <p className="mt-1 line-clamp-2 text-[11px] leading-5 text-zinc-500 dark:text-zinc-400">
+                {getConditionSummary(condition)}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid items-start gap-8 lg:grid-cols-[240px_1fr]">
       {/* Sidebar Filters */}
       <aside className="space-y-6 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 p-6 rounded-[2rem] shadow-sm">
         <div className="flex justify-between items-center pb-3 border-b border-black/5 dark:border-white/5">
@@ -263,7 +303,7 @@ export function ShopBrowser({
             Device Condition
           </p>
           <div className="space-y-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            {["New", "Used", "Refurbished"].map((cond) => {
+            {productionConditions.map((cond) => {
               const checked = selectedConditions.includes(cond);
               return (
                 <label
@@ -495,6 +535,7 @@ export function ShopBrowser({
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }

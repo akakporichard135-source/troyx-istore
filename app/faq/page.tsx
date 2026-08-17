@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "FAQ", description: "TroyX iStore fre
 
 const faqs = [
   ["Are products genuine?", "TroyX iStore is designed around genuine product inventory, clear sourcing, and condition transparency."],
-  ["Do used devices show battery health?", "Yes. Used inventory supports battery health display and inspection notes."],
+  ["Do UK Used devices show battery health?", "Yes. UK Used inventory supports battery health display and inspection notes."],
   ["Can I pick up my order?", "Yes. Checkout supports pickup and delivery options."],
   ["Can I compare products before buying?", "Yes. Use wishlist, compare, and product detail pages to review options before contacting the team or checking out."],
   ["Is the trade-in estimate final?", "No. Final value is confirmed only after physical inspection."]

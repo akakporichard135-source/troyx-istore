@@ -419,7 +419,15 @@ export default function EditProductPage({ params }: Props) {
                 Device Condition Tiers
               </p>
               <div className="flex gap-4">
-                {(["New", "Used", "Refurbished"] as ProductCondition[]).map(
+                {(
+                  [
+                    "Brand New",
+                    "UK Used",
+                    "Excellent",
+                    "Very Good",
+                    "Refurbished"
+                  ] as ProductCondition[]
+                ).map(
                   (cond) => {
                     const isChecked = form.conditions.includes(cond);
                     return (

@@ -40,7 +40,7 @@ export default async function ProductDetailsPage({ params }: Props) {
   const product = getProductBySlug(slug);
   if (!product) notFound();
   const conditionLabels = product.condition.map(normalizeConditionLabel);
-  const primaryCondition = conditionLabels[0] || "To Confirm";
+  const primaryCondition = conditionLabels[0] || "Brand New";
   const usedListing = product.condition.some(isUsedCondition);
 
   const related = products
@@ -162,8 +162,8 @@ export default async function ProductDetailsPage({ params }: Props) {
             title={usedListing ? "Real photos expected" : "Catalogue imagery"}
             description={
               usedListing
-                ? "UK Used, Excellent, and Very Good units should include real device photos before final confirmation. Ask TroyX on WhatsApp if photos are pending."
-                : "Brand New and To Confirm catalogue listings may use clean product imagery while TroyX confirms exact stock and configuration."
+                ? "UK Used, Excellent, Very Good, and Refurbished units should include real device photos before final confirmation. Ask TroyX on WhatsApp if photos are pending."
+                : "Brand New catalogue listings may use clean product imagery while TroyX confirms exact stock and configuration."
             }
           />
           <InfoPanel

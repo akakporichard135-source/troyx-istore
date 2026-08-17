@@ -8,7 +8,7 @@ export default function TermsPage() {
   const items = [
     "TroyX iStore is an independent retailer and does not suggest official affiliation with Apple Inc.",
     "Product availability, condition, warranty details, and delivery estimates are displayed on product pages.",
-    "Used and refurbished devices may vary by cosmetic condition, battery health, and included accessories.",
+    "UK Used and refurbished devices may vary by cosmetic condition, battery health, and included accessories.",
     "Trade-in estimates are provisional until physical inspection confirms final value.",
     "Customers are responsible for accurate shipping, billing, and contact information."
   ];

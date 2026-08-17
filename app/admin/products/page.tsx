@@ -145,10 +145,10 @@ export default function ProductsManagerPage() {
             price: Number(parts[3]) || 0,
             rating: 4.8,
             reviewCount: 15,
-            images: ["/images/products/verified-image-pending.webp"],
+            images: ["/images/categories/accessories.webp"],
             colors: ["Black"],
             storage: ["128GB"],
-            condition: ["New"],
+            condition: ["Brand New"],
             availability: (parts[4] ||
               "Available on request") as Product["availability"],
             warranty: parts[5] || "12-month TroyX warranty",
@@ -352,7 +352,7 @@ export default function ProductsManagerPage() {
                             <Image
                               src={
                                 p.images[0] ||
-                                "/images/products/verified-image-pending.webp"
+                                "/images/categories/accessories.webp"
                               }
                               alt={p.name}
                               width={32}
