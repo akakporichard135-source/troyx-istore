@@ -23,9 +23,125 @@ import {
   Video,
   X,
   AlertCircle,
+  Sparkles,
+  Layout,
+  Layers,
+  HelpCircle,
+  Sliders,
+  Film,
+  Camera,
+  Grid,
 } from "lucide-react";
-import { PageRecord, PageSection, PageRevision, MediaAsset } from "@/lib/types";
+import { PageRecord, PageSection, PageRevision, SectionType } from "@/lib/types";
 import SectionRenderer from "@/components/public/SectionRenderer";
+import UniversalMediaPicker, { SelectedMedia } from "@/components/admin/UniversalMediaPicker";
+
+const TEMPLATE_OPTIONS: Array<{
+  type: SectionType;
+  title: string;
+  category: string;
+  description: string;
+  defaultTheme: "dark" | "white";
+}> = [
+  {
+    type: "cinematic_hero",
+    title: "Cinematic Video Hero",
+    category: "Hero Showcases",
+    description: "Full-width video background with Apple typography and dual CTA buttons.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "image_hero",
+    title: "Full-Width Image Hero",
+    category: "Hero Showcases",
+    description: "Photographic high-resolution hero with responsive desktop and mobile pictures.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "fullscreen_image",
+    title: "Full-Screen Visual Showcase",
+    category: "Hero Showcases",
+    description: "Immersive edge-to-edge hardware visual with subtle dark contrast overlay.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "split_story",
+    title: "Image-and-Text Split Story",
+    category: "Storytelling",
+    description: "50/50 split layout pairing product narrative with crisp hardware photography.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "video_story",
+    title: "Video Narrative Split",
+    category: "Storytelling",
+    description: "Side-by-side looping cinematic clip and product feature explanation.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "feature_showcase",
+    title: "Feature Highlights Grid",
+    category: "Features & Specs",
+    description: "Three-column modern card grid detailing hardware features with icons.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "tech_specs",
+    title: "Technical Specifications",
+    category: "Features & Specs",
+    description: "Minimalist Apple-style horizontal divider table for chips, displays, and battery.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "comparison_table",
+    title: "Device Comparison Cards",
+    category: "Features & Specs",
+    description: "Multi-model comparison columns highlighting tier differences.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "media_gallery",
+    title: "Product Photography Gallery",
+    category: "Galleries & Carousels",
+    description: "Interactive photo grid showcase for device finishes and angles.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "image_carousel",
+    title: "Swipeable Image Carousel",
+    category: "Galleries & Carousels",
+    description: "Smooth horizontal slider with next/previous controls for gallery photography.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "promo_banner",
+    title: "Campaign / Promotional Banner",
+    category: "Marketing",
+    description: "High-contrast promotional card with badge and direct purchase link.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "faq",
+    title: "Frequently Asked Questions",
+    category: "Information",
+    description: "Interactive expandable FAQ accordion for store policies, warranty, and battery.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "contact_section",
+    title: "Store Location & Contact Info",
+    category: "Storefront",
+    description: "Physical East Legon showroom photography, phone numbers, and direct WhatsApp.",
+    defaultTheme: "dark",
+  },
+  {
+    type: "cta_section",
+    title: "Call-to-Action Closing Section",
+    category: "Marketing",
+    description: "High-impact closing section encouraging buyers to explore stock or visit store.",
+    defaultTheme: "dark",
+  },
+];
 
 export default function AdminPageEditor() {
   const params = useParams();
@@ -44,14 +160,15 @@ export default function AdminPageEditor() {
   const [previewSection, setPreviewSection] = useState<PageSection | null>(null);
   const [previewViewport, setPreviewViewport] = useState<"desktop" | "mobile">("desktop");
   const [showRevisionModal, setShowRevisionModal] = useState(false);
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
 
-  // Media Library Picker Modal State
+  // Universal Media Picker State
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerTarget, setPickerTarget] = useState<
-    "desktopImageUrl" | "mobileImageUrl" | "desktopVideoUrl" | "mobileVideoUrl" | "posterImageUrl" | null
+    "desktopImageUrl" | "mobileImageUrl" | "desktopVideoUrl" | "mobileVideoUrl" | "posterImageUrl" | "gallery" | null
   >(null);
-  const [libraryAssets, setLibraryAssets] = useState<MediaAsset[]>([]);
-  const [libraryLoading, setLibraryLoading] = useState(false);
-  const [libraryFilter, setLibraryFilter] = useState<"all" | "image" | "video">("all");
+  const [pickerFilter, setPickerFilter] = useState<"all" | "image" | "video">("all");
+  const [pickerTitle, setPickerTitle] = useState("Select Media Asset");
 
   // Load page and its sections
   const loadData = async () => {
@@ -80,7 +197,7 @@ export default function AdminPageEditor() {
     loadData();
   }, [pageId]);
 
-  // Section Ordering: Move Up
+  // Section Ordering: Move Up or Down
   const moveSection = async (index: number, direction: "up" | "down") => {
     const targetIndex = direction === "up" ? index - 1 : index + 1;
     if (targetIndex < 0 || targetIndex >= sections.length) return;
@@ -149,24 +266,28 @@ export default function AdminPageEditor() {
     const result = await res.json();
     if (result.section) {
       setSections((prev) => [...prev, result.section]);
+      setMessage(`Duplicated section '${result.section.draftLabel}'`);
+      setTimeout(() => setMessage(null), 3000);
     }
   };
 
-  // Add a new blank section
-  const handleAddSection = async () => {
+  // Create Section from Selected Template
+  const handleSelectTemplate = async (template: typeof TEMPLATE_OPTIONS[0]) => {
+    setShowTemplateModal(false);
     const res = await fetch("/api/admin/sections", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         pageId,
-        sectionType: "cinematic_hero",
-        draftLabel: `New Section ${sections.length + 1}`,
+        sectionType: template.type,
+        draftLabel: `${template.title} #${sections.length + 1}`,
         sortOrder: sections.length + 1,
         isPublished: false,
-        theme: "dark",
-        backgroundColor: "#000000",
-        textColor: "#f5f5f7",
+        theme: template.defaultTheme,
+        backgroundColor: template.defaultTheme === "dark" ? "#000000" : "#ffffff",
+        textColor: template.defaultTheme === "dark" ? "#f5f5f7" : "#1d1d1f",
         textAlignment: "center",
+        mediaType: template.type.includes("video") ? "video" : "image",
       }),
     });
     const result = await res.json();
@@ -176,7 +297,7 @@ export default function AdminPageEditor() {
     }
   };
 
-  // Save changes to edited section
+  // Save Section changes
   const handleSaveSection = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingSection) return;
@@ -206,7 +327,7 @@ export default function AdminPageEditor() {
 
   // Create Snapshot Revision
   const handleCreateRevision = async () => {
-    const notes = prompt("Enter revision snapshot note (e.g. 'Before holiday campaign launch'):");
+    const notes = prompt("Enter revision snapshot note (e.g. 'Before launch update'):");
     if (notes === null) return;
 
     const res = await fetch("/api/admin/revisions", {
@@ -237,32 +358,41 @@ export default function AdminPageEditor() {
     }
   };
 
-  const openMediaPicker = async (
-    target: "desktopImageUrl" | "mobileImageUrl" | "desktopVideoUrl" | "mobileVideoUrl" | "posterImageUrl",
+  // Open Universal Media Picker
+  const openMediaPicker = (
+    target: "desktopImageUrl" | "mobileImageUrl" | "desktopVideoUrl" | "mobileVideoUrl" | "posterImageUrl" | "gallery",
+    title: string,
     filter: "all" | "image" | "video" = "all"
   ) => {
     setPickerTarget(target);
-    setLibraryFilter(filter);
-    setLibraryLoading(true);
-    try {
-      const q = filter !== "all" ? `?type=${filter}` : "";
-      const res = await fetch(`/api/admin/media${q}`);
-      const data = await res.json();
-      if (data.assets) setLibraryAssets(data.assets);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLibraryLoading(false);
-    }
+    setPickerTitle(title);
+    setPickerFilter(filter);
+    setPickerOpen(true);
   };
 
-  const handleSelectAsset = (asset: MediaAsset) => {
-    if (!pickerTarget || !editingSection) return;
-    setEditingSection({
-      ...editingSection,
-      [pickerTarget]: asset.publicUrl,
-    });
-    setPickerTarget(null);
+  const handleMediaSelected = (media: SelectedMedia) => {
+    if (!editingSection || !pickerTarget) return;
+
+    if (pickerTarget === "gallery") {
+      const currentGallery = editingSection.config?.galleryImages || [];
+      const updatedGallery = [
+        ...currentGallery,
+        { url: media.url, caption: media.caption || "", alt: media.altText || media.filename || "" },
+      ];
+      setEditingSection({
+        ...editingSection,
+        config: {
+          ...editingSection.config,
+          galleryImages: updatedGallery,
+        },
+      });
+    } else {
+      setEditingSection({
+        ...editingSection,
+        [pickerTarget]: media.url,
+      });
+    }
+    setPickerOpen(false);
   };
 
   if (loading) {
@@ -282,20 +412,24 @@ export default function AdminPageEditor() {
         <div className="space-y-1">
           <Link
             href="/admin/pages"
-            className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white mb-1"
+            className="text-xs text-zinc-400 hover:text-white inline-flex items-center gap-1.5 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to All Pages</span>
+            <span>Back to Page Manager</span>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
               {page.title}
             </h1>
-            {isHome && (
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">
-                Exact 6 Draft Slots Architecture
-              </span>
-            )}
+            <span
+              className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${
+                page.isPublished
+                  ? "bg-emerald-950 text-emerald-400 border-emerald-800"
+                  : "bg-yellow-950 text-yellow-400 border-yellow-800"
+              }`}
+            >
+              {page.isPublished ? "Published" : "Draft"}
+            </span>
           </div>
           <p className="text-xs text-zinc-400">
             Route: <span className="font-mono text-zinc-300">/{isHome ? "" : page.slug}</span>
@@ -331,7 +465,7 @@ export default function AdminPageEditor() {
           </Link>
 
           <button
-            onClick={handleAddSection}
+            onClick={() => setShowTemplateModal(true)}
             className="apple-btn-primary text-xs flex items-center gap-1.5"
           >
             <Plus className="w-4 h-4" />
@@ -362,167 +496,229 @@ export default function AdminPageEditor() {
             <span className="text-zinc-300 font-mono">4. Apple Watch Series 12 (white)</span>,{" "}
             <span className="text-zinc-300 font-mono">5. iPad A16 (white)</span>, and{" "}
             <span className="text-zinc-300 font-mono">6. AirPods Pro 3 (dark)</span>. All six exist as
-            unpublished drafts with no fake initial images or prices. To launch a section, click{" "}
-            <span className="text-white font-medium">Edit Content</span>, attach your media or text, and
-            toggle <span className="text-emerald-400 font-medium">Publish</span>.
+            unpublished drafts. To launch a section, click <span className="text-white font-medium">Edit Content</span>, attach your media or text, and toggle <span className="text-emerald-400 font-medium">Publish</span>.
           </p>
         </div>
       )}
 
       {/* Sections List */}
       <div className="space-y-3">
-        {sections.map((section, index) => {
-          const hasMedia =
-            section.desktopImageUrl ||
-            section.desktopVideoUrl ||
-            section.mobileImageUrl ||
-            section.mobileVideoUrl;
-
-          return (
-            <div
-              key={section.id}
-              className={`p-5 rounded-2xl border transition-all ${
-                section.isPublished
-                  ? "bg-[#161617] border-zinc-700/80 shadow-md"
-                  : "bg-zinc-950/80 border-zinc-900"
-              }`}
+        {sections.length === 0 ? (
+          <div className="p-12 text-center rounded-2xl border border-dashed border-zinc-800 bg-[#161617]/50 space-y-3">
+            <Layout className="w-8 h-8 text-zinc-600 mx-auto" />
+            <div className="text-sm font-semibold text-white">No sections on this page yet</div>
+            <p className="text-xs text-zinc-400 max-w-sm mx-auto">
+              Add your first section from our 20 Apple-inspired templates to start visually designing this page.
+            </p>
+            <button
+              onClick={() => setShowTemplateModal(true)}
+              className="apple-btn-primary text-xs py-2 px-4 inline-flex items-center gap-1.5"
             >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                {/* Slot index, Title & Metadata */}
-                <div className="flex items-start sm:items-center gap-4">
-                  <div className="w-8 h-8 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-400 shrink-0">
-                    {index + 1}
-                  </div>
+              <Plus className="w-4 h-4" />
+              <span>Choose Section Template</span>
+            </button>
+          </div>
+        ) : (
+          sections.map((section, index) => {
+            const hasMedia =
+              section.desktopImageUrl ||
+              section.desktopVideoUrl ||
+              section.mobileImageUrl ||
+              section.mobileVideoUrl;
 
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-white tracking-tight">
-                        {section.draftLabel}
-                      </span>
-                      <span
-                        className={`text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded border ${
-                          section.theme === "dark"
-                            ? "bg-black text-zinc-300 border-zinc-800"
-                            : "bg-white text-zinc-900 border-zinc-300"
-                        }`}
-                      >
-                        {section.theme} Theme
-                      </span>
+            return (
+              <div
+                key={section.id}
+                className={`p-5 rounded-2xl border transition-all ${
+                  section.isPublished
+                    ? "bg-[#161617] border-zinc-700/80 shadow-md"
+                    : "bg-zinc-950/80 border-zinc-900"
+                }`}
+              >
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  {/* Slot index, Title & Metadata */}
+                  <div className="flex items-start sm:items-center gap-4">
+                    <div className="w-8 h-8 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-400 shrink-0">
+                      {index + 1}
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400">
-                      <span>Type: {section.sectionType}</span>
-                      <span>•</span>
-                      <span>Alignment: {section.textAlignment}</span>
-                      <span>•</span>
-                      <span>
-                        Media:{" "}
-                        {hasMedia ? (
-                          <span className="text-emerald-400">Attached</span>
-                        ) : (
-                          <span className="text-zinc-500">None (Empty draft)</span>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-white tracking-tight">
+                          {section.draftLabel}
+                        </span>
+                        <span
+                          className={`text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded border ${
+                            section.theme === "dark"
+                              ? "bg-black text-zinc-300 border-zinc-800"
+                              : "bg-white text-zinc-900 border-zinc-300"
+                          }`}
+                        >
+                          {section.theme} Theme
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400">
+                        <span>Type: {section.sectionType}</span>
+                        <span>•</span>
+                        <span>Alignment: {section.textAlignment}</span>
+                        <span>•</span>
+                        <span>
+                          Media:{" "}
+                          {hasMedia ? (
+                            <span className="text-emerald-400">Attached</span>
+                          ) : (
+                            <span className="text-zinc-500">None (Empty draft)</span>
+                          )}
+                        </span>
+                        {section.title && (
+                          <>
+                            <span>•</span>
+                            <span className="text-zinc-300 font-medium truncate max-w-xs">
+                              Title: &quot;{section.title}&quot;
+                            </span>
+                          </>
                         )}
-                      </span>
-                      {section.title && (
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section Controls */}
+                  <div className="flex items-center gap-2 self-end sm:self-center">
+                    {/* Reorder Buttons */}
+                    <div className="flex items-center rounded-xl bg-zinc-900 border border-zinc-800 p-0.5">
+                      <button
+                        onClick={() => moveSection(index, "up")}
+                        disabled={index === 0}
+                        className="p-1.5 text-zinc-400 hover:text-white disabled:opacity-30 rounded hover:bg-zinc-800"
+                        title="Move Up"
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => moveSection(index, "down")}
+                        disabled={index === sections.length - 1}
+                        className="p-1.5 text-zinc-400 hover:text-white disabled:opacity-30 rounded hover:bg-zinc-800"
+                        title="Move Down"
+                      >
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Preview Button */}
+                    <button
+                      onClick={() => setPreviewSection(section)}
+                      className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 hover:text-white flex items-center gap-1"
+                      title="Preview Section"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span className="hidden md:inline">Preview</span>
+                    </button>
+
+                    {/* Edit Content */}
+                    <button
+                      onClick={() => setEditingSection(section)}
+                      className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 hover:text-white flex items-center gap-1"
+                    >
+                      <Edit3 className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Edit</span>
+                    </button>
+
+                    {/* Duplicate */}
+                    <button
+                      onClick={() => handleDuplicate(section)}
+                      className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-400 hover:text-white"
+                      title="Duplicate Section"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                    </button>
+
+                    {/* Publish Toggle Button */}
+                    <button
+                      onClick={() => togglePublish(section)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                        section.isPublished
+                          ? "bg-emerald-600 hover:bg-emerald-500 text-white"
+                          : "bg-zinc-800 hover:bg-zinc-700 text-yellow-400 border border-yellow-500/30"
+                      }`}
+                    >
+                      {section.isPublished ? (
                         <>
-                          <span>•</span>
-                          <span className="text-zinc-300 font-medium truncate max-w-xs">
-                            Title: &quot;{section.title}&quot;
-                          </span>
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Published</span>
+                        </>
+                      ) : (
+                        <>
+                          <CircleDashed className="w-3.5 h-3.5" />
+                          <span>Publish</span>
                         </>
                       )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Section Controls */}
-                <div className="flex items-center gap-2 self-end sm:self-center">
-                  {/* Reorder Buttons */}
-                  <div className="flex items-center rounded-xl bg-zinc-900 border border-zinc-800 p-0.5">
-                    <button
-                      onClick={() => moveSection(index, "up")}
-                      disabled={index === 0}
-                      className="p-1.5 text-zinc-400 hover:text-white disabled:opacity-30 rounded hover:bg-zinc-800"
-                      title="Move Up"
-                    >
-                      <ArrowUp className="w-3.5 h-3.5" />
                     </button>
+
+                    {/* Delete Button */}
                     <button
-                      onClick={() => moveSection(index, "down")}
-                      disabled={index === sections.length - 1}
-                      className="p-1.5 text-zinc-400 hover:text-white disabled:opacity-30 rounded hover:bg-zinc-800"
-                      title="Move Down"
+                      onClick={() => handleDelete(section.id, section.draftLabel)}
+                      className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-red-400"
+                      title="Delete section"
                     >
-                      <ArrowDown className="w-3.5 h-3.5" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
-
-                  {/* Preview Button */}
-                  <button
-                    onClick={() => setPreviewSection(section)}
-                    className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 hover:text-white flex items-center gap-1"
-                    title="Preview Section"
-                  >
-                    <Eye className="w-3.5 h-3.5" />
-                    <span className="hidden md:inline">Preview</span>
-                  </button>
-
-                  {/* Edit Content */}
-                  <button
-                    onClick={() => setEditingSection(section)}
-                    className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 hover:text-white flex items-center gap-1"
-                  >
-                    <Edit3 className="w-3.5 h-3.5 text-blue-400" />
-                    <span>Edit</span>
-                  </button>
-
-                  {/* Duplicate */}
-                  <button
-                    onClick={() => handleDuplicate(section)}
-                    className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-400 hover:text-white"
-                    title="Duplicate Section"
-                  >
-                    <Copy className="w-3.5 h-3.5" />
-                  </button>
-
-                  {/* Publish Toggle Button */}
-                  <button
-                    onClick={() => togglePublish(section)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors ${
-                      section.isPublished
-                        ? "bg-emerald-600 hover:bg-emerald-500 text-white"
-                        : "bg-zinc-800 hover:bg-zinc-700 text-yellow-400 border border-yellow-500/30"
-                    }`}
-                  >
-                    {section.isPublished ? (
-                      <>
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Published</span>
-                      </>
-                    ) : (
-                      <>
-                        <CircleDashed className="w-3.5 h-3.5" />
-                        <span>Publish</span>
-                      </>
-                    )}
-                  </button>
-
-                  {/* Delete Button */}
-                  <button
-                    onClick={() => handleDelete(section.id, section.draftLabel)}
-                    className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-red-400"
-                    title="Delete section"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
 
-      {/* Section Editor Drawer/Modal */}
+      {/* TEMPLATE SELECTOR MODAL */}
+      {showTemplateModal && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="max-w-4xl w-full bg-[#161617] border border-zinc-800 rounded-3xl p-6 space-y-6 max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                  Section Template Library
+                </span>
+                <h2 className="text-xl font-semibold text-white">Choose a Section Template</h2>
+              </div>
+              <button
+                onClick={() => setShowTemplateModal(false)}
+                className="p-1 rounded-lg text-zinc-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 overflow-y-auto pr-1 flex-1">
+              {TEMPLATE_OPTIONS.map((tmpl) => (
+                <div
+                  key={tmpl.type}
+                  onClick={() => handleSelectTemplate(tmpl)}
+                  className="p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-blue-500 hover:bg-zinc-900 cursor-pointer transition-all space-y-1.5 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">
+                      {tmpl.category}
+                    </span>
+                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-black text-zinc-400 border border-zinc-800">
+                      {tmpl.defaultTheme}
+                    </span>
+                  </div>
+                  <h3 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">
+                    {tmpl.title}
+                  </h3>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    {tmpl.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SECTION EDITOR DRAWER */}
       {editingSection && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-end animate-fade-in">
           <div className="w-full max-w-2xl h-full bg-[#161617] border-l border-zinc-800 p-6 overflow-y-auto space-y-6">
@@ -610,7 +806,7 @@ export default function AdminPageEditor() {
                     onChange={(e) =>
                       setEditingSection({ ...editingSection, tagline: e.target.value })
                     }
-                    placeholder="e.g. Pro Beyond"
+                    placeholder="e.g. Titanium Power"
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white"
                   />
                 </div>
@@ -636,321 +832,263 @@ export default function AdminPageEditor() {
                     onChange={(e) =>
                       setEditingSection({ ...editingSection, subtitle: e.target.value })
                     }
-                    placeholder="e.g. Titanium. So strong. So light. So Pro."
+                    placeholder="e.g. Built for performance and all-day endurance."
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white"
                   />
                 </div>
               </div>
 
-              {/* Media Configuration & Cinematic Controls */}
+              {/* Media Configuration with Universal Media Picker */}
               <div className="space-y-4 p-4 rounded-xl bg-zinc-900 border border-zinc-800">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-white">Cinematic Media Assets</h3>
+                  <h3 className="font-semibold text-white">Universal Media Assets</h3>
                   <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">
-                    Cloudinary CDN Ready
+                    Direct Cloud Upload
                   </span>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="block text-zinc-400">Media Mode</label>
-                  <select
-                    value={editingSection.mediaType}
-                    onChange={(e) =>
-                      setEditingSection({
-                        ...editingSection,
-                        mediaType: e.target.value as any,
-                      })
-                    }
-                    className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white"
-                  >
-                    <option value="none">None (Text Only / Clean Blueprint State)</option>
-                    <option value="image">Image Showcase</option>
-                    <option value="video">Cinematic Video</option>
-                    <option value="both">Image + Video</option>
-                  </select>
-                </div>
-
-                {/* Desktop Image */}
-                <div className="space-y-1">
+                {/* Desktop Image Slot */}
+                <div className="space-y-1.5 p-3 rounded-lg bg-zinc-950 border border-zinc-800/80">
                   <div className="flex items-center justify-between">
-                    <label className="block text-zinc-400">Desktop Image URL</label>
-                    <button
-                      type="button"
-                      onClick={() => openMediaPicker("desktopImageUrl", "image")}
-                      className="text-[11px] text-blue-400 hover:text-blue-300 font-medium"
-                    >
-                      Choose from Library
-                    </button>
+                    <label className="text-zinc-300 font-medium flex items-center gap-1.5">
+                      <ImageIcon className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Desktop Image</span>
+                    </label>
+                    {editingSection.desktopImageUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setEditingSection({ ...editingSection, desktopImageUrl: "" })}
+                        className="text-[10px] text-red-400 hover:underline"
+                      >
+                        Remove
+                      </button>
+                    )}
                   </div>
-                  <input
-                    type="text"
-                    value={editingSection.desktopImageUrl || ""}
-                    onChange={(e) =>
-                      setEditingSection({
-                        ...editingSection,
-                        desktopImageUrl: e.target.value,
-                      })
-                    }
-                    placeholder="e.g. https://res.cloudinary.com/.../hero.jpg"
-                    className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
-                  />
-                </div>
-
-                {/* Mobile Image */}
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label className="block text-zinc-400">Mobile Image URL (Optional)</label>
-                    <button
-                      type="button"
-                      onClick={() => openMediaPicker("mobileImageUrl", "image")}
-                      className="text-[11px] text-blue-400 hover:text-blue-300 font-medium"
-                    >
-                      Choose from Library
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    value={editingSection.mobileImageUrl || ""}
-                    onChange={(e) =>
-                      setEditingSection({
-                        ...editingSection,
-                        mobileImageUrl: e.target.value,
-                      })
-                    }
-                    placeholder="Mobile specific aspect ratio"
-                    className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
-                  />
-                </div>
-
-                {/* Desktop Video */}
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label className="block text-zinc-400">Desktop Video URL</label>
-                    <button
-                      type="button"
-                      onClick={() => openMediaPicker("desktopVideoUrl", "video")}
-                      className="text-[11px] text-blue-400 hover:text-blue-300 font-medium"
-                    >
-                      Choose from Library
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    value={editingSection.desktopVideoUrl || ""}
-                    onChange={(e) =>
-                      setEditingSection({
-                        ...editingSection,
-                        desktopVideoUrl: e.target.value,
-                      })
-                    }
-                    placeholder="e.g. https://res.cloudinary.com/.../showcase.mp4"
-                    className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
-                  />
-                </div>
-
-                {/* Mobile Video */}
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label className="block text-zinc-400">Mobile Video URL (Optional)</label>
-                    <button
-                      type="button"
-                      onClick={() => openMediaPicker("mobileVideoUrl", "video")}
-                      className="text-[11px] text-blue-400 hover:text-blue-300 font-medium"
-                    >
-                      Choose from Library
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    value={editingSection.mobileVideoUrl || ""}
-                    onChange={(e) =>
-                      setEditingSection({
-                        ...editingSection,
-                        mobileVideoUrl: e.target.value,
-                      })
-                    }
-                    placeholder="Mobile vertical crop (9:16 or portrait)"
-                    className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
-                  />
-                </div>
-
-                {/* Poster Image */}
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label className="block text-zinc-400">Video Poster Image URL</label>
-                    <button
-                      type="button"
-                      onClick={() => openMediaPicker("posterImageUrl", "image")}
-                      className="text-[11px] text-blue-400 hover:text-blue-300 font-medium"
-                    >
-                      Choose from Library
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    value={editingSection.posterImageUrl || ""}
-                    onChange={(e) =>
-                      setEditingSection({
-                        ...editingSection,
-                        posterImageUrl: e.target.value,
-                      })
-                    }
-                    placeholder="Static fallback frame before video streams"
-                    className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
-                  />
-                </div>
-
-                {/* Cinematic Video Playback Controls */}
-                {(editingSection.mediaType === "video" || editingSection.mediaType === "both") && (
-                  <div className="pt-3 border-t border-zinc-800 space-y-3">
-                    <span className="text-xs font-semibold text-zinc-300 uppercase tracking-wider block">
-                      Cinematic Playback Controls
-                    </span>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                      <label className="flex items-center gap-2 text-zinc-300 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={editingSection.config?.videoAutoplay !== false}
-                          onChange={(e) =>
-                            setEditingSection({
-                              ...editingSection,
-                              config: {
-                                ...editingSection.config,
-                                videoAutoplay: e.target.checked,
-                              },
-                            })
-                          }
-                          className="rounded bg-zinc-950 border-zinc-700 text-blue-600 focus:ring-0"
-                        />
-                        <span>Autoplay</span>
-                      </label>
-
-                      <label className="flex items-center gap-2 text-zinc-300 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={editingSection.config?.videoLoop !== false}
-                          onChange={(e) =>
-                            setEditingSection({
-                              ...editingSection,
-                              config: {
-                                ...editingSection.config,
-                                videoLoop: e.target.checked,
-                              },
-                            })
-                          }
-                          className="rounded bg-zinc-950 border-zinc-700 text-blue-600 focus:ring-0"
-                        />
-                        <span>Loop</span>
-                      </label>
-
-                      <label className="flex items-center gap-2 text-zinc-300 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={editingSection.config?.videoMuted !== false}
-                          onChange={(e) =>
-                            setEditingSection({
-                              ...editingSection,
-                              config: {
-                                ...editingSection.config,
-                                videoMuted: e.target.checked,
-                              },
-                            })
-                          }
-                          className="rounded bg-zinc-950 border-zinc-700 text-blue-600 focus:ring-0"
-                        />
-                        <span>Muted</span>
-                      </label>
-
-                      <label className="flex items-center gap-2 text-zinc-300 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(editingSection.config?.videoControls)}
-                          onChange={(e) =>
-                            setEditingSection({
-                              ...editingSection,
-                              config: {
-                                ...editingSection.config,
-                                videoControls: e.target.checked,
-                              },
-                            })
-                          }
-                          className="rounded bg-zinc-950 border-zinc-700 text-blue-600 focus:ring-0"
-                        />
-                        <span>Controls</span>
-                      </label>
-                    </div>
-
-                    <div className="space-y-1 pt-1">
-                      <div className="flex items-center justify-between text-xs">
-                        <label className="text-zinc-400">Background Overlay Opacity</label>
-                        <span className="font-mono text-zinc-300">
-                          {Math.round((editingSection.config?.overlayOpacity || 0) * 100)}%
-                        </span>
+                  {editingSection.desktopImageUrl ? (
+                    <div className="flex items-center gap-3 pt-1">
+                      <div className="w-14 h-14 rounded-lg bg-black border border-zinc-800 overflow-hidden shrink-0">
+                        <img src={editingSection.desktopImageUrl} alt="Preview" className="w-full h-full object-cover" />
                       </div>
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={editingSection.config?.overlayOpacity ?? 0}
-                        onChange={(e) =>
-                          setEditingSection({
-                            ...editingSection,
-                            config: {
-                              ...editingSection.config,
-                              overlayOpacity: parseFloat(e.target.value),
-                            },
-                          })
-                        }
-                        className="w-full accent-blue-500 cursor-pointer"
-                      />
+                      <div className="flex-1 truncate text-[11px] text-zinc-400">
+                        {editingSection.desktopImageUrl}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => openMediaPicker("desktopImageUrl", "Select Desktop Image", "image")}
+                        className="apple-btn-secondary text-[11px] py-1 px-2.5"
+                      >
+                        Replace
+                      </button>
                     </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => openMediaPicker("desktopImageUrl", "Select Desktop Image", "image")}
+                      className="w-full py-2 px-3 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center gap-2 hover:border-zinc-700"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Select or Upload Desktop Image</span>
+                    </button>
+                  )}
+                </div>
+
+                {/* Mobile Image Slot */}
+                <div className="space-y-1.5 p-3 rounded-lg bg-zinc-950 border border-zinc-800/80">
+                  <div className="flex items-center justify-between">
+                    <label className="text-zinc-300 font-medium flex items-center gap-1.5">
+                      <Smartphone className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Mobile Image (Optional)</span>
+                    </label>
+                    {editingSection.mobileImageUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setEditingSection({ ...editingSection, mobileImageUrl: "" })}
+                        className="text-[10px] text-red-400 hover:underline"
+                      >
+                        Remove
+                      </button>
+                    )}
                   </div>
-                )}
+                  {editingSection.mobileImageUrl ? (
+                    <div className="flex items-center gap-3 pt-1">
+                      <div className="w-14 h-14 rounded-lg bg-black border border-zinc-800 overflow-hidden shrink-0">
+                        <img src={editingSection.mobileImageUrl} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1 truncate text-[11px] text-zinc-400">
+                        {editingSection.mobileImageUrl}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => openMediaPicker("mobileImageUrl", "Select Mobile Image", "image")}
+                        className="apple-btn-secondary text-[11px] py-1 px-2.5"
+                      >
+                        Replace
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => openMediaPicker("mobileImageUrl", "Select Mobile Image", "image")}
+                      className="w-full py-2 px-3 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center gap-2 hover:border-zinc-700"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Select or Upload Mobile Image</span>
+                    </button>
+                  )}
+                </div>
+
+                {/* Desktop Video Slot */}
+                <div className="space-y-1.5 p-3 rounded-lg bg-zinc-950 border border-zinc-800/80">
+                  <div className="flex items-center justify-between">
+                    <label className="text-zinc-300 font-medium flex items-center gap-1.5">
+                      <Film className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Cinematic Desktop Video</span>
+                    </label>
+                    {editingSection.desktopVideoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setEditingSection({ ...editingSection, desktopVideoUrl: "" })}
+                        className="text-[10px] text-red-400 hover:underline"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                  {editingSection.desktopVideoUrl ? (
+                    <div className="flex items-center gap-3 pt-1">
+                      <div className="w-14 h-14 rounded-lg bg-black border border-zinc-800 overflow-hidden shrink-0 flex items-center justify-center text-blue-400">
+                        <Video className="w-6 h-6" />
+                      </div>
+                      <div className="flex-1 truncate text-[11px] text-zinc-400">
+                        {editingSection.desktopVideoUrl}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => openMediaPicker("desktopVideoUrl", "Select Desktop Video", "video")}
+                        className="apple-btn-secondary text-[11px] py-1 px-2.5"
+                      >
+                        Replace
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => openMediaPicker("desktopVideoUrl", "Select Desktop Video", "video")}
+                      className="w-full py-2 px-3 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center gap-2 hover:border-zinc-700"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Select or Upload Desktop Video</span>
+                    </button>
+                  )}
+                </div>
+
+                {/* Poster Image Slot */}
+                <div className="space-y-1.5 p-3 rounded-lg bg-zinc-950 border border-zinc-800/80">
+                  <div className="flex items-center justify-between">
+                    <label className="text-zinc-300 font-medium flex items-center gap-1.5">
+                      <ImageIcon className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Video Poster Image</span>
+                    </label>
+                    {editingSection.posterImageUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setEditingSection({ ...editingSection, posterImageUrl: "" })}
+                        className="text-[10px] text-red-400 hover:underline"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                  {editingSection.posterImageUrl ? (
+                    <div className="flex items-center gap-3 pt-1">
+                      <div className="w-14 h-14 rounded-lg bg-black border border-zinc-800 overflow-hidden shrink-0">
+                        <img src={editingSection.posterImageUrl} alt="Poster" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1 truncate text-[11px] text-zinc-400">
+                        {editingSection.posterImageUrl}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => openMediaPicker("posterImageUrl", "Select Video Poster Image", "image")}
+                        className="apple-btn-secondary text-[11px] py-1 px-2.5"
+                      >
+                        Replace
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => openMediaPicker("posterImageUrl", "Select Video Poster Image", "image")}
+                      className="w-full py-2 px-3 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center gap-2 hover:border-zinc-700"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Select or Upload Poster</span>
+                    </button>
+                  )}
+                </div>
               </div>
 
-              {/* Action Buttons (Learn More, Buy) */}
+              {/* Call to Action Buttons */}
               <div className="space-y-4 p-4 rounded-xl bg-zinc-900 border border-zinc-800">
-                <h3 className="font-semibold text-white">Call to Action Links</h3>
+                <h3 className="font-semibold text-white">Call to Action Buttons</h3>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="block text-zinc-400">Learn More Link</label>
+                    <label className="block text-zinc-400">Learn More Text</label>
+                    <input
+                      type="text"
+                      value={editingSection.learnMoreText || ""}
+                      onChange={(e) =>
+                        setEditingSection({ ...editingSection, learnMoreText: e.target.value })
+                      }
+                      placeholder="Learn more"
+                      className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="block text-zinc-400">Learn More Destination URL</label>
                     <input
                       type="text"
                       value={editingSection.learnMoreUrl || ""}
                       onChange={(e) =>
-                        setEditingSection({
-                          ...editingSection,
-                          learnMoreUrl: e.target.value,
-                        })
+                        setEditingSection({ ...editingSection, learnMoreUrl: e.target.value })
                       }
-                      placeholder="/learn-more/iphone"
+                      placeholder="/learn-more/iphone-18-pro"
                       className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
                     />
                   </div>
+                </div>
 
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="block text-zinc-400">Buy Link</label>
+                    <label className="block text-zinc-400">Buy Button Text</label>
+                    <input
+                      type="text"
+                      value={editingSection.buyText || ""}
+                      onChange={(e) =>
+                        setEditingSection({ ...editingSection, buyText: e.target.value })
+                      }
+                      placeholder="Buy"
+                      className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="block text-zinc-400">Buy Destination URL</label>
                     <input
                       type="text"
                       value={editingSection.buyUrl || ""}
                       onChange={(e) =>
-                        setEditingSection({
-                          ...editingSection,
-                          buyUrl: e.target.value,
-                        })
+                        setEditingSection({ ...editingSection, buyUrl: e.target.value })
                       }
-                      placeholder="/store"
+                      placeholder="/product/iphone-18-pro"
                       className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Submit Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-800">
+              {/* Form Action Controls */}
+              <div className="pt-4 border-t border-zinc-800 flex items-center justify-between">
                 <button
                   type="button"
                   onClick={() => setEditingSection(null)}
@@ -961,10 +1099,10 @@ export default function AdminPageEditor() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="apple-btn-primary px-5 py-2 flex items-center gap-1.5"
+                  className="apple-btn-primary px-6 py-2.5 flex items-center gap-1.5"
                 >
-                  <Save className="w-3.5 h-3.5" />
-                  <span>{saving ? "Saving..." : "Save Section"}</span>
+                  <Save className="w-4 h-4" />
+                  <span>{saving ? "Saving Section..." : "Save Changes"}</span>
                 </button>
               </div>
             </form>
@@ -972,17 +1110,17 @@ export default function AdminPageEditor() {
         </div>
       )}
 
-      {/* Responsive Preview Modal (Desktop & Mobile viewports) */}
+      {/* PREVIEW MODAL */}
       {previewSection && (
-        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4">
-          <div className="w-full max-w-5xl flex items-center justify-between pb-3 text-xs text-zinc-400">
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4">
+          <div className="w-full max-w-6xl flex items-center justify-between pb-4 border-b border-zinc-800">
             <div className="flex items-center gap-3">
-              <span className="font-semibold text-white">Previewing: {previewSection.draftLabel}</span>
-              <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 rounded-lg p-1">
+              <span className="text-sm font-semibold text-white">Live Section Preview</span>
+              <div className="flex items-center rounded-xl bg-zinc-900 border border-zinc-800 p-0.5">
                 <button
                   onClick={() => setPreviewViewport("desktop")}
-                  className={`px-2.5 py-1 rounded flex items-center gap-1 ${
-                    previewViewport === "desktop" ? "bg-zinc-800 text-white" : "text-zinc-400"
+                  className={`p-1.5 rounded-lg text-xs flex items-center gap-1 ${
+                    previewViewport === "desktop" ? "bg-zinc-800 text-white font-medium" : "text-zinc-400"
                   }`}
                 >
                   <Monitor className="w-3.5 h-3.5" />
@@ -990,8 +1128,8 @@ export default function AdminPageEditor() {
                 </button>
                 <button
                   onClick={() => setPreviewViewport("mobile")}
-                  className={`px-2.5 py-1 rounded flex items-center gap-1 ${
-                    previewViewport === "mobile" ? "bg-zinc-800 text-white" : "text-zinc-400"
+                  className={`p-1.5 rounded-lg text-xs flex items-center gap-1 ${
+                    previewViewport === "mobile" ? "bg-zinc-800 text-white font-medium" : "text-zinc-400"
                   }`}
                 >
                   <Smartphone className="w-3.5 h-3.5" />
@@ -999,53 +1137,50 @@ export default function AdminPageEditor() {
                 </button>
               </div>
             </div>
-
             <button
               onClick={() => setPreviewSection(null)}
-              className="text-zinc-400 hover:text-white p-1 rounded-lg bg-zinc-900 border border-zinc-800"
+              className="p-1 rounded-lg text-zinc-400 hover:text-white"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div
-            className={`border border-zinc-800 rounded-2xl overflow-y-auto shadow-2xl transition-all duration-300 ${
-              previewViewport === "mobile" ? "w-[390px] h-[720px]" : "w-full max-w-5xl h-[640px]"
-            } bg-black`}
-          >
-            <SectionRenderer section={previewSection} priority={true} />
+          <div className="flex-1 w-full overflow-y-auto py-6 flex items-center justify-center">
+            <div
+              className={`transition-all duration-300 rounded-3xl overflow-hidden border border-zinc-800 ${
+                previewViewport === "mobile" ? "w-[375px] shadow-2xl" : "w-full max-w-6xl"
+              }`}
+            >
+              <SectionRenderer section={previewSection} priority={true} />
+            </div>
           </div>
         </div>
       )}
 
-      {/* Revision History Modal */}
+      {/* REVISION HISTORY MODAL */}
       {showRevisionModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="max-w-lg w-full bg-[#161617] border border-zinc-800 rounded-2xl p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="max-w-2xl w-full bg-[#161617] border border-zinc-800 rounded-3xl p-6 space-y-4 max-h-[80vh] flex flex-col">
             <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
-              <h2 className="text-base font-semibold text-white">Version History & Rollback</h2>
-              <button onClick={() => setShowRevisionModal(false)}>
-                <X className="w-4 h-4 text-zinc-400" />
+              <h2 className="text-base font-semibold text-white">Version Snapshot History</h2>
+              <button onClick={() => setShowRevisionModal(false)} className="text-zinc-400 hover:text-white">
+                <X className="w-5 h-5" />
               </button>
             </div>
-
-            <div className="space-y-3 max-h-96 overflow-y-auto text-xs">
+            <div className="divide-y divide-zinc-800/80 overflow-y-auto pr-1 flex-1">
               {revisions.map((rev) => (
-                <div
-                  key={rev.id}
-                  className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-between"
-                >
+                <div key={rev.id} className="py-3 flex items-center justify-between">
                   <div>
-                    <div className="font-semibold text-white">
-                      Version #{rev.versionNumber} — {rev.revisionNotes}
+                    <div className="text-xs font-medium text-white">
+                      Version #{rev.versionNumber} — {rev.revisionNotes || "Snapshot"}
                     </div>
                     <div className="text-[10px] text-zinc-500 mt-0.5">
-                      {new Date(rev.createdAt).toLocaleString()} by {rev.createdBy}
+                      {new Date(rev.createdAt).toLocaleString()} by {rev.createdBy || "Admin"}
                     </div>
                   </div>
                   <button
                     onClick={() => handleRollback(rev.id)}
-                    className="apple-btn-secondary text-xs py-1 px-2.5"
+                    className="apple-btn-secondary text-xs py-1 px-3"
                   >
                     Rollback
                   </button>
@@ -1055,97 +1190,20 @@ export default function AdminPageEditor() {
           </div>
         </div>
       )}
-      {/* Media Library Picker Modal */}
-      {pickerTarget && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="max-w-3xl w-full bg-[#161617] border border-zinc-800 rounded-2xl p-6 space-y-4 max-h-[85vh] flex flex-col">
-            <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
-              <div>
-                <h3 className="text-sm font-semibold text-white">Select Media from Cloud Library</h3>
-                <p className="text-[11px] text-zinc-400">
-                  Target field: <span className="font-mono text-blue-400">{pickerTarget}</span>
-                </p>
-              </div>
-              <button
-                onClick={() => setPickerTarget(null)}
-                className="p-1 rounded-lg text-zinc-400 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
 
-            {libraryLoading ? (
-              <div className="py-12 text-center text-xs text-zinc-400">Loading Cloudinary Assets...</div>
-            ) : libraryAssets.length === 0 ? (
-              <div className="py-12 text-center space-y-2">
-                <ImageIcon className="w-8 h-8 text-zinc-600 mx-auto" />
-                <p className="text-xs text-zinc-400">No media assets found in library.</p>
-                <Link
-                  href="/admin/media"
-                  target="_blank"
-                  className="text-xs text-blue-400 hover:underline inline-block"
-                >
-                  Go to Media Library to upload new assets &rarr;
-                </Link>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 overflow-y-auto pr-1 flex-1">
-                {libraryAssets.map((asset) => (
-                  <div
-                    key={asset.id}
-                    onClick={() => handleSelectAsset(asset)}
-                    className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-blue-500 cursor-pointer transition-colors space-y-2 group"
-                  >
-                    <div className="aspect-square rounded-lg bg-black overflow-hidden flex items-center justify-center relative">
-                      {asset.mediaType === "image" ? (
-                        <img
-                          src={asset.publicUrl}
-                          alt={asset.altText || asset.filename}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                        />
-                      ) : (
-                        <div className="flex flex-col items-center justify-center text-blue-400 p-2">
-                          <Video className="w-6 h-6 mb-1" />
-                          <span className="text-[9px] uppercase font-bold">Video</span>
-                        </div>
-                      )}
-                      <span className="absolute top-1 right-1 text-[8px] font-bold px-1 py-0.5 rounded bg-black/80 text-white uppercase">
-                        {asset.mediaType}
-                      </span>
-                    </div>
-                    <div>
-                      <div className="text-[11px] font-medium text-white truncate" title={asset.filename}>
-                        {asset.filename}
-                      </div>
-                      <div className="text-[9px] text-zinc-500 mt-0.5">
-                        {(asset.fileSize / 1024).toFixed(0)} KB
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="pt-3 border-t border-zinc-800 flex items-center justify-between text-xs">
-              <Link
-                href="/admin/media"
-                target="_blank"
-                className="text-blue-400 hover:underline flex items-center gap-1"
-              >
-                <span>Open Full Media Library</span>
-                <ExternalLink className="w-3 h-3" />
-              </Link>
-              <button
-                type="button"
-                onClick={() => setPickerTarget(null)}
-                className="px-4 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* UNIVERSAL MEDIA PICKER MODAL */}
+      <UniversalMediaPicker
+        isOpen={pickerOpen}
+        onClose={() => setPickerOpen(false)}
+        onSelect={handleMediaSelected}
+        title={pickerTitle}
+        filter={pickerFilter}
+        currentValue={
+          editingSection && pickerTarget && pickerTarget !== "gallery"
+            ? (editingSection[pickerTarget] as string)
+            : undefined
+        }
+      />
     </div>
   );
 }

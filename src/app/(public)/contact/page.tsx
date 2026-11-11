@@ -1,9 +1,24 @@
 import React from "react";
 import { Phone, MessageCircle, MapPin, Clock, Share2 } from "lucide-react";
+import { getPublishedSections } from "@/lib/storage/db";
+import SectionRenderer from "@/components/public/SectionRenderer";
 
-export default function ContactPage() {
+export const revalidate = 0;
+
+export default async function ContactPage() {
+  const sections = await getPublishedSections("page-contact");
+
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* Dynamic CMS Sections if published */}
+      {sections && sections.length > 0 && (
+        <div className="w-full flex flex-col space-y-2 pb-6">
+          {sections.map((sec) => (
+            <SectionRenderer key={sec.id} section={sec} />
+          ))}
+        </div>
+      )}
+
       <section className="py-16 sm:py-24 px-4 sm:px-6 text-center border-b border-zinc-900 bg-zinc-950">
         <div className="max-w-2xl mx-auto space-y-3">
           <p className="text-xs uppercase tracking-widest text-zinc-500 font-medium">

@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/auth/session";
 import { getPages, getPageSections } from "@/lib/storage/db";
 import { Layers, Plus, ExternalLink, ArrowRight, CheckCircle2, CircleDashed } from "lucide-react";
+import CreatePageButton from "@/components/admin/CreatePageButton";
 
 export const revalidate = 0;
 
@@ -43,6 +44,7 @@ export default async function AdminPagesPage() {
             Manage pages, SEO descriptions, and schema-driven component sections.
           </p>
         </div>
+        <CreatePageButton />
       </div>
 
       {/* Pages Table */}

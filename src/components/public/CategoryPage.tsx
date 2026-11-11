@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import { MessageCircle, Shield, ArrowRight } from "lucide-react";
-import { ProductRecord, ProductCategory } from "@/lib/types";
+import { ProductRecord, ProductCategory, PageSection } from "@/lib/types";
 import { formatGHS } from "@/lib/pricing";
+import SectionRenderer from "./SectionRenderer";
 
 interface CategoryPageProps {
   categoryTitle: string;
@@ -10,6 +11,7 @@ interface CategoryPageProps {
   tagline?: string;
   description?: string;
   products: ProductRecord[];
+  sections?: PageSection[];
 }
 
 export default function CategoryPage({
@@ -18,26 +20,54 @@ export default function CategoryPage({
   tagline = "Original Apple Products",
   description,
   products,
+  sections = [],
 }: CategoryPageProps) {
   const publishedProducts = products.filter((p) => p.isPublished);
+  const publishedSections = sections.filter((s) => s.isPublished);
+
+  // Separate sections intended for top hero vs bottom storytelling/specs/faq
+  const topSections = publishedSections.filter(
+    (s) =>
+      s.sectionType === "cinematic_hero" ||
+      s.sectionType === "image_hero" ||
+      s.sectionType === "video_hero" ||
+      s.sectionType === "fullscreen_image" ||
+      s.sectionType === "promo_banner"
+  );
+  const bottomSections = publishedSections.filter(
+    (s) =>
+      s.sectionType !== "cinematic_hero" &&
+      s.sectionType !== "image_hero" &&
+      s.sectionType !== "video_hero" &&
+      s.sectionType !== "fullscreen_image" &&
+      s.sectionType !== "promo_banner"
+  );
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Category Hero Header */}
-      <section className="border-b border-zinc-900 bg-gradient-to-b from-zinc-950 to-black py-12 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto text-center space-y-3">
-          <p className="text-xs uppercase tracking-widest text-zinc-500 font-medium">
-            {tagline}
-          </p>
-          <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-white">
-            {categoryTitle}
-          </h1>
-          <p className="max-w-xl mx-auto text-sm sm:text-base text-zinc-400 font-light">
-            {description ||
-              `Explore genuine original Apple ${categoryTitle.toLowerCase()} hardware with warranty at TroyX iStore, Bawaleshie, East Legon.`}
-          </p>
+      {/* Dynamic Top CMS Sections if published, or default Category Hero Header */}
+      {topSections.length > 0 ? (
+        <div className="w-full flex flex-col space-y-2">
+          {topSections.map((sec) => (
+            <SectionRenderer key={sec.id} section={sec} />
+          ))}
         </div>
-      </section>
+      ) : (
+        <section className="border-b border-zinc-900 bg-gradient-to-b from-zinc-950 to-black py-12 sm:py-20 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto text-center space-y-3">
+            <p className="text-xs uppercase tracking-widest text-zinc-500 font-medium">
+              {tagline}
+            </p>
+            <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-white">
+              {categoryTitle}
+            </h1>
+            <p className="max-w-xl mx-auto text-sm sm:text-base text-zinc-400 font-light">
+              {description ||
+                `Explore genuine original Apple ${categoryTitle.toLowerCase()} hardware with warranty at TroyX iStore, Bawaleshie, East Legon.`}
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Subcategory Navigation Bar */}
       <div className="border-b border-zinc-900 bg-zinc-950/60 sticky top-12 z-30 backdrop-blur-md">
@@ -177,6 +207,15 @@ export default function CategoryPage({
           </div>
         )}
       </section>
+
+      {/* Dynamic Bottom CMS Sections if published */}
+      {bottomSections.length > 0 && (
+        <div className="w-full flex flex-col space-y-2 pb-16 border-t border-zinc-900">
+          {bottomSections.map((sec) => (
+            <SectionRenderer key={sec.id} section={sec} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -281,6 +281,26 @@ export async function updateSiteSettings(
   partial: Partial<SiteSettings>,
   userId?: string
 ): Promise<SiteSettings> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const docRef = firestore.collection("settings").doc("site");
+    const snap = await docRef.get();
+    const current = snap.exists ? (snap.data() as SiteSettings) : INITIAL_SITE_SETTINGS;
+    const updated: SiteSettings = {
+      ...current,
+      ...partial,
+      updatedAt: new Date().toISOString(),
+    };
+    await docRef.set(cleanFirestoreData(updated), { merge: true });
+    await recordAuditLog({
+      userId,
+      action: "UPDATE_SITE_SETTINGS",
+      entityType: "settings",
+      details: partial,
+    });
+    return updated;
+  }
+
   const db = loadLocalDatabase();
   db.settings = { ...db.settings, ...partial, updatedAt: new Date().toISOString() };
   saveLocalDatabase(db);
@@ -295,16 +315,38 @@ export async function updateSiteSettings(
 
 // Pages
 export async function getPages(): Promise<PageRecord[]> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const snap = await firestore.collection("pages").get();
+    return snap.docs
+      .map((d) => ({ id: d.id, ...(d.data() as any) }))
+      .sort((a, b) => (a.navigationOrder ?? 0) - (b.navigationOrder ?? 0));
+  }
+
   const db = loadLocalDatabase();
   return db.pages.sort((a, b) => a.navigationOrder - b.navigationOrder);
 }
 
 export async function getPageBySlug(slug: string): Promise<PageRecord | null> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const snap = await firestore.collection("pages").where("slug", "==", slug).limit(1).get();
+    if (snap.empty) return null;
+    return { id: snap.docs[0].id, ...(snap.docs[0].data() as any) };
+  }
+
   const db = loadLocalDatabase();
   return db.pages.find((p) => p.slug === slug) || null;
 }
 
 export async function getPageById(id: string): Promise<PageRecord | null> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const doc = await firestore.collection("pages").doc(id).get();
+    if (!doc.exists) return null;
+    return { id: doc.id, ...(doc.data() as any) };
+  }
+
   const db = loadLocalDatabase();
   return db.pages.find((p) => p.id === id) || null;
 }
@@ -313,13 +355,27 @@ export async function createPage(
   data: Omit<PageRecord, "id" | "createdAt" | "updatedAt">,
   userId?: string
 ): Promise<PageRecord> {
-  const db = loadLocalDatabase();
   const newPage: PageRecord = {
     ...data,
     id: `page-${Date.now()}`,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
+
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    await firestore.collection("pages").doc(newPage.id).set(cleanFirestoreData(newPage));
+    await recordAuditLog({
+      userId,
+      action: "CREATE_PAGE",
+      entityType: "page",
+      entityId: newPage.id,
+      details: { title: newPage.title, slug: newPage.slug },
+    });
+    return newPage;
+  }
+
+  const db = loadLocalDatabase();
   db.pages.push(newPage);
   saveLocalDatabase(db);
   await recordAuditLog({
@@ -337,6 +393,27 @@ export async function updatePage(
   data: Partial<PageRecord>,
   userId?: string
 ): Promise<PageRecord | null> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const docRef = firestore.collection("pages").doc(id);
+    const snap = await docRef.get();
+    if (!snap.exists) return null;
+    const updated = {
+      ...(snap.data() as PageRecord),
+      ...data,
+      updatedAt: new Date().toISOString(),
+    };
+    await docRef.set(cleanFirestoreData(updated), { merge: true });
+    await recordAuditLog({
+      userId,
+      action: "UPDATE_PAGE",
+      entityType: "page",
+      entityId: id,
+      details: data,
+    });
+    return updated;
+  }
+
   const db = loadLocalDatabase();
   const index = db.pages.findIndex((p) => p.id === id);
   if (index === -1) return null;
@@ -358,6 +435,29 @@ export async function updatePage(
 }
 
 export async function deletePage(id: string, userId?: string): Promise<boolean> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const pageDoc = await firestore.collection("pages").doc(id).get();
+    if (!pageDoc.exists) return false;
+    const pageData = pageDoc.data() as PageRecord;
+    if (pageData.slug === "home") return false;
+
+    await firestore.collection("pages").doc(id).delete();
+    const secSnap = await firestore.collection("sections").where("pageId", "==", id).get();
+    const batch = firestore.batch();
+    secSnap.docs.forEach((d) => batch.delete(d.ref));
+    await batch.commit();
+
+    await recordAuditLog({
+      userId,
+      action: "DELETE_PAGE",
+      entityType: "page",
+      entityId: id,
+      details: { slug: pageData.slug },
+    });
+    return true;
+  }
+
   const db = loadLocalDatabase();
   const page = db.pages.find((p) => p.id === id);
   if (!page) return false;
@@ -626,11 +726,46 @@ export async function createPageRevision(
   notes?: string,
   userId?: string
 ): Promise<PageRevision | null> {
-  const db = loadLocalDatabase();
-  const page = db.pages.find((p) => p.id === pageId);
+  const page = await getPageById(pageId);
   if (!page) return null;
 
-  const sections = db.sections.filter((s) => s.pageId === pageId);
+  const sections = await getPageSections(pageId);
+
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const existingSnap = await firestore
+      .collection("revisions")
+      .where("pageId", "==", pageId)
+      .get();
+    const versionNumber = existingSnap.docs.length + 1;
+
+    const revision: PageRevision = {
+      id: `rev-${pageId}-v${versionNumber}-${Date.now()}`,
+      pageId,
+      versionNumber,
+      title: page.title,
+      slug: page.slug,
+      contentSnapshot: {
+        page: JSON.parse(JSON.stringify(page)),
+        sections: JSON.parse(JSON.stringify(sections)),
+      },
+      revisionNotes: notes || `Revision snapshot v${versionNumber}`,
+      createdBy: userId || "admin",
+      createdAt: new Date().toISOString(),
+    };
+
+    await firestore.collection("revisions").doc(revision.id).set(cleanFirestoreData(revision));
+    await recordAuditLog({
+      userId,
+      action: "CREATE_REVISION",
+      entityType: "page_revision",
+      entityId: revision.id,
+      details: { versionNumber, pageId },
+    });
+    return revision;
+  }
+
+  const db = loadLocalDatabase();
   const existingRevisions = db.revisions.filter((r) => r.pageId === pageId);
   const versionNumber = existingRevisions.length + 1;
 
@@ -662,6 +797,17 @@ export async function createPageRevision(
 }
 
 export async function getPageRevisions(pageId: string): Promise<PageRevision[]> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const snap = await firestore
+      .collection("revisions")
+      .where("pageId", "==", pageId)
+      .get();
+    return snap.docs
+      .map((d) => ({ id: d.id, ...(d.data() as any) }))
+      .sort((a, b) => (b.versionNumber ?? 0) - (a.versionNumber ?? 0));
+  }
+
   const db = loadLocalDatabase();
   return db.revisions
     .filter((r) => r.pageId === pageId)
@@ -672,6 +818,41 @@ export async function rollbackPageRevision(
   revisionId: string,
   userId?: string
 ): Promise<boolean> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const revDoc = await firestore.collection("revisions").doc(revisionId).get();
+    if (!revDoc.exists) return false;
+    const revision = revDoc.data() as PageRevision;
+    const { page, sections } = revision.contentSnapshot;
+
+    // Restore page
+    await firestore.collection("pages").doc(page.id).set(cleanFirestoreData(page), { merge: true });
+
+    // Delete current sections
+    const currentSecSnap = await firestore
+      .collection("sections")
+      .where("pageId", "==", page.id)
+      .get();
+    const batch = firestore.batch();
+    currentSecSnap.docs.forEach((d) => batch.delete(d.ref));
+
+    // Restore snapshotted sections
+    sections.forEach((sec) => {
+      const ref = firestore.collection("sections").doc(sec.id);
+      batch.set(ref, cleanFirestoreData(sec));
+    });
+    await batch.commit();
+
+    await recordAuditLog({
+      userId,
+      action: "ROLLBACK_REVISION",
+      entityType: "page_revision",
+      entityId: revisionId,
+      details: { pageId: page.id, versionNumber: revision.versionNumber },
+    });
+    return true;
+  }
+
   const db = loadLocalDatabase();
   const revision = db.revisions.find((r) => r.id === revisionId);
   if (!revision) return false;
@@ -982,11 +1163,31 @@ export async function getProducts(options?: {
 }
 
 export async function getProductBySlug(slug: string): Promise<ProductRecord | null> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const snap = await firestore
+      .collection("products")
+      .where("slug", "==", slug)
+      .limit(1)
+      .get();
+    if (!snap.empty) {
+      return snap.docs[0].data() as ProductRecord;
+    }
+    return null;
+  }
   const db = loadLocalDatabase();
   return db.products.find((p) => p.slug === slug) || null;
 }
 
 export async function getProductById(id: string): Promise<ProductRecord | null> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const doc = await firestore.collection("products").doc(id).get();
+    if (doc.exists) {
+      return doc.data() as ProductRecord;
+    }
+    return null;
+  }
   const db = loadLocalDatabase();
   return db.products.find((p) => p.id === id) || null;
 }
@@ -995,13 +1196,32 @@ export async function createProduct(
   data: Omit<ProductRecord, "id" | "createdAt" | "updatedAt">,
   userId?: string
 ): Promise<ProductRecord> {
-  const db = loadLocalDatabase();
   const newProduct: ProductRecord = {
     ...data,
     id: `prod-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
+
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    await firestore.collection("products").doc(newProduct.id).set(cleanFirestoreData(newProduct));
+
+    const db = loadLocalDatabase();
+    db.products.push(newProduct);
+    saveLocalDatabase(db);
+
+    await recordAuditLog({
+      userId,
+      action: "CREATE_PRODUCT",
+      entityType: "product",
+      entityId: newProduct.id,
+      details: { name: newProduct.name, sku: newProduct.sku, basePrice: newProduct.basePrice },
+    });
+    return newProduct;
+  }
+
+  const db = loadLocalDatabase();
   db.products.push(newProduct);
   saveLocalDatabase(db);
   await recordAuditLog({
@@ -1019,6 +1239,37 @@ export async function updateProduct(
   data: Partial<ProductRecord>,
   userId?: string
 ): Promise<ProductRecord | null> {
+  const now = new Date().toISOString();
+
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const ref = firestore.collection("products").doc(id);
+    const doc = await ref.get();
+    if (!doc.exists) return null;
+    const updated = {
+      ...(doc.data() as ProductRecord),
+      ...data,
+      updatedAt: now,
+    };
+    await ref.set(cleanFirestoreData(updated), { merge: true });
+
+    const db = loadLocalDatabase();
+    const index = db.products.findIndex((p) => p.id === id);
+    if (index !== -1) {
+      db.products[index] = updated;
+      saveLocalDatabase(db);
+    }
+
+    await recordAuditLog({
+      userId,
+      action: "UPDATE_PRODUCT",
+      entityType: "product",
+      entityId: id,
+      details: data,
+    });
+    return updated;
+  }
+
   const db = loadLocalDatabase();
   const index = db.products.findIndex((p) => p.id === id);
   if (index === -1) return null;
@@ -1026,7 +1277,7 @@ export async function updateProduct(
   db.products[index] = {
     ...db.products[index],
     ...data,
-    updatedAt: new Date().toISOString(),
+    updatedAt: now,
   };
   saveLocalDatabase(db);
   await recordAuditLog({
@@ -1040,6 +1291,28 @@ export async function updateProduct(
 }
 
 export async function deleteProduct(id: string, userId?: string): Promise<boolean> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const ref = firestore.collection("products").doc(id);
+    const doc = await ref.get();
+    if (!doc.exists) return false;
+    const prod = doc.data() as ProductRecord;
+    await ref.delete();
+
+    const db = loadLocalDatabase();
+    db.products = db.products.filter((p) => p.id !== id);
+    saveLocalDatabase(db);
+
+    await recordAuditLog({
+      userId,
+      action: "DELETE_PRODUCT",
+      entityType: "product",
+      entityId: id,
+      details: { name: prod.name, sku: prod.sku },
+    });
+    return true;
+  }
+
   const db = loadLocalDatabase();
   const prod = db.products.find((p) => p.id === id);
   if (!prod) return false;
@@ -1060,6 +1333,49 @@ export async function bulkUpdateProductPrices(
   updates: Array<{ id: string; basePrice: number; discountPrice?: number | null }>,
   userId?: string
 ): Promise<number> {
+  const now = new Date().toISOString();
+
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const batch = firestore.batch();
+    let count = 0;
+    updates.forEach((item) => {
+      if (item.basePrice > 0) {
+        const ref = firestore.collection("products").doc(item.id);
+        const updatePayload: any = { basePrice: item.basePrice, updatedAt: now };
+        if (item.discountPrice !== undefined) {
+          updatePayload.discountPrice = item.discountPrice;
+        }
+        batch.set(ref, updatePayload, { merge: true });
+        count++;
+      }
+    });
+    if (count > 0) {
+      await batch.commit();
+    }
+
+    const db = loadLocalDatabase();
+    updates.forEach((item) => {
+      const prod = db.products.find((p) => p.id === item.id);
+      if (prod && item.basePrice > 0) {
+        prod.basePrice = item.basePrice;
+        if (item.discountPrice !== undefined) {
+          prod.discountPrice = item.discountPrice;
+        }
+        prod.updatedAt = now;
+      }
+    });
+    saveLocalDatabase(db);
+
+    await recordAuditLog({
+      userId,
+      action: "BULK_UPDATE_PRICES",
+      entityType: "product",
+      details: { count, updates },
+    });
+    return count;
+  }
+
   const db = loadLocalDatabase();
   let updatedCount = 0;
 
@@ -1087,6 +1403,15 @@ export async function bulkUpdateProductPrices(
 
 // Orders & Checkout
 export async function getOrders(): Promise<OrderRecord[]> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const snap = await firestore.collection("orders").get();
+    return snap.docs
+      .map((d) => d.data() as OrderRecord)
+      .sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+  }
   const db = loadLocalDatabase();
   return db.orders.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -1094,6 +1419,12 @@ export async function getOrders(): Promise<OrderRecord[]> {
 }
 
 export async function getOrderById(id: string): Promise<OrderRecord | null> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const doc = await firestore.collection("orders").doc(id).get();
+    if (doc.exists) return doc.data() as OrderRecord;
+    return null;
+  }
   const db = loadLocalDatabase();
   return db.orders.find((o) => o.id === id) || null;
 }
@@ -1101,16 +1432,57 @@ export async function getOrderById(id: string): Promise<OrderRecord | null> {
 export async function createOrder(
   data: Omit<OrderRecord, "id" | "orderNumber" | "createdAt" | "updatedAt">
 ): Promise<OrderRecord> {
-  const db = loadLocalDatabase();
+  const now = new Date().toISOString();
   const orderNumber = `TX-${Date.now().toString().slice(-6)}`;
   const newOrder: OrderRecord = {
     ...data,
     id: `order-${Date.now()}`,
     orderNumber,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: now,
+    updatedAt: now,
   };
 
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    await firestore.collection("orders").doc(newOrder.id).set(cleanFirestoreData(newOrder));
+
+    // Decrement inventory safely in Firestore
+    for (const item of newOrder.items) {
+      try {
+        const prodRef = firestore.collection("products").doc(item.productId);
+        const prodDoc = await prodRef.get();
+        if (prodDoc.exists) {
+          const currentStock = prodDoc.data()?.stockQuantity || 0;
+          if (currentStock >= item.quantity) {
+            await prodRef.update({
+              stockQuantity: currentStock - item.quantity,
+              updatedAt: now,
+            });
+          }
+        }
+      } catch (err) {
+        console.error("Inventory decrement error:", err);
+      }
+    }
+
+    const db = loadLocalDatabase();
+    db.orders.push(newOrder);
+    saveLocalDatabase(db);
+
+    await recordAuditLog({
+      action: "CREATE_ORDER",
+      entityType: "order",
+      entityId: newOrder.id,
+      details: {
+        orderNumber,
+        totalAmount: newOrder.totalAmount,
+        customerName: newOrder.customerName,
+      },
+    });
+    return newOrder;
+  }
+
+  const db = loadLocalDatabase();
   db.orders.push(newOrder);
 
   // Decrement inventory safely if products exist
@@ -1142,6 +1514,37 @@ export async function updateOrderStatus(
   paymentStatus?: OrderRecord["paymentStatus"],
   userId?: string
 ): Promise<OrderRecord | null> {
+  const now = new Date().toISOString();
+
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const ref = firestore.collection("orders").doc(id);
+    const doc = await ref.get();
+    if (!doc.exists) return null;
+    const updatePayload: any = { status, updatedAt: now };
+    if (paymentStatus) {
+      updatePayload.paymentStatus = paymentStatus;
+    }
+    await ref.update(updatePayload);
+    const updated = { ...(doc.data() as OrderRecord), ...updatePayload };
+
+    const db = loadLocalDatabase();
+    const index = db.orders.findIndex((o) => o.id === id);
+    if (index !== -1) {
+      db.orders[index] = updated;
+      saveLocalDatabase(db);
+    }
+
+    await recordAuditLog({
+      userId,
+      action: "UPDATE_ORDER_STATUS",
+      entityType: "order",
+      entityId: id,
+      details: { status, paymentStatus },
+    });
+    return updated;
+  }
+
   const db = loadLocalDatabase();
   const index = db.orders.findIndex((o) => o.id === id);
   if (index === -1) return null;
@@ -1165,6 +1568,15 @@ export async function updateOrderStatus(
 
 // Promotions
 export async function getPromotions(): Promise<PromotionRecord[]> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const snap = await firestore.collection("promotions").get();
+    return snap.docs
+      .map((d) => d.data() as PromotionRecord)
+      .sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+  }
   const db = loadLocalDatabase();
   return db.promotions.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -1175,13 +1587,32 @@ export async function createPromotion(
   data: Omit<PromotionRecord, "id" | "createdAt" | "updatedAt">,
   userId?: string
 ): Promise<PromotionRecord> {
-  const db = loadLocalDatabase();
   const newPromo: PromotionRecord = {
     ...data,
     id: `promo-${Date.now()}`,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
+
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    await firestore.collection("promotions").doc(newPromo.id).set(cleanFirestoreData(newPromo));
+
+    const db = loadLocalDatabase();
+    db.promotions.push(newPromo);
+    saveLocalDatabase(db);
+
+    await recordAuditLog({
+      userId,
+      action: "CREATE_PROMOTION",
+      entityType: "promotion",
+      entityId: newPromo.id,
+      details: { title: newPromo.title, code: newPromo.code },
+    });
+    return newPromo;
+  }
+
+  const db = loadLocalDatabase();
   db.promotions.push(newPromo);
   saveLocalDatabase(db);
   await recordAuditLog({
@@ -1199,6 +1630,37 @@ export async function updatePromotion(
   data: Partial<PromotionRecord>,
   userId?: string
 ): Promise<PromotionRecord | null> {
+  const now = new Date().toISOString();
+
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const ref = firestore.collection("promotions").doc(id);
+    const doc = await ref.get();
+    if (!doc.exists) return null;
+    const updated = {
+      ...(doc.data() as PromotionRecord),
+      ...data,
+      updatedAt: now,
+    };
+    await ref.set(cleanFirestoreData(updated), { merge: true });
+
+    const db = loadLocalDatabase();
+    const index = db.promotions.findIndex((p) => p.id === id);
+    if (index !== -1) {
+      db.promotions[index] = updated;
+      saveLocalDatabase(db);
+    }
+
+    await recordAuditLog({
+      userId,
+      action: "UPDATE_PROMOTION",
+      entityType: "promotion",
+      entityId: id,
+      details: data,
+    });
+    return updated;
+  }
+
   const db = loadLocalDatabase();
   const index = db.promotions.findIndex((p) => p.id === id);
   if (index === -1) return null;
@@ -1237,6 +1699,26 @@ export async function updateNavigation(
   items: NavigationConfig["items"],
   userId?: string
 ): Promise<NavigationConfig> {
+  const now = new Date().toISOString();
+
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const nav: NavigationConfig = { id: "header", location: "header", items, updatedAt: now };
+    await firestore.collection("navigation").doc("header").set(cleanFirestoreData(nav));
+
+    const db = loadLocalDatabase();
+    db.navigation = nav;
+    saveLocalDatabase(db);
+
+    await recordAuditLog({
+      userId,
+      action: "UPDATE_NAVIGATION",
+      entityType: "navigation",
+      details: { count: items.length },
+    });
+    return nav;
+  }
+
   const db = loadLocalDatabase();
   db.navigation.items = items;
   db.navigation.updatedAt = new Date().toISOString();
@@ -1251,6 +1733,15 @@ export async function updateNavigation(
 }
 
 export async function getFooterColumns(): Promise<FooterColumn[]> {
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    const doc = await firestore.collection("navigation").doc("footer").get();
+    if (doc.exists) {
+      const data = doc.data() as { columns: FooterColumn[] };
+      return data.columns || [];
+    }
+  }
+
   const db = loadLocalDatabase();
   return db.footerColumns;
 }
@@ -1259,6 +1750,28 @@ export async function updateFooterColumns(
   columns: FooterColumn[],
   userId?: string
 ): Promise<FooterColumn[]> {
+  const now = new Date().toISOString();
+
+  if (isFirebaseMode()) {
+    const firestore = getRequiredFirestore();
+    await firestore.collection("navigation").doc("footer").set({
+      columns: cleanFirestoreData(columns),
+      updatedAt: now,
+    });
+
+    const db = loadLocalDatabase();
+    db.footerColumns = columns;
+    saveLocalDatabase(db);
+
+    await recordAuditLog({
+      userId,
+      action: "UPDATE_FOOTER",
+      entityType: "footer",
+      details: { count: columns.length },
+    });
+    return columns;
+  }
+
   const db = loadLocalDatabase();
   db.footerColumns = columns;
   saveLocalDatabase(db);
@@ -1275,12 +1788,22 @@ export async function updateFooterColumns(
 export async function recordAuditLog(
   entry: Omit<AuditLogRecord, "id" | "createdAt">
 ): Promise<AuditLogRecord> {
-  const db = loadLocalDatabase();
   const log: AuditLogRecord = {
     ...entry,
     id: `audit-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
     createdAt: new Date().toISOString(),
   };
+
+  if (isFirebaseMode()) {
+    try {
+      const firestore = getRequiredFirestore();
+      await firestore.collection("audit_logs").doc(log.id).set(cleanFirestoreData(log));
+    } catch (e) {
+      console.error("Failed to write audit log to Firestore:", e);
+    }
+  }
+
+  const db = loadLocalDatabase();
   db.auditLogs.unshift(log);
   // Keep last 500 records
   if (db.auditLogs.length > 500) {
@@ -1291,6 +1814,18 @@ export async function recordAuditLog(
 }
 
 export async function getAuditLogs(limit = 100): Promise<AuditLogRecord[]> {
+  if (isFirebaseMode()) {
+    try {
+      const firestore = getRequiredFirestore();
+      const snap = await firestore.collection("audit_logs").get();
+      const logs = snap.docs.map((d) => d.data() as AuditLogRecord);
+      logs.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      return logs.slice(0, limit);
+    } catch (e) {
+      console.error("Failed to read audit logs from Firestore:", e);
+    }
+  }
+
   const db = loadLocalDatabase();
   return db.auditLogs.slice(0, limit);
 }
@@ -1299,17 +1834,20 @@ export async function getAuditLogs(limit = 100): Promise<AuditLogRecord[]> {
 export async function getDashboardStats() {
   if (isFirebaseMode()) {
     const firestore = getRequiredFirestore();
-    const [sectionsSnap, productsSnap, pagesSnap, ordersSnap] = await Promise.all([
+    const [sectionsSnap, productsSnap, pagesSnap, ordersSnap, mediaSnap, promosSnap] = await Promise.all([
       firestore.collection("sections").get(),
       firestore.collection("products").get(),
       firestore.collection("pages").get(),
       firestore.collection("orders").get().catch(() => ({ docs: [] })),
+      firestore.collection("media").get().catch(() => ({ docs: [] })),
+      firestore.collection("promotions").get().catch(() => ({ docs: [] })),
     ]);
 
     const sections = sectionsSnap.docs.map((d) => d.data() as PageSection);
     const products = productsSnap.docs.map((d) => d.data() as ProductRecord);
     const pages = pagesSnap.docs.map((d) => d.data() as PageRecord);
     const orders = ordersSnap.docs.map((d) => d.data() as OrderRecord);
+    const promos = promosSnap.docs.map((d) => d.data() as PromotionRecord);
 
     const homepageDraftSections = sections.filter(
       (s) => s.pageId === "page-home" && !s.isPublished
@@ -1330,8 +1868,8 @@ export async function getDashboardStats() {
       totalRevenue: orders
         .filter((o) => o.paymentStatus !== "unpaid" && o.status !== "cancelled")
         .reduce((sum, o) => sum + (o.totalAmount || 0), 0),
-      mediaCount: 0,
-      activePromotions: 0,
+      mediaCount: mediaSnap.docs.length,
+      activePromotions: promos.filter((p) => p.isActive).length,
     };
   }
 

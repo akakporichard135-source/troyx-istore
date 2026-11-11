@@ -1,10 +1,25 @@
 import React from "react";
 import Link from "next/link";
 import { ShieldCheck, MapPin, Phone, Award } from "lucide-react";
+import { getPublishedSections } from "@/lib/storage/db";
+import SectionRenderer from "@/components/public/SectionRenderer";
 
-export default function AboutPage() {
+export const revalidate = 0;
+
+export default async function AboutPage() {
+  const sections = await getPublishedSections("page-about");
+
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* Dynamic CMS Sections if published */}
+      {sections && sections.length > 0 && (
+        <div className="w-full flex flex-col space-y-2 pb-6">
+          {sections.map((sec) => (
+            <SectionRenderer key={sec.id} section={sec} />
+          ))}
+        </div>
+      )}
+
       {/* Hero */}
       <section className="py-20 sm:py-28 px-4 sm:px-6 text-center border-b border-zinc-900 bg-gradient-to-b from-zinc-950 to-black">
         <div className="max-w-3xl mx-auto space-y-4">
@@ -48,7 +63,7 @@ export default function AboutPage() {
             <h3 className="text-xl font-semibold text-white">East Legon Showroom</h3>
             <p className="text-sm text-zinc-400 leading-relaxed">
               Visit us in person at Bawaleshie, East Legon, Accra to test devices hands-on or receive
-              personal setup assistance from our team.
+              expert advice and personal setup assistance from our team.
             </p>
           </div>
         </div>

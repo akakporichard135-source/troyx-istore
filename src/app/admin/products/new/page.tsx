@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Save, AlertCircle } from "lucide-react";
+import { ArrowLeft, Save, AlertCircle, Image as ImageIcon, Plus, Trash2 } from "lucide-react";
+import UniversalMediaPicker from "@/components/admin/UniversalMediaPicker";
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function NewProductPage() {
   const [stockQuantity, setStockQuantity] = useState("1");
   const [imageUrl, setImageUrl] = useState("");
   const [isPublished, setIsPublished] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -269,15 +271,46 @@ export default function NewProductPage() {
         {/* Media & Publication */}
         <div className="p-6 rounded-2xl bg-[#161617] border border-zinc-800 space-y-4">
           <h2 className="text-sm font-semibold text-white">4. Image & Publishing</h2>
-          <div>
-            <label className="block text-zinc-400 mb-1">Primary Image URL</label>
-            <input
-              type="text"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="e.g. /uploads/iphone-16.png (or from Media Library)"
-              className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
-            />
+          <div className="space-y-2">
+            <label className="block text-zinc-400">Primary Product Image</label>
+            {imageUrl ? (
+              <div className="flex items-center gap-4 p-3 rounded-xl bg-zinc-900 border border-zinc-800">
+                <div className="w-16 h-16 rounded-lg bg-black border border-zinc-800 overflow-hidden flex items-center justify-center shrink-0">
+                  <img src={imageUrl} alt="Product preview" className="w-full h-full object-contain" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs text-white truncate font-mono">{imageUrl}</div>
+                  <div className="text-[10px] text-zinc-500 mt-0.5">Selected product showcase image</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPickerOpen(true)}
+                    className="apple-btn-secondary text-xs py-1.5 px-3"
+                  >
+                    Change
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setImageUrl("")}
+                    className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-zinc-800"
+                    title="Remove Image"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setPickerOpen(true)}
+                className="w-full py-4 border-2 border-dashed border-zinc-800 hover:border-zinc-700 rounded-2xl flex flex-col items-center justify-center gap-2 text-zinc-400 hover:text-white transition-colors bg-zinc-900/30"
+              >
+                <ImageIcon className="w-6 h-6 text-blue-400" />
+                <span className="text-xs font-medium">Select or Upload Product Image</span>
+                <span className="text-[10px] text-zinc-500">Supports PNG, JPG, WebP from Media Library or direct upload</span>
+              </button>
+            )}
           </div>
 
           <label className="flex items-center gap-2 text-zinc-300 pt-2 cursor-pointer">
@@ -307,6 +340,20 @@ export default function NewProductPage() {
             <span>{loading ? "Creating..." : "Save Product"}</span>
           </button>
         </div>
+
+        {/* Universal Media Picker */}
+        <UniversalMediaPicker
+          isOpen={pickerOpen}
+          onClose={() => setPickerOpen(false)}
+          onSelect={(media) => {
+            setImageUrl(media.url);
+            setPickerOpen(false);
+          }}
+          title="Select Product Image"
+          filter="image"
+          currentValue={imageUrl}
+          onClear={() => setImageUrl("")}
+        />
       </form>
     </div>
   );

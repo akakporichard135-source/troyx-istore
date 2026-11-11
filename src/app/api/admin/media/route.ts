@@ -175,14 +175,39 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, asset });
     }
 
-    // Local Preview Mode Fallback when Cloudinary is not yet configured
-    ensureUploadDir();
-    const timestamp = Date.now();
-    const cleanFileName = `${timestamp}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-    const filePath = path.join(UPLOAD_DIR, cleanFileName);
-    const publicUrl = `/uploads/${cleanFileName}`;
+    // Fallback when Cloudinary is not yet configured
+    const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    let publicUrl = "";
+    let filePath = "";
 
-    fs.writeFileSync(filePath, buffer);
+    if (isVercel || file.size <= 2 * 1024 * 1024) {
+      if (file.size > 2 * 1024 * 1024 && !isCloudinaryConfigured()) {
+        return NextResponse.json(
+          {
+            error:
+              "Cloudinary is required for files larger than 2MB. Please configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in your Vercel project settings.",
+            code: "CLOUDINARY_REQUIRED",
+          },
+          { status: 400 }
+        );
+      }
+      // Store as Data URI to avoid serverless filesystem write errors (EROFS)
+      publicUrl = `data:${file.type};base64,${buffer.toString("base64")}`;
+      filePath = "data-uri";
+    } else {
+      try {
+        ensureUploadDir();
+        const timestamp = Date.now();
+        const cleanFileName = `${timestamp}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+        filePath = path.join(UPLOAD_DIR, cleanFileName);
+        publicUrl = `/uploads/${cleanFileName}`;
+        fs.writeFileSync(filePath, buffer);
+      } catch (e) {
+        // Fallback to data URI if write fails
+        publicUrl = `data:${file.type};base64,${buffer.toString("base64")}`;
+        filePath = "data-uri";
+      }
+    }
 
     const asset = await createMediaAsset(
       {

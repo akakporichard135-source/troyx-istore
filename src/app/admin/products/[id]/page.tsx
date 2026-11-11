@@ -15,7 +15,9 @@ import {
   Layers,
   Image as ImageIcon,
   ExternalLink,
+  UploadCloud,
 } from "lucide-react";
+import UniversalMediaPicker from "@/components/admin/UniversalMediaPicker";
 
 export default function AdminEditProductPage() {
   const params = useParams();
@@ -44,6 +46,7 @@ export default function AdminEditProductPage() {
   const [isFeatured, setIsFeatured] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [newImageUrl, setNewImageUrl] = useState("");
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [slug, setSlug] = useState("");
 
   // Variants
@@ -437,43 +440,74 @@ export default function AdminEditProductPage() {
 
         {/* Media Images */}
         <div className="p-6 rounded-2xl bg-[#161617] border border-zinc-800 space-y-4">
-          <h2 className="text-sm font-semibold text-white border-b border-zinc-800 pb-3">
-            Product Media Gallery
-          </h2>
+          <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+            <div>
+              <h2 className="text-sm font-semibold text-white">Product Media Gallery</h2>
+              <p className="text-[11px] text-zinc-400">Manage high-res product photos and finishes</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setPickerOpen(true)}
+              className="apple-btn-primary text-xs py-1.5 px-3.5 flex items-center gap-1.5"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Select or Upload Media</span>
+            </button>
+          </div>
 
           <div className="flex gap-2">
             <input
               type="text"
               value={newImageUrl}
               onChange={(e) => setNewImageUrl(e.target.value)}
-              placeholder="Paste public image URL (e.g. from Media Library)..."
-              className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-white"
+              placeholder="Or paste direct image URL (e.g. from Media Library)..."
+              className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-white font-mono"
             />
             <button
               type="button"
               onClick={handleAddImage}
               className="apple-btn-secondary text-xs px-4"
             >
-              Add Image
+              Add URL
             </button>
           </div>
 
-          {images.length > 0 && (
-            <div className="flex flex-wrap gap-3 pt-2">
+          {images.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 pt-2">
               {images.map((img, i) => (
-                <div key={i} className="relative group w-24 h-24 rounded-xl bg-zinc-900 border border-zinc-800 p-2 overflow-hidden flex items-center justify-center">
+                <div key={i} className="relative group aspect-square rounded-2xl bg-zinc-900 border border-zinc-800 p-2 overflow-hidden flex items-center justify-center">
                   <img src={img} alt="" className="w-full h-full object-contain" />
+                  <span className="absolute bottom-1.5 left-1.5 text-[8px] font-bold px-1.5 py-0.5 rounded bg-black/80 text-zinc-400">
+                    #{i + 1}
+                  </span>
                   <button
                     type="button"
                     onClick={() => handleRemoveImage(i)}
-                    className="absolute top-1 right-1 p-1 rounded-full bg-red-600 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-1.5 right-1.5 p-1 rounded-lg bg-red-600/90 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500 shadow-md"
+                    title="Remove Image"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
               ))}
             </div>
+          ) : (
+            <div className="py-8 text-center border border-dashed border-zinc-800 rounded-xl text-zinc-500 text-xs">
+              No gallery images attached yet. Click &quot;Select or Upload Media&quot; above.
+            </div>
           )}
+
+          {/* Universal Media Picker */}
+          <UniversalMediaPicker
+            isOpen={pickerOpen}
+            onClose={() => setPickerOpen(false)}
+            onSelect={(media) => {
+              setImages((prev) => [...prev, media.url]);
+              setPickerOpen(false);
+            }}
+            title="Add Media to Product Gallery"
+            filter="image"
+          />
         </div>
 
         {/* Variant Builder */}

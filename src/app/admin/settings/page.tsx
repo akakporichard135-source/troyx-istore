@@ -13,8 +13,13 @@ import {
   Key,
   ShieldCheck,
   AlertCircle,
+  Image as ImageIcon,
+  Share2,
+  Trash2,
+  Plus,
 } from "lucide-react";
 import { SiteSettings } from "@/lib/types";
+import UniversalMediaPicker, { SelectedMedia } from "@/components/admin/UniversalMediaPicker";
 
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -28,6 +33,11 @@ export default function AdminSettingsPage() {
   const [changingPassword, setChangingPassword] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
+
+  // Universal Media Picker state
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerTarget, setPickerTarget] = useState<"logoUrl" | "faviconUrl" | "ogImageUrl" | null>(null);
+  const [pickerTitle, setPickerTitle] = useState("Select Brand Media");
 
   useEffect(() => {
     fetch("/api/admin/settings")
@@ -98,6 +108,21 @@ export default function AdminSettingsPage() {
     }
   };
 
+  const openPicker = (target: "logoUrl" | "faviconUrl" | "ogImageUrl", title: string) => {
+    setPickerTarget(target);
+    setPickerTitle(title);
+    setPickerOpen(true);
+  };
+
+  const handleMediaSelected = (media: SelectedMedia) => {
+    if (!settings || !pickerTarget) return;
+    setSettings({
+      ...settings,
+      [pickerTarget]: media.url,
+    });
+    setPickerOpen(false);
+  };
+
   if (loading || !settings) {
     return <div className="p-12 text-center text-zinc-500">Loading Store Configuration...</div>;
   }
@@ -112,7 +137,7 @@ export default function AdminSettingsPage() {
           Store Settings & Access Security
         </h1>
         <p className="text-xs text-zinc-400 mt-1">
-          Business information, announcements, and password security for TroyX iStore.
+          Business information, announcements, branding, and password security for TroyX iStore.
         </p>
       </div>
 
@@ -185,19 +210,125 @@ export default function AdminSettingsPage() {
         </form>
       </div>
 
-      {/* 2. Store Business Identity */}
+      {/* 2. Brand Visual Identity & Media */}
+      <div className="p-6 rounded-2xl bg-[#161617] border border-zinc-800 space-y-4">
+        <div className="flex items-center gap-2 text-sm font-semibold text-white">
+          <ImageIcon className="w-4 h-4 text-blue-400" />
+          <span>Brand Visual Assets & Logos</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Logo */}
+          <div className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-2 text-xs">
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-white">TroyX Logo</span>
+              {settings.logoUrl && (
+                <button
+                  type="button"
+                  onClick={() => setSettings({ ...settings, logoUrl: "" })}
+                  className="text-red-400 text-[10px] hover:underline"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+            {settings.logoUrl ? (
+              <div className="h-16 rounded-lg bg-black border border-zinc-800 flex items-center justify-center p-2">
+                <img src={settings.logoUrl} alt="Logo" className="max-h-full max-w-full object-contain" />
+              </div>
+            ) : (
+              <div className="h-16 rounded-lg bg-zinc-950 border border-dashed border-zinc-800 flex items-center justify-center text-[10px] text-zinc-500">
+                Default Apple Minimalist Text
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => openPicker("logoUrl", "Select Brand Logo")}
+              className="w-full apple-btn-secondary text-[11px] py-1.5"
+            >
+              {settings.logoUrl ? "Replace Logo" : "Upload Brand Logo"}
+            </button>
+          </div>
+
+          {/* Favicon */}
+          <div className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-2 text-xs">
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-white">Store Favicon</span>
+              {settings.faviconUrl && (
+                <button
+                  type="button"
+                  onClick={() => setSettings({ ...settings, faviconUrl: "" })}
+                  className="text-red-400 text-[10px] hover:underline"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+            {settings.faviconUrl ? (
+              <div className="h-16 rounded-lg bg-black border border-zinc-800 flex items-center justify-center p-2">
+                <img src={settings.faviconUrl} alt="Favicon" className="w-8 h-8 object-contain" />
+              </div>
+            ) : (
+              <div className="h-16 rounded-lg bg-zinc-950 border border-dashed border-zinc-800 flex items-center justify-center text-[10px] text-zinc-500">
+                Default SVG Icon
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => openPicker("faviconUrl", "Select Store Favicon")}
+              className="w-full apple-btn-secondary text-[11px] py-1.5"
+            >
+              {settings.faviconUrl ? "Replace Favicon" : "Upload Favicon"}
+            </button>
+          </div>
+
+          {/* Open Graph Image */}
+          <div className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-2 text-xs">
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-white">Open Graph Image</span>
+              {settings.ogImageUrl && (
+                <button
+                  type="button"
+                  onClick={() => setSettings({ ...settings, ogImageUrl: "" })}
+                  className="text-red-400 text-[10px] hover:underline"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+            {settings.ogImageUrl ? (
+              <div className="h-16 rounded-lg bg-black border border-zinc-800 flex items-center justify-center p-2">
+                <img src={settings.ogImageUrl} alt="OG Preview" className="max-h-full max-w-full object-cover" />
+              </div>
+            ) : (
+              <div className="h-16 rounded-lg bg-zinc-950 border border-dashed border-zinc-800 flex items-center justify-center text-[10px] text-zinc-500">
+                Default Social Banner
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => openPicker("ogImageUrl", "Select Social Share Image")}
+              className="w-full apple-btn-secondary text-[11px] py-1.5"
+            >
+              {settings.ogImageUrl ? "Replace Image" : "Upload OG Image"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Store Business Profile & Direct Contacts */}
       <form onSubmit={handleSaveSettings} className="p-6 rounded-2xl bg-[#161617] border border-zinc-800 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm font-semibold text-white">
             <Store className="w-4 h-4 text-blue-400" />
-            <span>Business Profile & Contact</span>
+            <span>Business Profile & Social Channels</span>
           </div>
           <button
             type="submit"
             disabled={savingSettings}
             className="apple-btn-primary text-xs flex items-center gap-1.5"
           >
-            <Save className="w-3.5 h-3.5" />
+            <Save className="w-4 h-4" />
             <span>{savingSettings ? "Saving..." : "Save Identity"}</span>
           </button>
         </div>
@@ -234,7 +365,18 @@ export default function AdminSettingsPage() {
           </div>
 
           <div>
-            <label className="block text-zinc-400 mb-1">Primary Phone</label>
+            <label className="block text-zinc-400 mb-1">Official WhatsApp Contact</label>
+            <input
+              type="text"
+              value={settings.whatsappNumber || "233207137437"}
+              onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
+              placeholder="e.g. 233207137437"
+              className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
+            />
+          </div>
+
+          <div>
+            <label className="block text-zinc-400 mb-1">Primary Phone Line</label>
             <input
               type="text"
               value={settings.contactPhones[0] || ""}
@@ -248,7 +390,7 @@ export default function AdminSettingsPage() {
           </div>
 
           <div>
-            <label className="block text-zinc-400 mb-1">Secondary Phone</label>
+            <label className="block text-zinc-400 mb-1">Secondary Phone Line</label>
             <input
               type="text"
               value={settings.contactPhones[1] || ""}
@@ -267,6 +409,18 @@ export default function AdminSettingsPage() {
               type="text"
               value={settings.tikTokHandle}
               onChange={(e) => setSettings({ ...settings, tikTokHandle: e.target.value })}
+              placeholder="@troyx_istore"
+              className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
+            />
+          </div>
+
+          <div>
+            <label className="block text-zinc-400 mb-1">Instagram Handle</label>
+            <input
+              type="text"
+              value={settings.instagramHandle || "@troyx_istore"}
+              onChange={(e) => setSettings({ ...settings, instagramHandle: e.target.value })}
+              placeholder="@troyx_istore"
               className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
             />
           </div>
@@ -298,19 +452,15 @@ export default function AdminSettingsPage() {
         </div>
       </form>
 
-      {/* 3. Database Engine & Firebase / Cloud Connectivity */}
-      <div className="p-6 rounded-2xl bg-[#161617] border border-zinc-800 space-y-3 text-xs text-zinc-400">
-        <div className="flex items-center gap-2 text-sm font-semibold text-white">
-          <Database className="w-4 h-4 text-purple-400" />
-          <span>Cloud Database Connectivity & Dedicated Firebase</span>
-        </div>
-        <p className="leading-relaxed">
-          The application is configured to connect to the dedicated Firebase project <strong className="text-white">troyx-istore</strong>. 
-          Cloud Firestore collections, security rules (<code className="text-zinc-300">firestore.rules</code>), and compound query indexes (<code className="text-zinc-300">firestore.indexes.json</code>) are fully provisioned. 
-          To enable live cloud operations, supply <code className="text-zinc-300">FIREBASE_SERVICE_ACCOUNT_KEY=./serviceAccountKey.json</code> in <code className="text-zinc-300">.env.local</code>.
-          Local fallback persistence remains fully active to ensure seamless zero-downtime operation.
-        </p>
-      </div>
+      {/* 4. Universal Media Picker */}
+      <UniversalMediaPicker
+        isOpen={pickerOpen}
+        onClose={() => setPickerOpen(false)}
+        onSelect={handleMediaSelected}
+        title={pickerTitle}
+        filter="image"
+        currentValue={pickerTarget && settings ? (settings[pickerTarget] as string) : undefined}
+      />
     </div>
   );
 }

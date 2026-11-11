@@ -16,7 +16,7 @@ export const revalidate = 0;
 
 export default async function LearnMorePage({ params }: LearnMorePageProps) {
   const product = await getProductBySlug(params.slug);
-  const page = await getPageBySlug(`learn-more-${params.slug}`);
+  const page = (await getPageBySlug(`learn-more-${params.slug}`)) || (await getPageBySlug(params.slug));
 
   // Fetch published cinematic sections attached to this Learn More page
   const sections = page ? await getPublishedSections(page.id) : [];

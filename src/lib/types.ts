@@ -22,20 +22,24 @@ export type SectionType =
   | "cinematic_hero"
   | "video_hero"
   | "image_hero"
+  | "fullscreen_image"
   | "video_story"
   | "split_story"
   | "scroll_reveal"
   | "feature_showcase"
   | "sticky_sequence"
   | "media_gallery"
+  | "image_carousel"
   | "comparison_table"
   | "tech_specs"
   | "full_gallery"
   | "promo_banner"
   | "product_collection"
+  | "category_showcase"
   | "testimonials"
   | "faq"
   | "contact_section"
+  | "store_photography"
   | "cta_section"
   | "custom_text";
 
@@ -62,6 +66,10 @@ export interface SectionConfig {
   specs?: Array<{ label: string; value: string }>;
   features?: Array<{ title: string; description: string; icon?: string }>;
   faqs?: Array<{ question: string; answer: string }>;
+  galleryImages?: Array<{ url: string; caption?: string; alt?: string }>;
+  comparisonItems?: Array<{ name: string; tag?: string; image?: string; specs: Record<string, string> }>;
+  categories?: Array<{ name: string; slug: string; image?: string; description?: string }>;
+  storeInfo?: { address?: string; phone?: string; whatsapp?: string; hours?: string; mapUrl?: string };
   customCss?: string;
 }
 
@@ -352,7 +360,14 @@ export interface SiteSettings {
   location: string;
   contactPhones: string[];
   tikTokHandle: string;
+  whatsappNumber?: string;
+  instagramHandle?: string;
   currency: string;
+  logoUrl?: string;
+  faviconUrl?: string;
+  ogImageUrl?: string;
+  seoTitle?: string;
+  seoDescription?: string;
   announcementText?: string;
   isAnnouncementActive: boolean;
   maintenanceMode: boolean;

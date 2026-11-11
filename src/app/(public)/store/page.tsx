@@ -1,11 +1,15 @@
 import React from "react";
-import { getProducts } from "@/lib/storage/db";
+import { getProducts, getPublishedSections } from "@/lib/storage/db";
 import CategoryPage from "@/components/public/CategoryPage";
 
 export const revalidate = 0;
 
 export default async function StorePage() {
-  const products = await getProducts();
+  const [products, sections] = await Promise.all([
+    getProducts(),
+    getPublishedSections("page-store"),
+  ]);
+
   return (
     <CategoryPage
       categoryTitle="Apple Store"
@@ -13,6 +17,7 @@ export default async function StorePage() {
       tagline="Home of Original Apple Products"
       description="The official collection of authentic Apple hardware at TroyX iStore in East Legon, Accra."
       products={products}
+      sections={sections}
     />
   );
 }
