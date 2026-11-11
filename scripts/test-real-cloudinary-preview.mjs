@@ -4,7 +4,7 @@ console.log("=================================================================="
 console.log("TROYX iSTORE — REAL CLOUDINARY UPLOAD & PREVIEW END-TO-END TEST");
 console.log("==================================================================\n");
 
-const PREVIEW_HOST = "https://troyx-istore-n99i-k3pf8l2br-richard-akakpo-s-projects.vercel.app";
+const PREVIEW_HOST = "https://troyx-istore-n99i-cmoqzbswa-richard-akakpo-s-projects.vercel.app";
 const BYPASS_TOKEN = "QkcH8dforX1f10SQUeQ767yA5aMKRbwW";
 
 const adminUser = {
