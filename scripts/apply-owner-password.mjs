@@ -108,7 +108,7 @@ async function main() {
   newPassword = "";
 
   console.log("\n==================================================================");
-  console.log("✔ PASSWORD RECOVERY COMPLETED SUCCESSFULLY");
+  console.log("[SUCCESS] PASSWORD RECOVERY COMPLETED SUCCESSFULLY");
   console.log(`  - Account:                ${targetEmail}`);
   console.log(`  - Preserved Firebase UID: ${targetUid}`);
   console.log(`  - Firebase Custom Claims: {"role": "owner", "temporary": true}`);

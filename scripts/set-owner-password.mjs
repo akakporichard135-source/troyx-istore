@@ -7,7 +7,7 @@ import path from "path";
 import fs from "fs";
 
 console.log("==================================================================");
-console.log("TROYX iSTORE — SECURE LOCAL OWNER PASSWORD RECOVERY");
+console.log("TROYX iSTORE -- SECURE LOCAL OWNER PASSWORD RECOVERY");
 console.log("==================================================================");
 console.log("Target Account: akakporichard135@gmail.com");
 console.log("Verified UID:   07Rwzx6R7iaENCpBWSQZ2Ta0YLX2\n");
