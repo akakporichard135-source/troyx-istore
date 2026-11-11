@@ -1,51 +1,70 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: ["class"],
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./context/**/*.{js,ts,jsx,tsx,mdx}",
-    "./hooks/**/*.{js,ts,jsx,tsx,mdx}",
-    "./lib/**/*.{js,ts,jsx,tsx,mdx}"
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        brand: {
-          blue: "#0071E3",
-          ink: "#0b0b0f",
-          mist: "#f5f5f7",
-          graphite: "#1d1d1f"
-        }
-      },
-      boxShadow: {
-        premium: "0 24px 80px rgba(0, 0, 0, 0.08)",
-        glass: "0 18px 60px rgba(15, 23, 42, 0.12)"
+        apple: {
+          black: "#000000",
+          dark: "#161617",
+          "card-dark": "#1d1d1f",
+          "border-dark": "#333336",
+          "gray-subtle": "#424245",
+          "text-muted": "#86868b",
+          "gray-light": "#d2d2d7",
+          "gray-bg": "#f5f5f7",
+          "card-light": "#ffffff",
+          "border-light": "#e5e5ea",
+          blue: "#0071e3",
+          "blue-hover": "#0077ed",
+          green: "#34c759",
+          red: "#ff3b30",
+          gold: "#e3c8a9",
+        },
       },
       fontFamily: {
         sans: [
-          "Inter",
-          "ui-sans-serif",
-          "system-ui",
           "-apple-system",
           "BlinkMacSystemFont",
-          "Segoe UI",
-          "sans-serif"
-        ]
+          "SF Pro Text",
+          "SF Pro Display",
+          "Helvetica Neue",
+          "Inter",
+          "sans-serif",
+        ],
       },
-      keyframes: {
-        float: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" }
-        }
+      maxWidth: {
+        "8xl": "88rem",
+        "9xl": "96rem",
+      },
+      letterSpacing: {
+        tighter: "-0.04em",
+        tight: "-0.02em",
+        normal: "0",
+        wide: "0.02em",
       },
       animation: {
-        float: "float 6s ease-in-out infinite"
-      }
-    }
+        "fade-in": "fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "slide-up": "slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        slideUp: {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };
-
 export default config;

@@ -1,0 +1,42 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isStaff() {
+      return isAuthenticated() && (
+        request.auth.token.role in ['editor', 'owner']
+      );
+    }
+    
+    function isOwner() {
+      return isAuthenticated() && request.auth.token.role == 'owner';
+    }
+
+    // Media uploads for TroyX iStore showcases, products, and brand assets
+    match /uploads/{allPaths=**} {
+      // Public visitors can load published images and cinematic showcase videos
+      allow read: if true;
+      
+      // Only authenticated staff with editor or owner role can upload
+      allow create, update: if isStaff()
+        && (
+          // Validate image uploads (max 15MB)
+          (request.resource.contentType.matches('image/.*') && request.resource.size < 15 * 1024 * 1024) ||
+          // Validate cinematic video showcases (max 100MB)
+          (request.resource.contentType.matches('video/.*') && request.resource.size < 100 * 1024 * 1024)
+        );
+        
+      // Only staff can delete media
+      allow delete: if isStaff();
+    }
+    
+    // Internal assets and backups
+    match /system/{allPaths=**} {
+      allow read, write: if isOwner();
+    }
+  }
+}

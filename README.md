@@ -1,50 +1,137 @@
-# TroyX iStore
+# TroyX iStore — Platform & Visual Admin Control Center
 
-Premium, production-ready e-commerce starter for TroyX iStore, an independent retailer of genuine Apple devices and accessories.
+> **Home of Original Apple Products**  
+> **Location:** Bawaleshie, East Legon, Accra, Ghana  
+> **Contact:** 0207137437 / 0548974717 | **TikTok:** [@troyx_istore](https://tiktok.com/@troyx_istore)  
+> **Currency:** Ghana Cedi (GH₵)  
+> **Design Philosophy:** Premium monochrome Apple-inspired aesthetic (black, white, subtle neutrals)
 
-## Stack
+---
 
-- Next.js App Router, React, TypeScript, Tailwind CSS
-- Supabase-ready service layer
-- React Hook Form and Zod validation
-- Zustand cart, wishlist, compare, and recently viewed state
-- Framer Motion dependency ready for richer animation
-- Cloudinary upload intent placeholder
-- SEO metadata, sitemap, robots, structured product data
-- Admin, AI assistant, trade-in, repair booking, checkout, account, and policy pages
+## 1. Architectural Mission & Initial Public State
 
-## Setup
+TroyX iStore is an enterprise-grade ecommerce website and visual content management system (CMS) engineered from the ground up for independent Apple electronics retailing in Accra, Ghana.
 
+### Strict Initial Public Zero-State:
+- **No fabricated products, stock, or placeholder photos presented as real.**
+- **No fake customer reviews, fictional discounts, or arbitrary prices.**
+- **The live homepage launches with the TroyX header, footer, and a clean, intentionally empty main content canvas.**
+- The owner publishes real devices and showcase banners on their own schedule directly via the **TroyX Control Center (`/admin`)** without modifying application source code.
+
+---
+
+## 2. Exact Homepage Draft Structure
+
+The CMS comes pre-seeded with the **exact six draft sections in required sequence**:
+
+| Slot | Draft Label | Theme | Initial State | Media Type |
+|---|---|---|---|---|
+| 1 | **iPhone 18 Pro — dark** | Dark (`#000000`) | Unpublished Draft | Configurable (Image/Video) |
+| 2 | **iPhone Duo — white** | White (`#ffffff`) | Unpublished Draft | Configurable (Image/Video) |
+| 3 | **MacBook Pro — dark** | Dark (`#000000`) | Unpublished Draft | Configurable (Image/Video) |
+| 4 | **Apple Watch Series 12 — white** | White (`#ffffff`) | Unpublished Draft | Configurable (Image/Video) |
+| 5 | **iPad A16 — white** | White (`#ffffff`) | Unpublished Draft | Configurable (Image/Video) |
+| 6 | **AirPods Pro 3 — dark** | Dark (`#000000`) | Unpublished Draft | Configurable (Image/Video) |
+
+> **Note:** These names are admin-side draft labels. They remain completely hidden from the public website until an administrator explicitly publishes them.
+
+---
+
+## 3. Public Route Skeletons (20+ Responsive Routes)
+
+Every public route is responsive and designed with high visual hierarchy:
+- `/` — Homepage (displays clean empty state or published cinematic showcases)
+- `/store` — All Apple Products showcase framework
+- `/iphone` — iPhone category framework
+- `/mac` — Mac & MacBook framework
+- `/ipad` — iPad framework
+- `/watch` — Apple Watch framework
+- `/airpods` — AirPods framework
+- `/accessories` — Original MagSafe & Apple accessories
+- `/product/[slug]` — Detailed product configurator (storage, color, SIM configuration, battery health %, Ghana cedi pricing, WhatsApp checkout)
+- `/learn-more/[slug]` — Cinematic interactive storytelling builder
+- `/compare` — Device comparison matrix
+- `/deals` — Seasonal promotions and trade-in packages
+- `/cart` — Shopping bag
+- `/checkout` — Checkout supporting Bawaleshie showroom pickup or Greater Accra delivery with server-validated pricing
+- `/order-confirmation/[id]` — Order summary with direct WhatsApp transmit button
+- `/about` — About TroyX iStore in Bawaleshie, East Legon
+- `/contact` — Showroom directions, direct phone lines, TikTok channel
+- `/delivery` — Delivery policy across Greater Accra & regional VIP couriers
+- `/warranty` — Warranty and hardware diagnostic guarantee
+- `/privacy` — Privacy policy
+- `/terms` — Terms of use
+
+---
+
+## 4. TroyX Control Center Modules (`/admin`)
+
+1. **Dashboard Overview:** Real metrics for catalog stock, active orders, verified revenue, and draft counters.
+2. **Visual Page Manager:** Manage titles, URLs, SEO descriptions, publish states, and revision histories.
+3. **Advanced Section Builder:** 18+ reusable component schemas (cinematic hero, video hero, split story, tech specs, comparisons, media galleries). Accessible reordering controls (Move Up / Down).
+4. **Cinematic Media Management:** Drag-and-drop image and video uploads, focal point configuration, alt-text indexing, metadata validation, video autoplay/muted controls.
+5. **Learn More Page Builder:** Modular deep-dive section composer for flagship devices.
+6. **Product Catalog Manager:** Full lifecycle management (Condition, SIM type, Battery Health %, Stock, SKU, GH₵ pricing).
+7. **Pricing & Inventory Engine:** Server-side price validation preventing client-side cart tampering.
+8. **Orders & Purchase Requests:** Order tracking and instant pre-formatted WhatsApp customer communication.
+9. **Navigation & Footer Editor:** Drag-and-drop category links and directory columns.
+10. **Promotions Manager:** Coupon codes, scheduled dates, and discount rules.
+11. **SEO & Sitemaps:** Dynamic `sitemap.xml` generated strictly from published routes.
+12. **Publishing & Version Control:** Version snapshots and instant rollback.
+13. **Admin Security:** Role-Based Access Control (Owner, Editor, Viewer), secure cookies, script injection prevention.
+
+---
+
+## 5. Quick Start Instructions
+
+### Development Server:
 ```bash
-npm install
-cp .env.example .env.local
 npm run dev
+# Server starts at http://localhost:3000
+# Admin Console: http://localhost:3000/admin
 ```
 
-Open `http://localhost:3000`.
-
-On Windows PowerShell with restricted scripts, use:
-
+### Production Build:
 ```bash
-npm.cmd install
-npm.cmd run dev
+npm run build
+npm run start
 ```
 
-## Environment
+### Run End-to-End Acceptance Tests (16 Tests):
+```bash
+npm run test:acceptance
+```
 
-Copy `.env.example` to `.env.local` and replace the placeholder values.
+---
 
-Supabase can be used for authentication, product storage, orders, roles, and audit logs. Cloudinary can be connected for product images and repair photo uploads. Payment providers are intentionally abstracted in `services/payment.ts`.
+## 6. How the Store Owner Publishes the First Homepage Showcase
 
-## Demo Data
+1. Navigate to `http://localhost:3000/admin` (or `https://your-domain.com/admin`).
+2. Log in with staff credentials:
+   - **Email:** `owner@troyxistore.com`
+   - **Passcode:** `TroyX@2026!`
+3. Click **Cinematic Media** in the left sidebar and upload your product photograph or render (e.g. `iphone-18-pro.webp`).
+4. Click **Copy URL** on the uploaded asset card.
+5. Navigate to **Pages & Sections** -> click **Manage Sections** on the `home` page.
+6. On Slot 1 (**iPhone 18 Pro — dark**), click **Edit**:
+   - Paste the copied image URL into **Desktop Image URL**.
+   - Enter your headline (e.g. `iPhone 18 Pro`).
+   - Enter your subtitle (e.g. `Titanium. So strong. So light. So Pro.`).
+   - Set Learn More link to `/iphone` and Buy link to `/store`.
+   - Click **Save Section**.
+7. Click the **Publish** toggle button on Slot 1.
+8. Visit the public homepage at `http://localhost:3000` — the showcase is now instantly live!
 
-Sample products live in `database/products.ts`. A SQL starter schema is in `database/schema.sql`, and seed-oriented demo content is exported from `database/seed.ts`.
+---
 
-## Production Notes
+## 7. Cloud Supabase Production Migration
 
-- Add Supabase Auth middleware and role claims before enabling real admin writes.
-- Replace demo CSRF handling with signed session-bound tokens.
-- Move rate limiting to Redis or an edge provider.
-- Connect payment adapters such as Stripe, Paystack, Flutterwave, mobile money, or bank transfer.
-- Replace placeholder SVG product visuals with real Cloudinary product photography.
-- Keep the independent-retailer disclaimer visible in legal and footer areas.
+When connecting to your cloud Supabase database:
+1. Create a project at [supabase.com](https://supabase.com).
+2. Run the SQL schema found in `supabase/migrations/20261109000000_troyx_initial_schema.sql` in the Supabase SQL Editor.
+3. Add your keys to `.env.local`:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+   ```

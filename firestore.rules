@@ -1,0 +1,116 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions for role-based access control
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function isOwner() {
+      return isAuthenticated() && (
+        request.auth.token.role == 'owner' || 
+        getUserData().role == 'owner'
+      );
+    }
+    
+    function isEditor() {
+      return isAuthenticated() && (
+        request.auth.token.role == 'editor' || 
+        request.auth.token.role == 'owner' || 
+        getUserData().role == 'editor' || 
+        getUserData().role == 'owner'
+      );
+    }
+    
+    function isViewer() {
+      return isAuthenticated() && (
+        request.auth.token.role in ['viewer', 'editor', 'owner'] ||
+        getUserData().role in ['viewer', 'editor', 'owner']
+      );
+    }
+
+    // 1. Pages Collection
+    // Public can read only published pages. Staff can read drafts. Editors/Owners can write.
+    match /pages/{pageId} {
+      allow read: if (resource.data.isPublished == true) || isViewer();
+      allow create, update, delete: if isEditor();
+    }
+
+    // 2. Page Sections Collection
+    // Public can read only published sections.
+    // The exact 6 homepage draft slots remain unpublished and hidden from public visitors.
+    match /sections/{sectionId} {
+      allow read: if (resource.data.isPublished == true) || isViewer();
+      allow create, update, delete: if isEditor();
+    }
+
+    // 3. Page Revisions (Snapshots & Rollbacks)
+    // Strictly private to authenticated staff.
+    match /revisions/{revisionId} {
+      allow read: if isViewer();
+      allow create, delete: if isEditor();
+      allow update: if false; // Snapshots are immutable
+    }
+
+    // 4. Products & Variants Catalog
+    // Public can browse published certified Apple devices. Staff can manage catalog.
+    match /products/{productId} {
+      allow read: if (resource.data.isPublished == true) || isViewer();
+      allow create, update, delete: if isEditor();
+    }
+
+    // 5. Media Assets Metadata
+    // Public can read metadata of media used on the site. Staff can upload and manage.
+    match /media/{mediaId} {
+      allow read: if true;
+      allow create, update: if isEditor();
+      allow delete: if isEditor();
+    }
+
+    // 6. Promotions & Deals
+    match /promotions/{promoId} {
+      allow read: if (resource.data.isActive == true) || isViewer();
+      allow create, update, delete: if isEditor();
+    }
+
+    // 7. Site Settings & Navigation
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    match /navigation/{docId} {
+      allow read: if true;
+      allow write: if isEditor();
+    }
+
+    // 8. Orders & Inquiries
+    // Customer orders are created through trusted server API (Firebase Admin SDK).
+    // Public cannot browse orders. Staff can review orders.
+    match /orders/{orderId} {
+      allow read: if isViewer();
+      allow create: if false; // Only Admin SDK creates verified orders
+      allow update: if isEditor(); // Update status (e.g. processing, completed)
+      allow delete: if isOwner();
+    }
+
+    // 9. Staff Users & Roles
+    // Read only by authorized staff. Only the verified Owner can assign staff roles.
+    match /users/{userId} {
+      allow read: if isViewer();
+      allow create, update, delete: if isOwner();
+    }
+
+    // 10. Audit Logs
+    // Append-only via server or trusted operations. Never editable or deletable by ordinary users.
+    match /auditLogs/{logId} {
+      allow read: if isOwner();
+      allow write: if false; // Written exclusively via Firebase Admin SDK
+    }
+  }
+}
