@@ -99,7 +99,9 @@ export function createSessionToken(user: UserProfile, maxAgeSeconds = 86400 * 7)
 }
 
 /**
- * Verifies credentials against registered staff accounts in database / Firebase Auth.
+ * Verifies credentials against registered staff accounts in Firebase Auth & Cloud Firestore.
+ * Supports direct Firebase Auth verification via Google Identity Toolkit API with automatic
+ * Firestore hash synchronization, plus PBKDF2 fallback verification.
  * Default bootstrap passwords have been permanently disabled per Phase 3 security policy.
  */
 export async function authenticateStaff(
@@ -107,54 +109,127 @@ export async function authenticateStaff(
   passcode: string
 ): Promise<UserProfile | null> {
   const normalizedEmail = email.trim().toLowerCase();
-  const user = await getUserByEmail(normalizedEmail);
-  if (!user) return null;
 
-  // 1. If password has been cryptographically hashed:
-  if (user.passwordHash && user.passwordSalt) {
-    const isValid = verifyPassword(passcode, user.passwordHash, user.passwordSalt);
-    if (!isValid) return null;
+  // Reject deprecated bootstrap passwords immediately
+  if (passcode === "TroyX@2026!" || passcode === "troyxistore") {
+    return null;
+  }
 
-    // Sync or verify custom claims via Firebase Admin SDK if active
+  // 1. Retrieve the user profile from Firestore or local store
+  let user = await getUserByEmail(normalizedEmail);
+
+  // If user is not yet in Firestore, check Firebase Admin Auth
+  if (!user) {
     try {
       const adminAuth = getAdminAuth();
       if (adminAuth) {
-        try {
-          const fbUser = await adminAuth.getUserByEmail(normalizedEmail);
-          if (fbUser.customClaims?.role !== user.role) {
-            await adminAuth.setCustomUserClaims(fbUser.uid, {
-              role: user.role,
-              temporary: user.isTemporary || false,
-            });
-          }
-        } catch {
-          // If user does not exist in Firebase Auth yet, provision them
-          try {
-            const newFbUser = await adminAuth.createUser({
-              email: normalizedEmail,
-              password: passcode,
-              displayName: user.fullName,
-            });
-            await adminAuth.setCustomUserClaims(newFbUser.uid, {
-              role: user.role,
-              temporary: user.isTemporary || false,
-            });
-          } catch {}
+        const fbUser = await adminAuth.getUserByEmail(normalizedEmail);
+        if (fbUser) {
+          const role = (fbUser.customClaims?.role as UserRole) || "owner";
+          user = {
+            id: fbUser.uid,
+            email: fbUser.email || normalizedEmail,
+            fullName: fbUser.displayName || "TroyX Administrator",
+            role,
+            isTemporary: Boolean(fbUser.customClaims?.temporary),
+            isSetupComplete: true,
+            createdAt: fbUser.metadata.creationTime || new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            customClaims: fbUser.customClaims as any,
+          };
         }
       }
     } catch {}
-
-    return user;
   }
 
-  // 2. Verified admin bootstrap secret from environment (if set by owner)
-  const envBootstrapSecret = process.env.ADMIN_BOOTSTRAP_SECRET;
-  if (envBootstrapSecret && passcode === envBootstrapSecret) {
-    return user;
+  if (!user) return null;
+
+  let isAuthenticated = false;
+
+  // 2. PRIMARY VERIFICATION: Google Firebase Authentication Identity Toolkit
+  const firebaseApiKey =
+    process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
+    process.env.FIREBASE_WEB_API_KEY ||
+    "AIzaSyBUNbaT_ZwYlax2TrsRAYaq2ckOCu74rfo";
+
+  if (firebaseApiKey) {
+    try {
+      const verifyRes = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${firebaseApiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: normalizedEmail,
+            password: passcode,
+            returnSecureToken: true,
+          }),
+        }
+      );
+
+      if (verifyRes.ok) {
+        const authData = await verifyRes.json();
+        if (authData.localId) {
+          isAuthenticated = true;
+
+          // Sync verified password hash to Firestore so both backends stay in sync
+          try {
+            const { hash, salt } = hashPassword(passcode);
+            await updateUserPassword(user.id, hash, salt);
+            user.passwordHash = hash;
+            user.passwordSalt = salt;
+          } catch {}
+        }
+      }
+    } catch (err) {
+      console.warn("Identity Toolkit network check failed, falling back to PBKDF2 hash:", err);
+    }
   }
 
-  // NOTE: Default passwords (TroyX@2026!, troyxistore) are strictly rejected.
-  return null;
+  // 3. FALLBACK VERIFICATION: Cryptographic PBKDF2 hash stored in Firestore/database
+  if (!isAuthenticated && user.passwordHash && user.passwordSalt) {
+    const isValid = verifyPassword(passcode, user.passwordHash, user.passwordSalt);
+    if (isValid) {
+      isAuthenticated = true;
+
+      // Sync verified password back to Firebase Auth if possible
+      try {
+        const adminAuth = getAdminAuth();
+        if (adminAuth) {
+          const fbUser = await adminAuth.getUserByEmail(normalizedEmail);
+          await adminAuth.updateUser(fbUser.uid, { password: passcode });
+        }
+      } catch {}
+    }
+  }
+
+  // 4. Secure admin bootstrap secret from environment (if set by owner)
+  if (!isAuthenticated) {
+    const envBootstrapSecret = process.env.ADMIN_BOOTSTRAP_SECRET;
+    if (envBootstrapSecret && passcode === envBootstrapSecret) {
+      isAuthenticated = true;
+    }
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  // 5. Ensure Firebase custom claims reflect verified role
+  try {
+    const adminAuth = getAdminAuth();
+    if (adminAuth) {
+      const fbUser = await adminAuth.getUserByEmail(normalizedEmail);
+      if (fbUser.customClaims?.role !== user.role) {
+        await adminAuth.setCustomUserClaims(fbUser.uid, {
+          role: user.role,
+          temporary: user.isTemporary || false,
+        });
+      }
+    }
+  } catch {}
+
+  return user;
 }
 
 /**

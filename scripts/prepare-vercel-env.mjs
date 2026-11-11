@@ -40,6 +40,8 @@ const vercelEnv = {
   NEXT_PUBLIC_STORE_CURRENCY: getEnvValue("NEXT_PUBLIC_STORE_CURRENCY", "GH₵"),
 
   // Dedicated Firebase Project
+  NEXT_PUBLIC_FIREBASE_API_KEY: "AIzaSyBUNbaT_ZwYlax2TrsRAYaq2ckOCu74rfo",
+  FIREBASE_WEB_API_KEY: "AIzaSyBUNbaT_ZwYlax2TrsRAYaq2ckOCu74rfo",
   NEXT_PUBLIC_FIREBASE_PROJECT_ID: "troyx-istore",
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: "troyx-istore.firebaseapp.com",
   FIREBASE_PROJECT_ID: "troyx-istore",

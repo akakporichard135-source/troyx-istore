@@ -176,7 +176,9 @@ export async function getUserByEmail(email: string): Promise<UserProfile | null>
       .limit(1)
       .get();
     if (!snap.empty) {
-      return snap.docs[0].data() as UserProfile;
+      const doc = snap.docs[0];
+      const data = doc.data() as UserProfile;
+      return { ...data, id: data.id || doc.id };
     }
   }
   const db = loadLocalDatabase();
