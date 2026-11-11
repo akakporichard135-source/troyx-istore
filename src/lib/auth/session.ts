@@ -203,14 +203,6 @@ export async function authenticateStaff(
     }
   }
 
-  // 4. Secure admin bootstrap secret from environment (if set by owner)
-  if (!isAuthenticated) {
-    const envBootstrapSecret = process.env.ADMIN_BOOTSTRAP_SECRET;
-    if (envBootstrapSecret && passcode === envBootstrapSecret) {
-      isAuthenticated = true;
-    }
-  }
-
   if (!isAuthenticated) {
     return null;
   }
