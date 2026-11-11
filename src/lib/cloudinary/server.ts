@@ -81,7 +81,6 @@ export interface SignedUploadParams {
 export function generateSignedUploadParams(options?: {
   folder?: string;
   resourceType?: "image" | "video";
-  tags?: string[];
 }): SignedUploadParams {
   if (!isCloudinaryConfigured()) {
     throw new Error("Cannot generate upload signature: Cloudinary is not configured.");
@@ -99,10 +98,6 @@ export function generateSignedUploadParams(options?: {
     folder,
     timestamp,
   };
-
-  if (options?.tags && options.tags.length > 0) {
-    paramsToSign.tags = options.tags.join(",");
-  }
 
   // Use official Cloudinary SDK signature generator
   const signature = cloudinary.utils.api_sign_request(paramsToSign, apiSecret);

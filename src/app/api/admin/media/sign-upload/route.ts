@@ -27,12 +27,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}));
     const resourceType = body.resourceType === "video" ? "video" : "image";
     const folder = body.folder || "troyx-istore/media";
-    const tags = Array.isArray(body.tags) ? body.tags : ["troyx-istore"];
 
     const signedParams = generateSignedUploadParams({
       folder,
       resourceType,
-      tags,
     });
 
     return NextResponse.json({

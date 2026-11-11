@@ -191,7 +191,6 @@ export default function UniversalMediaPicker({
           body: JSON.stringify({
             resourceType,
             folder: "troyx-istore/media",
-            tags: ["troyx-istore", resourceType],
           }),
         });
 
