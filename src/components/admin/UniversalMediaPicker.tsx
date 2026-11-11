@@ -69,6 +69,7 @@ export default function UniversalMediaPicker({
   const [altText, setAltText] = useState("");
   const [caption, setCaption] = useState("");
   const [focalPoint, setFocalPoint] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
+  const [isCloudinaryConfigured, setIsCloudinaryConfigured] = useState<boolean | null>(null);
 
   // URL Tab States
   const [manualUrl, setManualUrl] = useState(currentValue || "");
@@ -80,6 +81,17 @@ export default function UniversalMediaPicker({
   useEffect(() => {
     setMediaTypeFilter(filter);
   }, [filter]);
+
+  // Check Cloudinary Status
+  const checkCloudinaryConfig = async () => {
+    try {
+      const res = await fetch("/api/admin/media/config");
+      const data = await res.json();
+      setIsCloudinaryConfigured(Boolean(data.isConfigured));
+    } catch {
+      setIsCloudinaryConfigured(false);
+    }
+  };
 
   // Load Library Assets
   const loadAssets = async () => {
@@ -109,6 +121,7 @@ export default function UniversalMediaPicker({
   useEffect(() => {
     if (isOpen) {
       loadAssets();
+      checkCloudinaryConfig();
       setUploadError(null);
       setUploadSuccess(null);
     }
@@ -153,6 +166,13 @@ export default function UniversalMediaPicker({
   // Perform Real Direct Cloudinary / Serverless Upload
   const handleUploadSubmit = async () => {
     if (!uploadFile) return;
+
+    if (isCloudinaryConfigured === false) {
+      setUploadError(
+        "Cloudinary is not configured. Cloud Firestore stores only asset metadata and Cloudinary CDN URLs. Base64 file storage in Firestore is disabled. Please configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in your Vercel project or use the External URL tab."
+      );
+      return;
+    }
 
     setIsUploading(true);
     setUploadProgress(10);
@@ -534,6 +554,31 @@ export default function UniversalMediaPicker({
           {/* TAB 2: DIRECT UPLOAD */}
           {activeTab === "upload" && (
             <div className="space-y-6 max-w-xl mx-auto py-2">
+              {isCloudinaryConfigured === false && (
+                <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-800/80 text-xs text-amber-300 space-y-2">
+                  <div className="flex items-center gap-2 font-semibold text-amber-200">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                    <span>Cloudinary Configuration Required for Direct Binary Uploads</span>
+                  </div>
+                  <p className="leading-relaxed text-amber-300/90 font-light">
+                    Cloud Firestore strictly stores asset metadata, Cloudinary identifiers, and CDN URLs.
+                    Base64 file storage in Firestore has been disabled for database health and production safety.
+                  </p>
+                  <p className="text-[11px] text-zinc-400">
+                    To enable direct uploads, add <code className="text-zinc-200 bg-zinc-900 px-1 py-0.5 rounded">CLOUDINARY_CLOUD_NAME</code>, <code className="text-zinc-200 bg-zinc-900 px-1 py-0.5 rounded">CLOUDINARY_API_KEY</code>, and <code className="text-zinc-200 bg-zinc-900 px-1 py-0.5 rounded">CLOUDINARY_API_SECRET</code> to your Vercel project or local <code className="text-zinc-200 bg-zinc-900 px-1 py-0.5 rounded">.env.local</code>.
+                  </p>
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("url")}
+                      className="text-xs text-blue-400 hover:text-blue-300 font-medium underline flex items-center gap-1"
+                    >
+                      <span>Or use the External URL tab to link hosted media right now →</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Drag and Drop Zone */}
               <div
                 onClick={() => fileInputRef.current?.click()}

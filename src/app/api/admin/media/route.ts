@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 import { requireAdminRole } from "@/lib/auth/session";
 import { getMediaAssets, createMediaAsset } from "@/lib/storage/db";
 import {
@@ -9,14 +7,6 @@ import {
 } from "@/lib/cloudinary/server";
 
 export const dynamic = "force-dynamic";
-
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
-
-function ensureUploadDir() {
-  if (!fs.existsSync(UPLOAD_DIR)) {
-    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-  }
-}
 
 export async function GET(req: NextRequest) {
   const auth = await requireAdminRole(["owner", "editor", "viewer"]);
@@ -66,6 +56,18 @@ export async function POST(req: NextRequest) {
       if (!publicUrl || !filename) {
         return NextResponse.json(
           { error: "Missing required media fields (publicUrl, filename)." },
+          { status: 400 }
+        );
+      }
+
+      // Reject Base64 data URIs - Cloud Firestore stores ONLY real URLs and metadata
+      if (publicUrl.startsWith("data:")) {
+        return NextResponse.json(
+          {
+            error:
+              "Base64 media storage is disabled. Cloud Firestore stores only asset metadata and Cloudinary CDN URLs. Please upload via Cloudinary or provide an external HTTPS URL.",
+            code: "BASE64_MEDIA_FORBIDDEN",
+          },
           { status: 400 }
         );
       }
@@ -175,59 +177,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, asset });
     }
 
-    // Fallback when Cloudinary is not yet configured
-    const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
-    let publicUrl = "";
-    let filePath = "";
-
-    if (isVercel || file.size <= 2 * 1024 * 1024) {
-      if (file.size > 2 * 1024 * 1024 && !isCloudinaryConfigured()) {
-        return NextResponse.json(
-          {
-            error:
-              "Cloudinary is required for files larger than 2MB. Please configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in your Vercel project settings.",
-            code: "CLOUDINARY_REQUIRED",
-          },
-          { status: 400 }
-        );
-      }
-      // Store as Data URI to avoid serverless filesystem write errors (EROFS)
-      publicUrl = `data:${file.type};base64,${buffer.toString("base64")}`;
-      filePath = "data-uri";
-    } else {
-      try {
-        ensureUploadDir();
-        const timestamp = Date.now();
-        const cleanFileName = `${timestamp}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-        filePath = path.join(UPLOAD_DIR, cleanFileName);
-        publicUrl = `/uploads/${cleanFileName}`;
-        fs.writeFileSync(filePath, buffer);
-      } catch (e) {
-        // Fallback to data URI if write fails
-        publicUrl = `data:${file.type};base64,${buffer.toString("base64")}`;
-        filePath = "data-uri";
-      }
-    }
-
-    const asset = await createMediaAsset(
+    // Cloudinary is required for binary file uploads. Base64 storage in Firestore is strictly forbidden.
+    return NextResponse.json(
       {
-        filename: file.name,
-        filePath,
-        publicUrl,
-        fileSize: file.size,
-        mimeType: file.type,
-        mediaType: isVideo ? "video" : "image",
-        provider: "local",
-        altText,
-        caption,
-        focalPointX,
-        focalPointY,
-        usageCount: 0,
+        error:
+          "Cloudinary is not configured. Cloud Firestore stores only media metadata, Cloudinary asset identifiers, and media URLs. Base64 file storage in Firestore is disabled for production safety. Please configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in your Vercel project or .env.local to enable real image and video uploads.",
+        code: "CLOUDINARY_NOT_CONFIGURED",
       },
-      session.user.id
+      { status: 400 }
     );
-
-    return NextResponse.json({ success: true, asset });
   } catch (err: any) {
     return NextResponse.json({ error: err.message || "Upload failed" }, { status: 500 });
   }
